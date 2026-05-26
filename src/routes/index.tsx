@@ -1,11 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  Play, Send, Github, Twitter, Linkedin, Menu, X,
-  Activity, Zap, DollarSign, Server, ShieldCheck, GitBranch,
-  Check, Sparkles, Cloud, Boxes, Cpu, Network, Layers, Database, Lock, Gauge, Workflow, Container,
-  Settings, AlertTriangle, Shield, ChevronDown,
-} from "lucide-react";
+import { ArrowRight, ChevronRight, Check, Code, Network, Boxes, ShieldCheck, Cpu, Database, Cloud, GitBranch, ArrowUpRight, Zap, Eye, Lock, RefreshCcw, Github, Twitter, Linkedin, AlertTriangle, Shield, Settings, Play, Menu, X, Send, DollarSign, Gauge, Workflow, Container, Sparkles, Server, Layers } from "lucide-react";
+import { DemoStepper } from "../components/DemoStepper";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
@@ -1619,35 +1615,42 @@ function Pipelines() {
 }
 
 /* ===================== Providers ===================== */
+import awsIcon from '../assets/icon/icons8-aws-100.png';
+import azureIcon from '../assets/icon/icons8-azure-100.png';
+import gcpIcon from '../assets/icon/icons8-google-cloud-100.png';
+import k8sIcon from '../assets/icon/icons8-kubernetes-100.png';
+import terraformIcon from '../assets/icon/icons8-terraform-100.png';
+import dockerIcon from '../assets/icon/icons8-docker-96.png';
+
 function Providers() {
   const providers = [
-    { name: "AWS", desc: "Native Terraform for all 200+ services." },
-    { name: "Azure", desc: "ARM + Bicep imports in one click." },
-    { name: "GCP", desc: "Project, IAM, and VPC sync." },
-    { name: "Kubernetes", desc: "Helm-aware topology and drift." },
-    { name: "Terraform", desc: "Round-trip code · canvas · code." },
-    { name: "Docker", desc: "Compose-to-cloud in seconds." },
+    { name: "AWS", desc: "Native Terraform for all 200+ services.", icon: awsIcon },
+    { name: "Azure", desc: "ARM + Bicep imports in one click.", icon: azureIcon },
+    { name: "GCP", desc: "Project, IAM, and VPC sync.", icon: gcpIcon },
+    { name: "Kubernetes", desc: "Helm-aware topology and drift.", icon: k8sIcon },
+    { name: "Terraform", desc: "Round-trip code · canvas · code.", icon: terraformIcon },
+    { name: "Docker", desc: "Compose-to-cloud in seconds.", icon: dockerIcon },
   ];
   return (
     <section id="topology" className="py-24">
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
           <h2 className="font-display text-4xl md:text-5xl ig-metallic">One canvas, every cloud.</h2>
-          <span className="text-xs text-[#b0b0b0]">Scroll →</span>
         </div>
-        <div className="flex gap-4 overflow-x-auto pb-4 snap-x">
-          {providers.map((p) => (
-            <div key={p.name} className="ig-card rounded-2xl p-6 min-w-[260px] snap-start transition-all hover:-translate-y-1" style={{ transition: "transform .35s, border-color .35s, box-shadow .35s" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(138,83,214,.7)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 30px rgba(138,83,214,.35)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = ""; (e.currentTarget as HTMLDivElement).style.boxShadow = ""; }}>
-              <div className="h-10 w-10 rounded-xl grid place-items-center mb-4" style={{ background: "rgba(138,83,214,.15)", border: "1px solid rgba(138,83,214,.3)" }}>
-                <Cloud className="w-5 h-5 text-[#b07eff]" />
+        
+        <div className="ig-card rounded-2xl p-6 md:p-8 border border-[#8A53D6]/20 bg-black/40">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {providers.map((p) => (
+              <div key={p.name} className="rounded-xl p-6 transition-all hover:-translate-y-1 bg-[#1a0b2e]/30 border border-[#8A53D6]/10 hover:border-[#8A53D6]/50 hover:shadow-[0_0_30px_rgba(138,83,214,0.15)] flex flex-col h-full">
+                <div className="h-12 w-12 rounded-xl grid place-items-center mb-5 shrink-0" style={{ background: "rgba(138,83,214,.1)", border: "1px solid rgba(138,83,214,.2)" }}>
+                  <img src={p.icon} alt={p.name} className="w-7 h-7 object-contain opacity-90" />
+                </div>
+                <div className="font-display text-2xl text-white">{p.name}</div>
+                <p className="text-sm text-[#b0b0b0] mt-2 flex-1">{p.desc}</p>
+                <button className="mt-6 ig-ghost px-4 py-2 text-xs self-start">Connect</button>
               </div>
-              <div className="font-display text-2xl text-white">{p.name}</div>
-              <p className="text-sm text-[#b0b0b0] mt-2">{p.desc}</p>
-              <button className="mt-5 ig-ghost px-4 py-2 text-xs">Connect</button>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -1823,14 +1826,30 @@ function Testimonials() {
 /* ===================== CTA ===================== */
 function FinalCTA() {
   return (
-    <section id="pricing" className="py-32 relative overflow-hidden">
-      <div className="absolute inset-0 ig-portal-bg" />
-      <div className="relative mx-auto max-w-3xl px-6 text-center">
-        <h2 className="font-display text-5xl md:text-7xl ig-metallic leading-[0.95]">Ship the cloud<br/>you can see.</h2>
-        <p className="mt-6 text-[#b0b0b0]">Free for solo. $19/seat for teams. No credit card to start.</p>
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <a href="#jane" className="ig-cta px-8 py-4 inline-flex items-center gap-2">Start Designing <Arrow /></a>
-          <a href="#features" className="ig-ghost px-8 py-4">Book a demo</a>
+    <section id="pricing" className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 ig-portal-bg opacity-70" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="text-left">
+            <h2 className="font-display text-5xl md:text-7xl ig-metallic leading-[0.95]">Ship the cloud<br/>you can see.</h2>
+            <p className="mt-8 text-lg text-[#b0b0b0] max-w-md">Free for solo. $19/seat for teams. No credit card to start.</p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <a href="#jane" className="ig-cta px-8 py-4 inline-flex items-center gap-2">Start Designing <Arrow /></a>
+            </div>
+            
+            <div className="mt-12 pt-8 border-t border-white/10 flex items-center gap-6">
+              <div className="flex -space-x-3">
+                {[1, 2, 3, 4].map(i => (
+                  <img key={i} src={`https://i.pravatar.cc/100?img=${i+10}`} className="w-10 h-10 rounded-full border-2 border-black" alt="" />
+                ))}
+              </div>
+              <div className="text-xs text-slate-400">Join 10,000+ engineers<br/>shipping faster.</div>
+            </div>
+          </div>
+          
+          <div className="flex justify-center md:justify-end">
+            <DemoStepper />
+          </div>
         </div>
       </div>
     </section>
