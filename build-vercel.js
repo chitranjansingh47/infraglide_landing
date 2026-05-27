@@ -1,27 +1,38 @@
 import fs from 'fs';
 import path from 'path';
 
-console.log('Restructuring output directory for Vercel default settings...');
-
 const clientDir = path.join(process.cwd(), 'dist', 'client');
 const distDir = path.join(process.cwd(), 'dist');
 
-if (fs.existsSync(clientDir)) {
-  const files = fs.readdirSync(clientDir);
-  for (const file of files) {
-    fs.renameSync(path.join(clientDir, file), path.join(distDir, file));
-  }
-  fs.rmSync(clientDir, { recursive: true, force: true });
+console.log('Restructuring output for Vercel static SPA...');
+
+if (!fs.existsSync(clientDir)) {
+  console.log('No dist/client directory found — skipping restructure.');
+  process.exit(0);
 }
 
-// Rename _shell.html to index.html for standard SPA hosting
+// Copy everything from dist/client into dist/ (overwrite)
+fs.cpSync(clientDir, distDir, { recursive: true, force: true });
+console.log('Copied dist/client/* → dist/');
+
+// Remove the now-redundant dist/client folder
+fs.rmSync(clientDir, { recursive: true, force: true });
+console.log('Removed dist/client/');
+
+// Rename _shell.html → index.html
 const shellPath = path.join(distDir, '_shell.html');
 const indexPath = path.join(distDir, 'index.html');
 if (fs.existsSync(shellPath)) {
+  if (fs.existsSync(indexPath)) fs.rmSync(indexPath);
   fs.renameSync(shellPath, indexPath);
-  console.log('Successfully renamed _shell.html to index.html');
+  console.log('Renamed _shell.html → index.html');
+} else if (fs.existsSync(indexPath)) {
+  console.log('index.html already exists — nothing to rename.');
 } else {
-  console.log('_shell.html not found, skipping rename.');
+  console.error('ERROR: Neither _shell.html nor index.html found in dist/!');
+  process.exit(1);
 }
 
-console.log('Output restructured successfully for Vercel!');
+console.log('\n✅ dist/ is ready for Vercel static deployment!');
+console.log('Files in dist/:');
+fs.readdirSync(distDir).forEach(f => console.log(' -', f));
