@@ -8,7 +8,6 @@
     "build": "vite build && node build-vercel.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "lint": "eslint .",
     "format": "prettier --write ."
   },
   "dependencies": {
