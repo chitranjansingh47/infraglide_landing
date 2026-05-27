@@ -5,6 +5,7 @@ import { DemoStepper } from "../components/DemoStepper";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
+import Lenis from "lenis";
 import logoUrl from "@/assets/infraglide-logo.png";
 import awsCanvasBgUrl from "@/assets/aws_canvas_bg.png";
 import driftDetectionBgUrl from "@/assets/drift_detection_bg.png";
