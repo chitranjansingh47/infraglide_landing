@@ -1,0 +1,1567 @@
+
+InfraGlide — Design First. Deploy Fast.
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS — InfraGlide clean light system
+═══════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  /* surfaces */
+  --bg:       #f8f8fc;
+  --bg2:      #ffffff;
+  --bg3:      #f2f2f8;
+  --bg4:      #eaeaf4;
+  --card:     #ffffff;
+  --card2:    #f5f5fb;
+  /* borders */
+  --bdr:      rgba(90,80,160,0.10);
+  --bdr2:     rgba(90,80,160,0.16);
+  --bdr3:     rgba(90,80,160,0.26);
+  /* brand — indigo/violet on light */
+  --p:        #5a3ef8;   /* primary indigo */
+  --p2:       #7c5cfc;   /* mid indigo */
+  --p3:       #3a22d0;   /* deep indigo */
+  --p-lt:     rgba(90,62,248,0.07);
+  --p-lt2:    rgba(90,62,248,0.13);
+  --teal:     #00a888;
+  --teal-lt:  rgba(0,168,136,0.10);
+  --sky:      #0ea5c9;
+  --sky-lt:   rgba(14,165,201,0.10);
+  --amber:    #d97706;
+  --rose:     #e11d48;
+  /* text */
+  --t1:  #0f0e1a;
+  --t2:  #3a3760;
+  --t3:  #7b78a8;
+  --t4:  #aeabcc;
+  /* font */
+  --f: 'Inter', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  /* shadows */
+  --sh-sm: 0 1px 3px rgba(60,50,120,0.07);
+  --sh-md: 0 4px 20px rgba(60,50,120,0.09);
+  --sh-lg: 0 12px 48px rgba(60,50,120,0.11);
+  --sh-xl: 0 24px 80px rgba(60,50,120,0.14);
+  --glow-p: 0 0 40px rgba(90,62,248,0.14);
+  --glow-p2:0 0 80px rgba(90,62,248,0.08);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t1);font-family:var(--f);-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none;}
+a{text-decoration:none;color:inherit;}
+button{cursor:none;font-family:var(--f);border:none;background:none;}
+img{max-width:100%;}
+::selection{background:var(--p);color:#fff;}
+/* ── CURSOR ── */
+#cur{position:fixed;width:10px;height:10px;background:var(--p);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;box-shadow:0 0 12px rgba(90,62,248,0.35);}
+#cur-r{position:fixed;width:30px;height:30px;border:1.5px solid rgba(90,62,248,0.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s;}
+body.hov #cur{width:16px;height:16px;background:var(--teal);}
+body.hov #cur-r{width:44px;height:44px;opacity:.6;}
+/* ── CANVAS ── */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6;}
+/* ══════════════════════════
+   NAV
+══════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:60px;
+  background:rgba(248,248,252,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bdr);
+}
+.n-logo{display:flex;align-items:center;gap:9px;font-size:1.05rem;font-weight:700;color:var(--t1);letter-spacing:-.02em;}
+.n-logo-mark{
+  width:28px;height:28px;border-radius:7px;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#fff;
+  box-shadow:var(--glow-p);
+}
+.n-links{display:flex;align-items:center;gap:2px;}
+.n-link{padding:6px 12px;border-radius:7px;font-size:.83rem;font-weight:500;color:var(--t3);transition:color .2s,background .2s;}
+.n-link:hover{color:var(--t1);background:rgba(255,255,255,.06);}
+.n-dd{position:relative;}
+.n-dd-menu{
+  position:absolute;top:calc(100% + 8px);left:0;min-width:185px;
+  background:var(--card2);border:1px solid var(--bdr2);
+  border-radius:12px;padding:6px;
+  opacity:0;pointer-events:none;transform:translateY(-6px);
+  transition:all .18s;box-shadow:var(--sh-xl);z-index:300;
+}
+.n-dd:hover .n-dd-menu{opacity:1;pointer-events:all;transform:translateY(0);}
+.n-dd-item{display:block;padding:8px 11px;border-radius:7px;font-size:.81rem;font-weight:500;color:var(--t3);transition:all .15s;}
+.n-dd-item:hover{color:var(--t1);background:rgba(255,255,255,.06);}
+.n-actions{display:flex;align-items:center;gap:8px;}
+.btn-nav{
+  padding:7px 16px;border-radius:8px;font-size:.82rem;font-weight:600;
+  color:#fff;background:var(--p);
+  box-shadow:0 2px 12px rgba(90,62,248,.4);
+  transition:all .2s;
+}
+.btn-nav:hover{background:var(--p2);transform:translateY(-1px);box-shadow:0 4px 20px rgba(90,62,248,.5);}
+.n-mob{display:none;color:var(--t2);font-size:1.3rem;padding:4px;}
+/* ══════════════════════════
+   PAGES
+══════════════════════════ */
+.page{display:none;position:relative;z-index:10;min-height:100vh;padding-top:60px;}
+.page.active{display:block;}
+/* ══════════════════════════
+   SHARED
+══════════════════════════ */
+.sec{padding:100px 40px;}
+.sec-sm{padding:64px 40px;}
+.wrap{max-width:1140px;margin:0 auto;}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid rgba(90,62,248,.35);border-radius:999px;
+  padding:5px 13px;font-family:var(--fm);
+  font-size:10px;letter-spacing:.1em;color:var(--p2);
+  background:var(--p-lt);margin-bottom:18px;text-transform:uppercase;
+}
+.pulse{width:5px;height:5px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.6);}}
+.h1{font-size:clamp(2.6rem,5.5vw,4.2rem);font-weight:800;line-height:1.06;letter-spacing:-.04em;color:var(--t1);}
+.h2{font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:800;line-height:1.1;letter-spacing:-.035em;color:var(--t1);}
+.h3{font-size:1.1rem;font-weight:700;color:var(--t1);margin-bottom:8px;}
+.lead{font-size:1rem;color:var(--t2);line-height:1.75;max-width:520px;}
+.grad{background:linear-gradient(135deg,#a78bfa 0%,var(--p) 40%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.grad2{background:linear-gradient(90deg,var(--p2),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+/* Buttons */
+.btn-p{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:12px 26px;border-radius:9px;font-weight:600;font-size:.88rem;
+  color:#fff;background:var(--p);
+  box-shadow:0 2px 14px rgba(90,62,248,.38);
+  transition:all .2s;
+}
+.btn-p:hover{background:var(--p2);transform:translateY(-2px);box-shadow:0 6px 24px rgba(90,62,248,.5);}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:12px 26px;border-radius:9px;font-weight:600;font-size:.88rem;
+  color:var(--t2);border:1px solid var(--bdr2);background:rgba(255,255,255,.04);
+  transition:all .2s;
+}
+.btn-ghost:hover{color:var(--t1);border-color:var(--bdr3);background:rgba(255,255,255,.08);transform:translateY(-2px);}
+.btn-sm{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:8px 16px;border-radius:7px;font-weight:600;font-size:.78rem;
+  color:var(--p2);border:1px solid rgba(90,62,248,.3);background:var(--p-lt);
+  transition:all .2s;font-family:var(--fm);letter-spacing:.04em;
+}
+.btn-sm:hover{background:var(--p-lt2);border-color:rgba(90,62,248,.5);}
+/* Cards */
+.card{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:16px;padding:28px;
+  transition:border-color .25s,transform .25s,box-shadow .25s;
+}
+.card:hover{border-color:rgba(90,62,248,.3);transform:translateY(-3px);box-shadow:0 16px 48px rgba(60,50,120,.1),var(--glow-p2);}
+/* Reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}
+.rv.on{opacity:1;transform:none;}
+.rv2{opacity:0;transform:translateY(18px);transition:opacity .55s .12s ease,transform .55s .12s ease;}
+.rv2.on{opacity:1;transform:none;}
+.rv3{opacity:0;transform:translateY(18px);transition:opacity .55s .24s ease,transform .55s .24s ease;}
+.rv3.on{opacity:1;transform:none;}
+/* ══════════════════════════
+   HOME — HERO
+══════════════════════════ */
+.hero{
+  position:relative;min-height:calc(100vh - 60px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:80px 40px 60px;text-align:center;overflow:hidden;
+}
+/* radial purple glow background */
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);
+  width:900px;height:700px;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(90,62,248,.10) 0%,transparent 70%);
+  pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-100px;left:50%;transform:translateX(-50%);
+  width:600px;height:400px;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(0,168,136,.06) 0%,transparent 70%);
+  pointer-events:none;}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(90,62,248,.07);border:1px solid rgba(90,62,248,.18);
+  border-radius:999px;padding:6px 16px;
+  font-size:.76rem;font-weight:600;color:var(--p);
+  margin-bottom:28px;letter-spacing:.05em;animation:fd .7s ease both;
+}
+.hero-kicker-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse 2s infinite;}
+.hero h1{margin-bottom:20px;animation:fd .8s .08s ease both;}
+.hero-sub{
+  font-size:1.1rem;color:var(--t2);line-height:1.75;
+  max-width:560px;margin:0 auto 36px;animation:fd .9s .15s ease both;
+}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:60px;animation:fd 1s .22s ease both;}
+/* Typewriter */
+.tw-line{font-family:var(--fm);font-size:.9rem;color:var(--t3);margin-bottom:56px;display:flex;align-items:center;justify-content:center;gap:6px;animation:fd .9s .18s ease both;}
+.tw-val{color:var(--p2);font-weight:500;}
+.tw-c{display:inline-block;width:2px;height:.95em;background:var(--p);animation:blink .9s step-end infinite;border-radius:1px;vertical-align:middle;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+/* hero product mockup */
+.hero-mockup{
+  position:relative;width:100%;max-width:900px;margin:0 auto;
+  animation:fdUp 1s .35s ease both;
+}
+.mockup-window{
+  background:var(--bg3);border:1px solid var(--bdr2);border-radius:14px;
+  overflow:hidden;box-shadow:var(--sh-xl),var(--glow-p2);
+}
+.mockup-bar{
+  background:var(--bg4);border-bottom:1px solid var(--bdr);
+  padding:10px 16px;display:flex;align-items:center;gap:8px;
+}
+.m-dot{width:10px;height:10px;border-radius:50%;}
+.m-r{background:#ff5f57;}.m-y{background:#febc2e;}.m-g{background:#28c840;}
+.mockup-url{flex:1;background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:4px 12px;margin:0 12px;font-family:var(--fm);font-size:11px;color:var(--t4);text-align:center;}
+.mockup-body{display:grid;grid-template-columns:200px 1fr;min-height:340px;}
+.mockup-sidebar{background:var(--bg4);border-right:1px solid var(--bdr);padding:16px;display:flex;flex-direction:column;gap:6px;}
+.ms-item{padding:7px 10px;border-radius:7px;font-size:11px;color:var(--t3);display:flex;align-items:center;gap:8px;}
+.ms-item.active{background:var(--p-lt);color:var(--p2);}
+.ms-icon{width:16px;height:16px;border-radius:4px;flex-shrink:0;}
+.ms-icon-p{background:linear-gradient(135deg,var(--p),var(--p2));}
+.ms-icon-t{background:linear-gradient(135deg,var(--teal),var(--sky));}
+.ms-icon-a{background:linear-gradient(135deg,var(--amber),#f59e0b80);}
+.ms-icon-g{background:linear-gradient(135deg,#22c55e,#16a34a);}
+.mockup-canvas{position:relative;padding:20px;overflow:hidden;}
+/* infrastructure diagram nodes */
+.infra-node{
+  position:absolute;background:var(--card2);border:1px solid var(--bdr2);
+  border-radius:10px;padding:10px 14px;font-size:10px;font-weight:600;
+  display:flex;align-items:center;gap:7px;color:var(--t2);
+  box-shadow:var(--sh-md);cursor:default;
+}
+.in-1{top:20px;left:20px;}
+.in-2{top:20px;left:200px;}
+.in-3{top:20px;right:20px;}
+.in-4{top:110px;left:110px;}
+.in-5{top:110px;right:80px;}
+.in-6{bottom:30px;left:50px;}
+.in-7{bottom:30px;left:220px;}
+.in-8{bottom:30px;right:40px;}
+.inode-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-aws{background:#ff9900;}.id-az{background:#0078d4;}.id-gcp{background:#4285f4;}.id-tf{background:#7b42bc;}.id-k8{background:#326ce5;}.id-ok{background:#22c55e;box-shadow:0 0 8px #22c55e;}
+/* connecting lines SVG */
+.infra-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+/* stats */
+.hero-stats{display:flex;gap:0;background:var(--card);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;max-width:600px;margin:56px auto 0;}
+.hs-item{flex:1;padding:20px 24px;text-align:center;position:relative;}
+.hs-item+.hs-item::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:1px;background:var(--bdr);}
+.hs-n{font-size:1.75rem;font-weight:800;color:var(--p2);letter-spacing:-.03em;font-variant-numeric:tabular-nums;}
+.hs-l{font-size:.65rem;color:var(--t4);letter-spacing:.1em;text-transform:uppercase;margin-top:3px;font-family:var(--fm);}
+@keyframes fd{from{opacity:0;transform:translateY(-14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fdUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fdIn{from{opacity:0;}to{opacity:1;}}
+/* ══════════════════════════
+   SOCIAL PROOF BAR
+══════════════════════════ */
+.proof-bar{
+  padding:28px 40px;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);
+  background:var(--bg2);
+}
+.proof-label{font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);text-align:center;margin-bottom:18px;}
+.proof-logos{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.proof-pill{
+  padding:9px 20px;border-radius:8px;border:1px solid var(--bdr);
+  background:rgba(255,255,255,.02);font-family:var(--fm);font-size:.75rem;
+  font-weight:700;color:var(--t4);letter-spacing:.08em;transition:all .25s;
+}
+.proof-pill:hover{color:var(--t2);border-color:rgba(90,62,248,.3);background:var(--p-lt);}
+/* ══════════════════════════
+   FEATURES SECTION
+══════════════════════════ */
+.feat-intro{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:72px;}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.feat-card{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:14px;padding:26px;
+  position:relative;overflow:hidden;transition:all .25s;
+}
+.feat-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--p),var(--teal));
+  transform:scaleX(0);transform-origin:left;transition:transform .3s;
+}
+.feat-card:hover{border-color:rgba(90,62,248,.25);transform:translateY(-4px);box-shadow:var(--sh-lg),var(--glow-p2);}
+.feat-card:hover::after{transform:scaleX(1);}
+.feat-icon{
+  width:42px;height:42px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;margin-bottom:14px;
+}
+.fi-p{background:linear-gradient(135deg,rgba(90,62,248,.2),rgba(90,62,248,.05));border:1px solid rgba(90,62,248,.2);}
+.fi-t{background:linear-gradient(135deg,rgba(0,168,136,.2),rgba(0,168,136,.05));border:1px solid rgba(0,168,136,.2);}
+.fi-s{background:linear-gradient(135deg,rgba(14,165,201,.2),rgba(14,165,201,.05));border:1px solid rgba(14,165,201,.2);}
+.fi-a{background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(245,158,11,.05));border:1px solid rgba(245,158,11,.2);}
+.feat-title{font-size:.93rem;font-weight:700;color:var(--t1);margin-bottom:7px;}
+.feat-desc{font-size:.8rem;color:var(--t3);line-height:1.7;}
+.feat-badge{display:inline-block;margin-top:12px;font-family:var(--fm);font-size:9px;letter-spacing:.08em;color:var(--p2);background:var(--p-lt);padding:3px 8px;border-radius:999px;border:1px solid rgba(90,62,248,.2);}
+/* ══════════════════════════
+   HOW IT WORKS
+══════════════════════════ */
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:56px;}
+.how-grid::before{content:'';position:absolute;top:30px;left:12.5%;right:12.5%;height:1px;background:linear-gradient(90deg,transparent,var(--bdr2),rgba(90,62,248,.3),var(--bdr2),transparent);}
+.how-step{text-align:center;padding:0 14px;}
+.how-num{
+  width:60px;height:60px;border-radius:50%;
+  border:1px solid rgba(90,62,248,.3);background:var(--card);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1.2rem;color:var(--p2);
+  margin:0 auto 16px;position:relative;z-index:2;
+  transition:all .25s;
+}
+.how-step:hover .how-num{background:var(--p-lt);border-color:rgba(90,62,248,.5);box-shadow:0 0 24px rgba(90,62,248,.15);}
+.how-title{font-size:.88rem;font-weight:700;color:var(--t1);margin-bottom:6px;}
+.how-desc{font-size:.78rem;color:var(--t3);line-height:1.65;}
+/* ══════════════════════════
+   TERMINAL
+══════════════════════════ */
+.terminal{background:#1a1828;border:1px solid rgba(90,62,248,0.18);border-radius:14px;overflow:hidden;box-shadow:var(--sh-xl);}
+.term-bar{background:#231f38;border-bottom:1px solid rgba(255,255,255,0.07);padding:11px 16px;display:flex;align-items:center;gap:7px;}
+.td{width:10px;height:10px;border-radius:50%;}
+.td-r{background:#ff5f57;}.td-y{background:#febc2e;}.td-g{background:#28c840;}
+.term-title{font-family:var(--fm);font-size:10px;color:rgba(255,255,255,0.35);margin-left:8px;flex:1;}
+.term-replay{font-family:var(--fm);font-size:9px;color:rgba(255,255,255,0.35);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,0.1);padding:3px 10px;border-radius:5px;cursor:none;transition:all .2s;}
+.term-replay:hover{color:var(--p2);border-color:rgba(90,62,248,.4);}
+.term-body{padding:22px 26px;font-family:var(--fm);font-size:12.5px;line-height:2;min-height:190px;}
+.tp{color:#7ee787;}.tc{color:#e2e8f0;}.to{color:#94a3b8;}.ts{color:#7ee787;}.tw{color:#f59e0b;}
+.tcur{display:inline-block;width:7px;height:13px;background:var(--p2);animation:blink .9s step-end infinite;vertical-align:middle;border-radius:1px;}
+/* ══════════════════════════
+   TEMPLATES SECTION
+══════════════════════════ */
+.tmpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+.tmpl-card{
+  background:var(--card);border:1px solid var(--bdr);border-radius:14px;
+  overflow:hidden;transition:all .25s;
+}
+.tmpl-card:hover{border-color:rgba(90,62,248,.3);transform:translateY(-4px);box-shadow:var(--sh-lg);}
+.tmpl-thumb{
+  height:148px;background:var(--bg4);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;border-bottom:1px solid var(--bdr);
+}
+.tmpl-thumb-inner{display:flex;flex-direction:column;gap:7px;padding:14px;width:100%;}
+.tmpl-row{display:flex;gap:7px;}
+.tmpl-block{border-radius:6px;height:28px;display:flex;align-items:center;padding:0 8px;font-size:9px;font-weight:600;color:#fff;flex-shrink:0;}
+.tb-aws{background:#ff9900;width:52px;}.tb-rds{background:#3b82f6;width:44px;}.tb-ec{background:#f59e0b;width:36px;}
+.tb-vpc{background:rgba(90,62,248,.6);width:40px;border:1px dashed rgba(90,62,248,.8);}
+.tb-az{background:#0078d4;width:50px;}.tb-aks{background:#326ce5;width:44px;}.tb-acr{background:#00c9a7;width:36px;}
+.tb-gke{background:#4285f4;width:52px;}.tb-bq{background:#22c55e;width:44px;}.tb-cs{background:#f43f5e;width:36px;}
+.tb-tf{background:#7b42bc;width:48px;}.tb-gha{background:#1a1a2e;border:1px solid #333;width:48px;}
+.tmpl-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--t4);}
+.tmpl-body{padding:16px 18px;}
+.tmpl-tag{font-family:var(--fm);font-size:9px;letter-spacing:.08em;color:var(--p2);background:var(--p-lt);padding:2px 7px;border-radius:999px;margin-bottom:8px;display:inline-block;}
+.tmpl-name{font-size:.88rem;font-weight:700;color:var(--t1);margin-bottom:5px;}
+.tmpl-desc{font-size:.75rem;color:var(--t3);line-height:1.6;}
+/* ══════════════════════════
+   PRICING
+══════════════════════════ */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px;align-items:start;}
+.price-card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:34px 28px;position:relative;transition:all .25s;}
+.price-card:hover{box-shadow:var(--sh-xl);}
+.price-card.pop{border-color:rgba(90,62,248,.5);background:linear-gradient(160deg,rgba(90,62,248,.08),var(--card) 60%);box-shadow:0 0 0 1px rgba(90,62,248,.2),var(--sh-lg);}
+.pop-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--p),var(--p2));color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;padding:4px 16px;border-radius:0 0 10px 10px;font-family:var(--fm);text-transform:uppercase;}
+.price-plan{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--p2);margin-bottom:8px;font-weight:700;}
+.price-amt{font-size:2.6rem;font-weight:800;color:var(--t1);letter-spacing:-.04em;line-height:1;}
+.price-amt sup{font-size:1rem;vertical-align:top;margin-top:8px;font-weight:700;}
+.price-period{font-size:.78rem;color:var(--t3);}
+.price-desc{font-size:.8rem;color:var(--t3);margin:10px 0 22px;line-height:1.65;}
+.price-div{height:1px;background:var(--bdr);margin:20px 0;}
+.price-fl{font-family:var(--fm);font-size:9px;letter-spacing:.08em;color:var(--t4);text-transform:uppercase;margin-bottom:12px;}
+.price-feat{display:flex;gap:8px;align-items:flex-start;margin-bottom:9px;font-size:.8rem;color:var(--t2);line-height:1.5;}
+.pf-ck{color:var(--teal);flex-shrink:0;font-size:11px;margin-top:2px;}
+/* billing toggle */
+.bill-toggle{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:40px;font-size:.82rem;color:var(--t3);font-family:var(--fm);}
+.tog{width:42px;height:22px;border-radius:999px;background:var(--bdr2);position:relative;cursor:none;transition:background .3s;border:1px solid var(--bdr2);}
+.tog.on{background:var(--p);}
+.tog-k{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .3s;}
+.tog.on .tog-k{transform:translateX(20px);}
+.tog-active{color:var(--p2);font-weight:700;}
+.save-tag{background:rgba(0,168,136,.12);border:1px solid rgba(0,168,136,.2);color:var(--teal);padding:2px 7px;border-radius:999px;font-size:9px;font-weight:700;}
+/* FAQ */
+.faq-wrap{max-width:680px;margin:60px auto 0;}
+.faq-item{border-top:1px solid var(--bdr);}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:16px 4px;cursor:none;font-size:.88rem;font-weight:600;color:var(--t1);}
+.faq-ic{color:var(--p2);font-size:1.2rem;transition:transform .3s;line-height:1;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .38s ease;}
+.faq-ai{padding:0 4px 16px;font-size:.82rem;color:var(--t3);line-height:1.8;}
+/* ══════════════════════════
+   TEAM
+══════════════════════════ */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px;}
+.team-card{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:26px;text-align:center;transition:all .25s;position:relative;overflow:hidden;}
+.team-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--p),var(--teal));transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+.team-card:hover{border-color:rgba(90,62,248,.2);transform:translateY(-4px);box-shadow:var(--sh-lg);}
+.team-card:hover::before{transform:scaleX(1);}
+.t-av{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:#fff;margin:0 auto 12px;border:2px solid var(--bdr2);}
+.t-name{font-size:.92rem;font-weight:700;color:var(--t1);margin-bottom:2px;}
+.t-role{font-family:var(--fm);font-size:10px;color:var(--p2);letter-spacing:.06em;margin-bottom:8px;font-weight:700;}
+.t-desc{font-size:.76rem;color:var(--t3);line-height:1.65;}
+.t-soc{display:flex;gap:6px;justify-content:center;margin-top:12px;}
+.t-sc{width:24px;height:24px;border-radius:6px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t4);transition:all .2s;}
+.t-sc:hover{border-color:rgba(90,62,248,.4);color:var(--p2);}
+.mentors-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:640px;margin:36px auto 0;}
+/* ══════════════════════════
+   DOCS
+══════════════════════════ */
+.docs-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 60px);}
+.doc-sb{background:var(--bg2);border-right:1px solid var(--bdr);padding:24px 0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.doc-sb::-webkit-scrollbar{width:3px;}.doc-sb::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px;}
+.dsec{padding:0 14px;margin-bottom:22px;}
+.dset{font-family:var(--fm);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:7px;padding:0 5px;}
+.dsi{display:block;padding:7px 9px;border-radius:7px;font-size:.8rem;color:var(--t3);transition:all .18s;margin-bottom:1px;}
+.dsi:hover{color:var(--t1);background:rgba(255,255,255,.05);}
+.dsi.on{color:var(--p2);background:var(--p-lt);font-weight:600;}
+.doc-body{padding:40px 52px;max-width:820px;}
+.doc-h1{font-size:1.9rem;font-weight:800;letter-spacing:-.035em;margin-bottom:12px;color:var(--t1);}
+.doc-intro{font-size:.94rem;color:var(--t2);line-height:1.8;margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid var(--bdr);}
+.doc-h2{font-size:1.1rem;font-weight:700;margin:32px 0 10px;color:var(--t1);}
+.doc-p{font-size:.84rem;color:var(--t2);line-height:1.8;margin-bottom:12px;}
+.code-block{
+  background:#1a1828;border:1px solid rgba(90,62,248,0.15);border-radius:10px;
+  padding:18px 22px;font-family:var(--fm);font-size:12px;
+  line-height:1.9;color:#e2e8f0;margin:16px 0;overflow-x:auto;
+  position:relative;box-shadow:var(--sh-md);
+}
+.cc{color:#94a3b8;}.cg{color:#7ee787;}.cn{color:#7c82a8;}
+.cp-btn{position:absolute;top:9px;right:9px;font-family:var(--fm);font-size:9px;color:rgba(255,255,255,0.4);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,0.12);padding:3px 9px;border-radius:5px;cursor:none;transition:all .2s;}
+.cp-btn:hover{color:var(--p2);border-color:rgba(90,62,248,.4);}
+.callout{border-left:3px solid var(--p);background:var(--p-lt);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:.82rem;color:var(--t2);line-height:1.75;}
+.callout strong{color:var(--p2);}
+.doc-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:.8rem;}
+.doc-tbl th{font-family:var(--fm);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t4);padding:9px 12px;border-bottom:1px solid var(--bdr2);text-align:left;background:var(--bg3);}
+.doc-tbl td{padding:10px 12px;border-bottom:1px solid var(--bdr);color:var(--t2);}
+.doc-tbl tr:hover td{background:rgba(255,255,255,.02);}
+/* ══════════════════════════
+   BLOG
+══════════════════════════ */
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+.blog-card{background:var(--card);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;transition:all .25s;}
+.blog-card:hover{border-color:rgba(90,62,248,.25);transform:translateY(-4px);box-shadow:var(--sh-lg);}
+.blog-thumb{height:150px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;}
+.bt1{background:linear-gradient(135deg,#ede9fe,#c4b5fd);}
+.bt2{background:linear-gradient(135deg,#d1fae5,#6ee7b7);}
+.bt3{background:linear-gradient(135deg,#fef3c7,#fcd34d);}
+.bt4{background:linear-gradient(135deg,#e0e7ff,#a5b4fc);}
+.bt5{background:linear-gradient(135deg,#ccfbf1,#5eead4);}
+.bt6{background:linear-gradient(135deg,#fce7f3,#f9a8d4);}
+.blog-body{padding:18px 20px;}
+.blog-tag{font-family:var(--fm);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--p2);background:var(--p-lt);padding:2px 7px;border-radius:999px;font-weight:700;border:1px solid rgba(90,62,248,.2);}
+.blog-date{font-family:var(--fm);font-size:9px;color:var(--t4);margin-left:8px;}
+.blog-title{font-size:.89rem;font-weight:700;color:var(--t1);margin:9px 0 7px;line-height:1.4;}
+.blog-ex{font-size:.76rem;color:var(--t3);line-height:1.65;margin-bottom:12px;}
+.blog-rd{font-family:var(--fm);font-size:10px;color:var(--p2);font-weight:700;}
+/* ══════════════════════════
+   CONTACT
+══════════════════════════ */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;margin-top:48px;align-items:start;}
+.c-method{display:flex;gap:12px;align-items:flex-start;padding:16px;background:var(--card);border:1px solid var(--bdr);border-radius:12px;margin-bottom:12px;transition:all .2s;}
+.c-method:hover{border-color:rgba(90,62,248,.25);transform:translateX(3px);}
+.c-m-icon{width:36px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p-lt);border:1px solid rgba(90,62,248,.2);display:flex;align-items:center;justify-content:center;font-size:14px;}
+.c-m-lbl{font-family:var(--fm);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin-bottom:3px;}
+.c-m-val{font-size:.84rem;color:var(--t1);font-weight:600;}
+.c-form{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:32px;}
+.f-lbl{display:block;font-family:var(--fm);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:6px;font-weight:700;}
+.f-inp,.f-sel,.f-ta{
+  width:100%;background:var(--bg3);border:1px solid var(--bdr2);
+  border-radius:9px;padding:10px 13px;
+  font-family:var(--f);font-size:.84rem;color:var(--t1);
+  transition:border-color .2s,box-shadow .2s;outline:none;
+  margin-bottom:14px;
+}
+.f-inp:focus,.f-sel:focus,.f-ta:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(90,62,248,.15);}
+.f-ta{height:100px;resize:vertical;}
+.f-sel{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a5070' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-color:var(--bg3);}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+/* ══════════════════════════
+   STATUS
+══════════════════════════ */
+.status-ok{display:flex;align-items:center;gap:12px;background:rgba(0,168,136,.06);border:1px solid rgba(0,168,136,.2);border-radius:12px;padding:16px 22px;margin-bottom:32px;}
+.status-dot{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);animation:pulse 2s infinite;flex-shrink:0;}
+.status-ok-t{font-size:.94rem;font-weight:700;color:var(--t1);}
+.status-ok-s{font-family:var(--fm);font-size:10px;color:var(--t4);}
+.status-grp{margin-bottom:32px;}
+.status-grp-t{font-family:var(--fm);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:9px;font-weight:700;}
+.s-item{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);border:1px solid var(--bdr);border-radius:10px;margin-bottom:6px;}
+.s-item-n{font-size:.83rem;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:8px;}
+.s-dot{width:7px;height:7px;border-radius:50%;}
+.s-ok{background:var(--teal);box-shadow:0 0 6px var(--teal);}
+.s-up{font-family:var(--fm);font-size:11px;color:var(--teal);font-weight:700;}
+.uptime-bars{display:flex;gap:2px;align-items:flex-end;}
+.ub{width:5px;height:16px;border-radius:2px;background:var(--teal);opacity:.65;}
+.ub.p{opacity:.3;height:10px;background:var(--amber);}
+/* ══════════════════════════
+   SECURITY / PRIVACY / TERMS / CHANGELOG
+══════════════════════════ */
+.prose{max-width:780px;margin:0 auto;padding:64px 40px;}
+.prose-h1{font-size:2.1rem;font-weight:800;letter-spacing:-.04em;margin-bottom:8px;color:var(--t1);}
+.prose-date{font-family:var(--fm);font-size:10px;color:var(--t4);margin-bottom:32px;}
+.prose-h2{font-size:1.1rem;font-weight:700;margin:32px 0 10px;color:var(--t1);}
+.prose-p{font-size:.84rem;color:var(--t2);line-height:1.85;margin-bottom:12px;}
+.prose-ul{margin:10px 0 16px 16px;}
+.prose-ul li{font-size:.84rem;color:var(--t2);line-height:1.8;margin-bottom:4px;}
+.cl-entry{padding:32px 0;border-top:1px solid var(--bdr);display:grid;grid-template-columns:140px 1fr;gap:32px;}
+.cl-v{font-family:var(--fm);font-size:.9rem;font-weight:700;color:var(--p2);}
+.cl-d{font-family:var(--fm);font-size:10px;color:var(--t4);margin-top:3px;}
+.cl-badge{display:inline-block;font-family:var(--fm);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-bottom:12px;font-weight:700;}
+.cb-n{background:rgba(0,168,136,.1);color:var(--teal);border:1px solid rgba(0,168,136,.2);}
+.cb-i{background:var(--p-lt);color:var(--p2);border:1px solid rgba(90,62,248,.2);}
+.cb-f{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.2);}
+.cb-s{background:rgba(244,63,94,.1);color:var(--rose);border:1px solid rgba(244,63,94,.2);}
+.cl-item{font-size:.82rem;color:var(--t2);line-height:1.7;margin-bottom:6px;display:flex;gap:7px;}
+.cl-item::before{content:'→';color:var(--p2);flex-shrink:0;font-weight:700;}
+/* ══════════════════════════
+   ABOUT
+══════════════════════════ */
+.about-hero{padding:100px 40px 72px;text-align:center;border-bottom:1px solid var(--bdr);position:relative;overflow:hidden;}
+.about-hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:500px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(90,62,248,.09) 0%,transparent 70%);pointer-events:none;}
+.val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+.val-card{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:28px;transition:all .25s;}
+.val-card:hover{border-color:rgba(90,62,248,.2);transform:translateY(-3px);}
+.val-icon{font-size:1.6rem;margin-bottom:12px;}
+.val-title{font-size:.9rem;font-weight:700;color:var(--t1);margin-bottom:7px;}
+.val-desc{font-size:.78rem;color:var(--t3);line-height:1.7;}
+.tl-item{display:grid;grid-template-columns:100px 1fr;gap:24px;padding:24px 0;border-top:1px solid var(--bdr);align-items:start;}
+.tl-yr{font-family:var(--fm);font-size:1.2rem;font-weight:700;color:var(--p2);}
+.tl-title{font-size:.88rem;font-weight:700;color:var(--t1);margin-bottom:5px;}
+.tl-desc{font-size:.78rem;color:var(--t3);line-height:1.7;}
+/* ══════════════════════════
+   DEMO PAGE
+══════════════════════════ */
+.demo-layout{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 60px);}
+.demo-left{padding:64px 52px;border-right:1px solid var(--bdr);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+.demo-left::before{content:'';position:absolute;top:-100px;left:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(ellipse,rgba(90,62,248,.07),transparent 70%);pointer-events:none;}
+.demo-right{padding:64px 52px;background:var(--bg2);display:flex;flex-direction:column;justify-content:center;}
+.demo-trust{display:flex;flex-direction:column;gap:10px;margin-top:28px;}
+.demo-ti{display:flex;gap:10px;align-items:center;font-size:.83rem;color:var(--t2);}
+.demo-ti-ic{color:var(--teal);font-size:13px;flex-shrink:0;}
+.demo-quote{margin-top:32px;padding:20px;background:var(--card);border:1px solid var(--bdr);border-radius:12px;}
+.demo-q-text{font-size:.82rem;color:var(--t2);line-height:1.75;font-style:italic;margin-bottom:10px;}
+.demo-q-auth{display:flex;align-items:center;gap:9px;}
+.demo-q-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--teal));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+.demo-q-name{font-size:.78rem;font-weight:700;color:var(--t1);}
+.demo-q-role{font-family:var(--fm);font-size:9px;color:var(--t4);}
+.demo-email-bar{margin-top:20px;padding:13px 16px;background:var(--p-lt);border:1px solid rgba(90,62,248,.2);border-radius:10px;display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--t2);}
+.demo-email-bar a{color:var(--p2);font-weight:600;font-family:var(--fm);}
+/* ══════════════════════════
+   CTA STRIP
+══════════════════════════ */
+.cta-strip{
+  padding:80px 40px;text-align:center;
+  background:linear-gradient(135deg,var(--p3) 0%,var(--p) 50%,#7c5cfc 100%);
+  position:relative;overflow:hidden;
+}
+.cta-strip::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='.04'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/svg%3E");}
+.cta-strip h2{font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;color:#fff;letter-spacing:-.04em;margin-bottom:12px;position:relative;}
+.cta-strip p{font-size:.92rem;color:rgba(255,255,255,.8);margin-bottom:32px;max-width:460px;margin-left:auto;margin-right:auto;line-height:1.75;position:relative;}
+.btn-white{display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:9px;background:#fff;color:var(--p);font-weight:700;font-size:.88rem;box-shadow:var(--sh-lg);transition:all .2s;}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(60,50,120,.18);}
+.btn-w-outline{display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:9px;border:2px solid rgba(255,255,255,.3);color:#fff;font-weight:700;font-size:.88rem;transition:all .2s;}
+.btn-w-outline:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);}
+/* ══════════════════════════
+   FOOTER
+══════════════════════════ */
+footer{background:var(--bg2);border-top:1px solid var(--bdr);padding:56px 40px 36px;}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;max-width:1140px;margin:0 auto 44px;}
+.ft-logo{display:flex;align-items:center;gap:8px;font-size:1rem;font-weight:700;color:var(--t1);margin-bottom:12px;}
+.ft-logo-m{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--p),var(--p2));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;}
+.ft-desc{font-size:.78rem;color:var(--t3);line-height:1.75;margin-bottom:16px;max-width:260px;}
+.ft-soc{display:flex;gap:7px;}
+.ft-sc{width:30px;height:30px;border-radius:7px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t4);transition:all .2s;}
+.ft-sc:hover{border-color:rgba(90,62,248,.4);color:var(--p2);}
+.ft-col h4{font-family:var(--fm);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:12px;}
+.ft-lnk{display:block;font-size:.79rem;color:var(--t3);margin-bottom:8px;transition:color .18s;}
+.ft-lnk:hover{color:var(--t1);}
+.ft-btm{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--bdr);max-width:1140px;margin:0 auto;font-family:var(--fm);font-size:10px;color:var(--t4);}
+.ft-bl{display:flex;gap:16px;}
+.ft-bl a{color:var(--t4);transition:color .18s;}
+.ft-bl a:hover{color:var(--t2);}
+/* ══════════════════════════
+   RESPONSIVE
+══════════════════════════ */
+@media(max-width:900px){
+  nav{padding:0 16px;}
+  .n-links,.n-actions{display:none;}
+  .n-mob{display:flex;}
+  .sec,.sec-sm{padding:60px 20px;}
+  .feat-intro,.feat-grid,.tmpl-grid,.price-grid,.team-grid,.blog-grid,.val-grid{grid-template-columns:1fr;}
+  .how-grid{grid-template-columns:1fr 1fr;gap:28px;}
+  .how-grid::before{display:none;}
+  .contact-grid,.demo-layout{grid-template-columns:1fr;}
+  .docs-layout{grid-template-columns:1fr;}
+  .doc-sb{display:none;}
+  .ft-grid{grid-template-columns:1fr 1fr;}
+  .ft-btm{flex-direction:column;gap:10px;text-align:center;}
+  .hero-stats{flex-direction:column;}
+  .hs-item+.hs-item::before{top:0;left:20%;right:20%;width:auto;height:1px;}
+  .f-row{grid-template-columns:1fr;}
+  .cl-entry{grid-template-columns:1fr;}
+  .tl-item{grid-template-columns:1fr;}
+  .mentors-grid{grid-template-columns:1fr;}
+  .mockup-body{grid-template-columns:1fr;}
+  .mockup-sidebar{display:none;}
+}
+IG
+InfraGlide
+Product ▾
+Features
+Pricing
+Documentation
+Changelog
+Templates
+Company ▾
+About
+Blog
+Team
+Contact
+Legal ▾
+Privacy
+Terms
+Security
+Status
+Get Demo →
+☰
+AI-POWERED CLOUD INFRASTRUCTURE PLATFORM
+Design first.
+Deploy fast.
+InfraGlide is the AI-driven platform to visually design, generate Terraform code, and manage cloud infrastructure — collaboratively, at any scale.
+Auto-generates&nbsp;
+&nbsp;from your diagram
+Start for free →
+▶ Watch demo
+app.infraglide.io / workspace / prod-vpc
+Architectures
+CI/CD Pipelines
+Costs
+Drift Detection
+Templates
+Modules
+Settings
+VPC — us-east-1
+Load Balancer
+CloudFront CDN
+ECS Cluster
+RDS PostgreSQL
+S3 Storage
+ElastiCache
+Route 53
+0%
+Faster Deploy
+0%
+Uptime SLA
+0
+Active Nodes
+0%
+Cost Reduction
+Trusted by engineering teams worldwide
+AWS
+Azure
+Google Cloud
+Terraform
+Kubernetes
+GitHub Actions
+On-Premises
+PLATFORM CAPABILITIES
+Everything your team needs
+to move 
+at cloud speed
+InfraGlide combines visual design, AI code generation, and team collaboration into a single platform — so you ship infrastructure faster with fewer mistakes.
+Start free →
+Read docs
+🚀
+Visual Infrastructure Designer
+Drag-and-drop cloud components to build architectures visually. No YAML or Terraform expertise required to get started.
+DESIGN FIRST
+🤖
+AI Code Generation
+Describe your infrastructure in plain English. Our AI generates production-ready Terraform, Helm charts, and CI/CD pipelines instantly.
+GPT-4 POWERED
+☁️
+Multi-Cloud Support
+AWS, Azure, GCP, OCI, and on-premises — all in one unified workspace with a single, consistent interface.
+5 CLOUD PROVIDERS
+🔒
+Security First
+Security controls embedded at design stage. Checkov, Tfsec, Terrascan, and OPA enforce policy before anything reaches production.
+SOC2 COMPLIANT
+🔍
+Drift Detection
+Scheduled scans monitor the gap between your source of truth and your cloud provider — automatically flag and remediate drift.
+REAL-TIME
+👥
+Team Collaboration
+Native version control, audit logs, RBAC, and merge conflict resolution built for infrastructure teams working at scale.
+GITOPS NATIVE
+💰
+Cost Optimization
+Infracost integration provides real-time cost estimates as you design. AI recommendations cut average cloud spend by 38%.
+38% SAVINGS
+⚙️
+Embedded CI/CD
+Built-in deployment pipeline with plan, apply, and destroy workflows. No external CI/CD tooling needed to ship to production.
+BUILT-IN PIPELINE
+📦
+Module Registry
+Private and community Terraform module registry. Build internal service catalogs so any developer can provision approved infra on demand.
+SELF-SERVE
+infraglide — production deployment
+↺ Replay
+$ 
+infraglide deploy --env production --cloud aws
+HOW IT WORKS
+From diagram to 
+deployed
+in four steps
+01
+Design Visually
+Drag & drop cloud components onto the canvas. Build architecture diagrams that become your source of truth.
+02
+AI Generates Code
+InfraGlide auto-generates valid, production-ready Terraform code as you design — zero manual editing required.
+03
+Review & Approve
+Preview the plan, get cost estimates, run security scans, and collaborate with your team before a single resource is created.
+04
+Deploy & Monitor
+One-click deployment with embedded CI/CD. Real-time monitoring, drift detection, and cost alerts keep you in control.
+Ready to transform your infrastructure?
+Join hundreds of engineering teams shipping faster, spending less, and sleeping better with InfraGlide.
+Start for free →
+View pricing
+READY-TO-USE TEMPLATES
+Start from a 
+proven architecture
+Don't start from scratch. Browse curated, production-ready architecture templates for every cloud use case.
+VPC
+IGW
+ALB
+ECS
+RDS
+S3
+AWS
+3-Tier Web App on AWS
+VPC, ALB, ECS Fargate, RDS Multi-AZ, S3. Production-ready with security groups and IAM roles.
+VNET
+ACR
+AKS
+AGW
+Azure DB
+AZURE
+AKS Microservices Cluster
+Azure Kubernetes Service with Application Gateway, ACR, and managed PostgreSQL for microservices.
+GKE
+BigQuery
+Cloud SQL
+GCS
+GCP
+GKE Data Platform
+GKE cluster with BigQuery, Cloud SQL, and Cloud Storage — ideal for data engineering workloads.
+Terraform
+GitOps
+AWS
+Azure
+GCP
+MULTI-CLOUD
+Multi-Cloud GitOps Pipeline
+Unified deployment pipeline managing resources across AWS, Azure, and GCP with Terraform and GitHub Actions.
+Lambda
+API GW
+DynamoDB
+SQS
+SERVERLESS
+Serverless API on AWS
+Lambda + API Gateway + DynamoDB + SQS serverless stack with full observability and IAM least privilege.
+Vault
+RBAC
+OPA
+WAF
+SECURITY
+Zero-Trust Security Baseline
+HashiCorp Vault, OPA policy enforcement, WAF, RBAC, and encryption at rest — compliance-ready from day one.
+Browse all 80+ templates →
+SIMPLE PRICING
+Plans for every 
+team size
+No hidden fees. Cancel anytime. 14-day free trial — no credit card required.
+Monthly
+Annual
+SAVE 20%
+Starter
+$
+79
+ /mo per user
+Perfect for small teams getting started with cloud infrastructure as code.
+Start Free Trial
+What's included
+✓
+Up to 5 cloud architectures
+✓
+100 Terraform generations/month
+✓
+AWS & GCP support
+✓
+Public templates library
+✓
+Up to 3 team members
+✓
+Community support
+✓
+Basic cost estimation
+MOST POPULAR
+Standard
+$
+239
+ /mo per user
+For growing teams that need the full power of cloud automation and collaboration.
+Start Free Trial
+Everything in Starter, plus
+✓
+Unlimited architectures
+✓
+Unlimited Terraform generation
+✓
+AWS, Azure & GCP support
+✓
+Public & private templates
+✓
+Unlimited team members
+✓
+Architecture versioning & Git sync
+✓
+RBAC & audit logs
+✓
+Embedded CI/CD pipeline
+✓
+Email support (business hours)
+✓
+Guided onboarding
+Enterprise
+$
+399
+ /mo per user
+For large-scale operations needing dedicated support, compliance, and advanced control.
+Contact Sales →
+Everything in Standard, plus
+✓
+Dedicated account manager
+✓
+Chat & Slack support
+✓
+99.99% uptime SLA
+✓
+SSO / LDAP / AD integration
+✓
+AI Provisioning (Bob engine)
+✓
+Drift Detection & auto-remediation
+✓
+Self-hosted or single-tenant
+✓
+HLD/LLD architecture diagrams
+✓
+AI cost optimization engine
+✓
+Private module registry
+✓
+Terraform migration tools
+✓
+Security & compliance reports
+Frequently asked questions
+OUR PEOPLE
+Meet the 
+team
+The builders behind InfraGlide — passionate about making cloud infrastructure accessible to every engineer.
+US
+Umesh Sharma
+Managing Director
+15+ years in enterprise cloud infrastructure. Drives InfraGlide's strategic vision and executive relationships.
+in
+𝕏
+MS
+Manish Sharma
+Founder & CEO
+Serial entrepreneur and cloud infrastructure expert. Founded InfraGlide to democratize enterprise-grade infrastructure tooling.
+in
+𝕏
+SK
+Sunil Kumar
+Chief Sales Officer
+Enterprise sales veteran with deep expertise in cloud software. Scaled sales teams at Fortune 500 technology companies.
+in
+𝕏
+MoS
+Monika Sharma
+Head of Engineering
+Full-stack architect leading the world-class team building the future of cloud automation and AI provisioning.
+in
+GH
+RS
+Ravindra Sharma
+Head of Marketing
+Technical product marketer and community builder. Specialises in developer-first GTM strategy and content.
+in
+𝕏
+NB
+Nakshtra Singh Bhati
+Engineering Manager
+Infrastructure enthusiast leading the platform squad responsible for the core deployment engine and AI features.
+in
+GH
+HS
+Harsh Shrivastav
+Engineering Manager
+DevOps and Kubernetes specialist managing the integrations team across all major cloud providers.
+in
+GH
+KG
+Kamal Gaur
+Senior Developer
+Backend wizard specialising in distributed systems and the high-performance Terraform execution engine. Go + Rust expert.
+in
+GH
+KP
+Kartikey Purohit
+Senior Developer
+Frontend architect who built the visual infrastructure designer — making InfraGlide instantly intuitive for any engineer.
+in
+GH
+MENTORS
+Our 
+guiding lights
+MP
+Mukesh Purohit
+Mentor
+Strategic guidance and technical vision. Decades of enterprise software architecture experience.
+PJ
+Prashant Kumar Jinega
+Mentor
+Expert in cloud-native transformations and DevOps culture. Key advisor on product and platform direction.
+WE'RE HIRING
+Join the 
+mission
+Help us redefine how the world manages cloud infrastructure. Remote-first, ambitious, and fast-moving.
+View open roles →
+Getting Started
+Quick Start
+Installation
+Authentication
+Core Concepts
+CLI Reference
+deploy
+plan
+destroy
+config
+Cloud Providers
+Amazon Web Services
+Microsoft Azure
+Google Cloud
+On-Premises
+Guides
+Terraform Integration
+CI/CD Pipelines
+RBAC & Permissions
+Drift Detection
+API Reference
+Overview
+Authentication
+Endpoints
+⚡ Quick Start
+Get InfraGlide running in under 5 minutes. Deploy your first infrastructure stack to any cloud provider with just a few commands.
+Prerequisites
+Before you begin, ensure you have the following installed:
+Required:
+ Node.js 18+, Terraform 1.5+, and valid credentials for at least one cloud provider (AWS, Azure, or GCP).
+1. Install the CLI
+COPY
+# Via npm (recommended)
+npm install -g @infraglide/cli
+# Via Homebrew
+brew tap infraglide/tap &amp;&amp; brew install infraglide
+# Via curl
+curl -fsSL https://get.infraglide.io | sh
+2. Authenticate
+COPY
+infraglide auth login
+✓ Logged in as user@example.com
+3. Initialize a Project
+COPY
+infraglide init my-infra --cloud aws --region us-east-1
+✓ Project initialized: my-infra
+  Created infraglide.yaml
+  Created environments/production.yaml
+4. Plan &amp; Deploy
+COPY
+infraglide plan --env production
+Plan: 12 to add, 0 to change, 0 to destroy
+Security: 94/100 · Est. cost: $142.50/mo
+infraglide deploy --env production --approve
+✓ Deployment complete in 3m 42s
+Configuration Reference
+Field
+Type
+Required
+Description
+project.name
+string
+✓
+Unique project identifier
+project.cloud
+enum
+✓
+aws | azure | gcp | multi
+project.region
+string
+✗
+Default cloud region
+environments
+object
+✓
+Environment definitions
+security.rbac
+boolean
+✗
+Enable RBAC (default: true)
+Terraform →
+RBAC →
+CI/CD →
+Drift →
+Changelog
+Last updated: January 2026
+v3.2.0
+Jan 15, 2026
+NEW
+AI Provisioning (Bob engine) — describe infrastructure in plain English, get production Terraform
+Centralized Monitoring with Topology View — full multi-cloud visibility in one map
+Cost Optimization AI — weekly GPT-4 powered savings recommendations
+IMPROVED
+Terraform plan generation 3× faster with parallel execution engine
+Visual designer supports nested module views and component grouping
+FIXED
+Race condition in concurrent multi-environment deployments
+Azure credential refresh for long-running sessions
+v3.1.0
+Dec 3, 2025
+NEW
+Drift Detection — scheduled scans, alerts, and auto-remediation for configuration drift
+LDAP/AD integration for enterprise SSO authentication
+HLD/LLD architecture diagram auto-generation from IaC
+SECURITY
+Upgraded all dependencies (CVE-2025-4821, CVE-2025-5103)
+Mutual TLS for all API communications
+v3.0.0
+Oct 20, 2025
+NEW
+Major release: complete visual designer rewrite with 60fps rendering engine
+Multi-cloud deployment from a single workflow — AWS + Azure + GCP simultaneously
+Private Terraform module registry with versioning and access control
+REST API v3 with GraphQL support and webhook events
+IMPROVED
+CLI rewritten in Go — 10× faster startup, single binary
+New onboarding: time-to-first-deploy under 5 minutes
+OUR STORY
+We believe infrastructure
+should 
+empower
+, not block
+InfraGlide was born from the frustration of watching great engineering teams waste weeks on YAML configs and manual deployments. We're here to fix that — permanently.
+⚡
+Speed over ceremony
+Every feature we build is measured by how much faster it makes your team. If it doesn't save time, we cut it.
+🔓
+Transparency by default
+No black boxes. InfraGlide shows you every API call, every Terraform resource, every cost estimate. You stay in control.
+🤝
+Built with engineers
+We talk to dozens of engineering teams every week. Our roadmap is shaped by the people who actually use the product.
+Our 
+journey
+2022
+The idea is born
+Manish and Umesh sketch out InfraGlide on a whiteboard during a 14-hour flight, frustrated by the complexity of managing multi-cloud infrastructure at scale.
+2023
+First commit & founding team
+The founding engineering team comes together. The first version of the visual designer ships. 50 beta users sign up within the first week.
+2024
+Product launch & seed round
+InfraGlide launches publicly. Team grows to 15 people. Seed round closed. Full support for AWS, Azure, and GCP.
+2025
+AI integration & scale
+AI Provisioning engine (Bob) launches. 500+ companies using InfraGlide. Series A closed.
+2026
+Today & beyond
+1,200+ nodes managed. 38% average cost reduction for customers. Building towards a world where any team can run enterprise-grade infrastructure.
+BLOG
+Insights from the 
+cloud
+Engineering deep-dives, product updates, and DevOps best practices from the InfraGlide team.
+🤖
+AI
+JAN 15, 2026
+How we built natural language infrastructure provisioning with GPT-4
+A technical deep-dive into the AI pipeline behind InfraGlide's natural language provisioning — from prompt engineering to Terraform AST generation.
+READ MORE →
+📉
+COST
+JAN 8, 2026
+How one team cut their AWS bill by 47% in 30 days
+A case study on how a 40-person SaaS company eliminated $28,000/month in wasted cloud spend using InfraGlide's cost engine.
+READ MORE →
+🔒
+SECURITY
+DEC 20, 2025
+The definitive guide to infrastructure security in 2026
+Everything you need to know about securing cloud infrastructure — from IAM best practices to zero-trust networking and supply chain security.
+READ MORE →
+🔄
+DEVOPS
+DEC 5, 2025
+Drift detection: Why your infra state is probably lying to you
+Configuration drift is silent and deadly. Learn how to detect it early and build self-healing systems before it causes an incident.
+READ MORE →
+☁️
+MULTI-CLOUD
+NOV 18, 2025
+Multi-cloud without losing your mind — patterns that actually work
+The honest truth about running workloads across AWS, Azure, and GCP — challenges no one talks about, and patterns that scale.
+READ MORE →
+⚡
+TERRAFORM
+NOV 2, 2025
+Terraform at scale: Lessons from managing 10,000+ resources
+Hard-won lessons from teams managing massive Terraform codebases — state management, module architecture, and team workflows.
+READ MORE →
+GET IN TOUCH
+Let's 
+talk
+Whether you're evaluating InfraGlide, need technical support, have a partnership idea, or just want to say hi — our team responds within one business day.
+✉️
+Email
+hello@infraglide.io
+💼
+Sales
+sales@infraglide.io
+🛡️
+Security
+security@infraglide.io
+📍
+Headquarters
+Bengaluru, Karnataka, India
+Send us a message
+First Name
+Last Name
+Work Email
+Company
+Topic
+Sales inquiry
+Technical support
+Partnership
+Press & media
+Other
+Message
+Send Message →
+Privacy Policy
+Last updated: January 1, 2026
+InfraGlide ("we", "our", "us") is committed to protecting your privacy. This policy explains what data we collect, how we use it, and your rights.
+Information We Collect
+We collect information you provide directly — account registration, billing details, and support requests. We also collect usage data and telemetry to improve the platform.
+Account information (name, email, company)
+Billing and payment information (processed by Stripe)
+Infrastructure metadata (not your actual infrastructure data)
+Usage analytics and feature telemetry
+Support communications
+How We Use It
+To provide and improve InfraGlide, communicate about your account, process payments, provide support, and comply with legal obligations.
+Data Retention
+We retain data while your account is active. Request deletion anytime at privacy@infraglide.io.
+Security
+TLS 1.3 in transit. AES-256 at rest. Annual SOC2 Type II audits and penetration testing.
+Terms of Service
+Last updated: January 1, 2026
+By using InfraGlide, you agree to these Terms. Please read carefully before using our platform.
+Acceptable Use
+Use InfraGlide only for lawful purposes. No malware, IP infringement, or interference with other users.
+Account Responsibilities
+You are responsible for maintaining credential security and all account activity. Notify us immediately of unauthorized access.
+Intellectual Property
+InfraGlide owns the platform. You own all infrastructure configurations, code, and data you create.
+Limitation of Liability
+InfraGlide is provided "as is." We are not liable for indirect or consequential damages, except where required by law.
+Contact
+legal@infraglide.io
+SECURITY
+Security at 
+every layer
+We treat security as a core product feature, not an afterthought.
+🔐
+Encryption
+TLS 1.3 in transit. AES-256 at rest. Secrets in HashiCorp Vault. Zero plaintext credentials in our databases.
+🏅
+SOC2 Type II
+Annual third-party SOC2 Type II audits. Reports available to Enterprise customers under NDA.
+🕵️
+Penetration Testing
+Bi-annual pen tests by independent security firms. Bug bounty via HackerOne.
+🔑
+Zero-Knowledge
+Cloud credentials are encrypted client-side before transmission. InfraGlide staff never have access to your cloud credentials.
+📋
+Audit Logging
+Every action logged with user, timestamp, IP, and resource. Immutable logs retained for 12 months.
+🛡️
+Vulnerability Disclosure
+Report vulnerabilities to security@infraglide.io. We respond within 24 hours and protect good-faith researchers.
+Report a vulnerability:
+ security@infraglide.io — 24-hour response guaranteed.
+System 
+Status
+All Systems Operational
+Last updated: 2 minutes ago · May 19, 2026 14:32 UTC
+Core Platform
+API Gateway
+100.0%
+Visual Designer
+99.98%
+Deployment Engine
+99.92%
+AI Provisioning
+99.99%
+Cloud Integrations
+Amazon Web Services
+Operational
+Microsoft Azure
+Operational
+Google Cloud Platform
+Operational
+Terraform Registry
+Operational
+SCHEDULE A DEMO
+See InfraGlide
+in action
+Book a personalised 30-minute demo with our solutions team. We'll walk you through the platform, answer your questions, and map a plan for your infrastructure.
+✓
+Live walkthrough of the visual designer & AI engine
+✓
+Custom use-case discussion with a solutions engineer
+✓
+Cost & ROI estimate for your cloud environment
+✓
+Q&A on security, compliance, and integrations
+✓
+No commitment — just a conversation
+"We cut our deployment time by 80% in the first sprint after the demo. The onboarding was seamless."
+RS
+Ravi S.
+Head of DevOps, TechCorp India
+✉️ &nbsp;Prefer email?&nbsp;
+sales@infraglide.io
+Request your demo
+Our team replies within one business day to confirm your slot.
+First Name *
+Last Name *
+Work Email *
+Company *
+Job Title
+Team Size
+1–5 engineers
+6–20 engineers
+21–100 engineers
+100+ engineers
+Primary Cloud
+AWS
+Azure
+GCP
+Multi-cloud
+On-premises
+What do you want to see?
+Preferred Demo Slot
+I'm flexible — you choose
+Morning IST (9:00–12:00)
+Afternoon IST (12:00–16:00)
+Evening IST (16:00–19:00)
+📅 Request My Demo →
+🎉
+Request sent!
+We've emailed 
+ and will confirm your slot within one business day.
+sales@infraglide.io
+← Back to Home
+By submitting you agree to our 
+Privacy Policy
+. We never share your data.
+IG
+InfraGlide
+Infrastructure management made simple. Design visually, generate Terraform, deploy confidently.
+𝕏
+in
+GH
+YT
+Product
+Features
+Pricing
+Templates
+Documentation
+Changelog
+Company
+About
+Blog
+Team
+Contact
+Careers
+Legal
+Privacy
+Terms
+Security
+Status
+© 2026 InfraGlide by Skilltect Technologies. All rights reserved.
+Privacy
+Terms
+Status
+/* ── CURSOR ── */
+const C=document.getElementById('cur'),R=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function ac(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;C.style.cssText=`left:${mx}px;top:${my}px;`;R.style.cssText=`left:${rx}px;top:${ry}px;`;requestAnimationFrame(ac);})();
+document.addEventListener('mouseover',e=>{if(e.target.matches('a,button,.feat-card,.blog-card,.team-card,.price-card,.proof-pill,.how-step,.c-method,.card,.val-card,.tmpl-card'))document.body.classList.add('hov');});
+document.addEventListener('mouseout',()=>document.body.classList.remove('hov'));
+/* ── CANVAS — subtle network bg ── */
+const cv=document.getElementById('bg-canvas'),ctx2=cv.getContext('2d');
+let pts=[];
+function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+rsz();window.addEventListener('resize',()=>{rsz();initPts();});
+class Pt{constructor(){this.reset();}reset(){this.x=Math.random()*cv.width;this.y=Math.random()*cv.height;this.vx=(Math.random()-.5)*.25;this.vy=(Math.random()-.5)*.25;this.op=Math.random()*.12+.03;this.r=Math.random()*1.2+.3;this.c=['90,62,248','0,168,136','14,165,201'][Math.floor(Math.random()*3)];}
+update(){this.x+=this.vx;this.y+=this.vy;const dx=this.x-mx,dy=this.y-my,d=Math.sqrt(dx*dx+dy*dy);if(d
+cv.width||this.y
+cv.height)this.reset();}
+draw(){ctx2.beginPath();ctx2.arc(this.x,this.y,this.r,0,Math.PI*2);ctx2.fillStyle=`rgba(${this.c},${this.op})`;ctx2.fill();}}
+function initPts(){pts=[];const n=Math.min(Math.floor(cv.width*cv.height/12000),100);for(let i=0;i
+{p.update();p.draw();});for(let i=0;i
+p.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);
+  if(pg){pg.classList.add('active');window.scrollTo(0,0);}
+  injectFt();setTimeout(initRv,80);
+  if(id==='home'){initTw();initCounters();setTimeout(runTerm,700);}
+  if(id==='pricing'){initFaq();}
+}
+function sc(id){setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});},100);}
+/* ── FOOTER ── */
+function injectFt(){
+  const tpl=document.getElementById('fttpl');
+  if(!tpl)return;
+  document.querySelectorAll('[id^="ft-"]').forEach(el=>{
+    if(el.id!=='fttpl'&&el.innerHTML.trim()===''){
+      el.appendChild(tpl.content.cloneNode(true));
+    }
+  });
+}
+injectFt();
+/* ── TYPEWRITER ── */
+const phrases=['Terraform code','Helm charts','CI/CD pipelines','cloud diagrams','IaC blueprints','cost estimates'];
+let pi=0,ci=0,del=false,twT=null;
+function initTw(){clearTimeout(twT);const el=document.getElementById('tw');if(!el)return;el.textContent='';pi=0;ci=0;del=false;tick();}
+function tick(){const el=document.getElementById('tw');if(!el)return;const p=phrases[pi];if(!del){el.textContent=p.slice(0,++ci);if(ci===p.length){del=true;twT=setTimeout(tick,1900);return;}twT=setTimeout(tick,60);}else{el.textContent=p.slice(0,--ci);if(ci===0){del=false;pi=(pi+1)%phrases.length;twT=setTimeout(tick,400);return;}twT=setTimeout(tick,30);}}
+/* ── COUNTERS ── */
+function initCounters(){document.querySelectorAll('.hs-n').forEach(el=>{const t=parseFloat(el.dataset.t),s=el.dataset.s||'',dur=2200,start=performance.now();function up(now){const e=Math.min((now-start)/dur,1),ease=1-Math.pow(1-e,3),v=t*ease;el.textContent=Math.round(v).toLocaleString()+s;if(e
+=TL.length)return;
+  const l=TL[ti++];
+  const s=document.createElement('span');
+  s.style.display='block';
+  if(l.t==='p'){
+    const prefix=document.createElement('span');
+    prefix.className='tp';
+    prefix.textContent='$ ';
+    s.appendChild(prefix);
+    if(ti===TL.length){
+      const cur=document.createElement('span');
+      cur.className='tcur';
+      s.appendChild(cur);
+    } else {
+      const cmd=document.createElement('span');
+      cmd.className='tc';
+      cmd.textContent=l.x;
+      s.appendChild(cmd);
+    }
+  } else {
+    const inner=document.createElement('span');
+    inner.className=l.t==='s'?'ts':l.t==='w'?'tw':'to';
+    inner.textContent=l.x;
+    s.appendChild(inner);
+  }
+  b.appendChild(s);
+  b.scrollTop=b.scrollHeight;
+  tt=setTimeout(addLine,l.x===''?70:110);
+}
+function replayTerm(){runTerm();}
+/* ── BILLING TOGGLE ── */
+let ann=true;
+function toggleBill(){ann=!ann;const el=document.getElementById('btog');if(el)el.classList.toggle('on',ann);document.querySelectorAll('.pv').forEach(el=>{el.textContent=ann?el.dataset.a:el.dataset.m;});}
+/* ── FAQ ── */
+const FAQS=[
+  {q:'Is there a free trial?',a:'Yes! All plans include a 14-day free trial with no credit card required. Full access to Standard features during trial.'},
+  {q:'Can I change plans later?',a:'Absolutely. Upgrade, downgrade, or cancel at any time from account settings. Prorated credits apply on upgrades.'},
+  {q:'Do you offer startup discounts?',a:'Yes — 50% off for companies under 2 years old with less than $5M in funding. Email hello@infraglide.io.'},
+  {q:'Is my infrastructure data secure?',a:'Cloud credentials are encrypted client-side before transmission. InfraGlide staff never have access to them. We\'re SOC2 Type II certified.'},
+  {q:'What cloud providers do you support?',a:'AWS, Microsoft Azure, Google Cloud Platform, OCI, and on-premises environments. Multi-cloud across all plans.'},
+  {q:'Do you offer self-hosted deployment?',a:'Yes — self-hosted and single-tenant hosting available on Enterprise. Contact sales for details.'},
+];
+function initFaq(){
+  const el=document.getElementById('faq-root');
+  if(!el||el.innerHTML!=='')return;
+  FAQS.forEach((f,i)=>{
+    const item=document.createElement('div');
+    item.className='faq-item';
+    const q=document.createElement('div');
+    q.className='faq-q';
+    q.addEventListener('click',()=>tfaq(i));
+    q.textContent=f.q;
+    const ic=document.createElement('span');
+    ic.className='faq-ic';
+    ic.id='fi'+i;
+    ic.textContent='+';
+    q.appendChild(ic);
+    const a=document.createElement('div');
+    a.className='faq-a';
+    a.id='fa'+i;
+    const ai=document.createElement('div');
+    ai.className='faq-ai';
+    ai.textContent=f.a;
+    a.appendChild(ai);
+    item.appendChild(q);
+    item.appendChild(a);
+    el.appendChild(item);
+  });
+}
+function tfaq(i){const a=document.getElementById('fa'+i),ic=document.getElementById('fi'+i),o=a.style.maxHeight&&a.style.maxHeight!=='0px';document.querySelectorAll('.faq-a').forEach(el=>el.style.maxHeight='0px');document.querySelectorAll('.faq-ic').forEach(el=>{el.textContent='+';el.style.transform='';});if(!o){a.style.maxHeight='200px';ic.textContent='−';ic.style.transform='rotate(180deg)';}}
+/* ── DOCS ── */
+const DOCS={
+  install:`
+📦 Installation
+Install the InfraGlide CLI on macOS, Linux, or Windows.
+npm
+COPY
+npm install -g @infraglide/cli
+Homebrew
+COPY
+brew tap infraglide/tap &amp;&amp; brew install infraglide
+Windows
+COPY
+winget install InfraGlide.CLI
+Verify
+COPY
+infraglide --version
+infraglide v3.2.0
+`,
+  auth:`
+🔑 Authentication
+Authenticate the CLI and configure cloud provider credentials.
+Login
+COPY
+infraglide auth login
+✓ Logged in as user@company.com
+Configure AWS
+COPY
+infraglide config set-cloud aws \\
+  --access-key-id AKIAIOSFODNN7 \\
+  --secret-access-key wJalrX
+✓ AWS credentials configured
+Security tip:
+ Never commit credentials to version control. InfraGlide encrypts all credentials before storing.
+`,
+  deploy:`
+⚡ infraglide deploy
+Deploy infrastructure to one or more cloud environments.
+Usage
+COPY
+infraglide deploy [options]
+Options
+Flag
+Description
+Default
+--env
+Target environment
+development
+--cloud
+Provider (aws|azure|gcp)
+From config
+--approve
+Auto-approve plan
+false
+--dry-run
+Plan only, no apply
+false
+--parallelism
+Concurrent operations
+10
+`,
+  tf:`
+🔧 Terraform Integration
+InfraGlide is fully compatible with your existing Terraform codebase.
+Import Existing Terraform
+COPY
+infraglide import --path ./terraform
+✓ Imported 47 resources from ./terraform
+✓ Visual diagram ready at app.infraglide.io
+Use Custom Modules
+COPY
+# infraglide.yaml
+modules:
+  - source: "git::https://github.com/org/tf-modules.git"
+    version: "v2.1.0"
+`,
+};
+function switchDoc(id,e){
+  if(e&&e.preventDefault)e.preventDefault();
+  // Whitelist check — only allow known doc keys
+  const allowed=['install','auth','deploy','tf'];
+  if(!allowed.includes(id))return;
+  document.querySelectorAll('.dsi').forEach(el=>el.classList.remove('on'));
+  if(e&&e.target&&e.target.classList)e.target.classList.add('on');
+  const b=document.getElementById('doc-body');
+  if(b&&DOCS[id])b.innerHTML=DOCS[id];
+}
+/* ── COPY CODE ── */
+function cpCode(btn){const t=btn.parentElement.innerText.replace('COPY','').replace('COPIED!','').trim();navigator.clipboard.writeText(t).then(()=>{btn.textContent='COPIED!';btn.style.color='#7ee787';setTimeout(()=>{btn.textContent='COPY';btn.style.color='';},2000);});}
+/* ── REVEAL ── */
+function initRv(){const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);}});},{threshold:.1});document.querySelectorAll('.rv,.rv2,.rv3').forEach(el=>{if(!el.classList.contains('on'))obs.observe(el);});}
+initRv();
+/* ── FORM SUBMIT ── */
+function fSubmit(btn){const o=btn.textContent;btn.textContent='⏳ Sending…';btn.disabled=true;setTimeout(()=>{btn.textContent='✓ Sent!';btn.style.background='var(--teal)';setTimeout(()=>{btn.textContent=o;btn.disabled=false;btn.style.background='';},2800);},1400);}
+/* ── DEMO SUBMIT ── */
+function sanitizeField(v){return(v||'').replace(/[\r\n]/g,' ').slice(0,500);}
+function submitDemo(e){
+  e.preventDefault();
+  const form=document.getElementById('dform'),btn=document.getElementById('dsub');
+  const d=new FormData(form);
+  const fn=sanitizeField(d.get('fn'));
+  const ln=sanitizeField(d.get('ln'));
+  const em=sanitizeField(d.get('em'));
+  const co=sanitizeField(d.get('co'));
+  const fields=[
+    ['Name',`${fn} ${ln}`],
+    ['Email',em],
+    ['Company',co],
+    ['Job Title',sanitizeField(d.get('jt'))||'—'],
+    ['Team Size',sanitizeField(d.get('ts'))],
+    ['Cloud',sanitizeField(d.get('cl'))],
+    ['Slot',sanitizeField(d.get('sl'))||'—'],
+    ['Message',sanitizeField(d.get('msg'))||'—']
+  ];
+  const body=fields.map(([k,v])=>`${k}: ${v}`).join('\n');
+  const subject=encodeURIComponent('Demo Request — '+co);
+  const bodyEnc=encodeURIComponent(body);
+  // Validate that the resulting URI uses mailto: only
+  const mailUri=`mailto:sales@infraglide.io?subject=${subject}&body=${bodyEnc}`;
+  if(!mailUri.startsWith('mailto:'))return;
+  window.location.href=mailUri;
+  btn.textContent='⏳ Sending…';btn.disabled=true;
+  setTimeout(()=>{
+    form.style.display='none';
+    const s=document.getElementById('dsuccess'),ec=document.getElementById('dem-ec');
+    if(s)s.style.display='block';
+    // Use textContent — never innerHTML — for user-supplied email
+    if(ec)ec.textContent=em;
+  },1200);
+}
+/* ── MOBILE MENU ── */
+function toggleMob(){const l=document.querySelector('.n-links');if(!l)return;const o=l.style.display==='flex';if(o){l.style.display='';}else{l.style.display='flex';l.style.flexDirection='column';l.style.position='absolute';l.style.top='60px';l.style.left='0';l.style.right='0';l.style.background='var(--bg2)';l.style.padding='16px';l.style.borderBottom='1px solid var(--bdr)';l.style.zIndex='99';l.style.boxShadow='var(--sh-xl)';}}
+/* ── INIT ── */
+initTw();initCounters();setTimeout(runTerm,900);

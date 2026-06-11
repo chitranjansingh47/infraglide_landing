@@ -55,18 +55,18 @@ export function DemoStepper() {
           --p-light: rgba(143,101,194, 0.1);
           --p-mid: rgba(143,101,194, 0.2);
           --p-glow: rgba(143,101,194,.18);
-          --p-border: rgba(143,101,194,.30);
-          --red: #D93025;
-          --red-light: rgba(217,48,37, 0.1);
-          --red-border: rgba(217,48,37,.25);
-          --surface: rgba(20, 20, 25, 0.6);
-          --surface2: rgba(30, 30, 35, 0.8);
-          --border: rgba(255,255,255,0.1);
+          --p-border: var(--ig-border);
+          --red: var(--ig-danger);
+          --red-light: rgba(239,68,68, 0.1);
+          --red-border: rgba(239,68,68,.25);
+          --surface: var(--ig-card);
+          --surface2: var(--ig-bg-2);
+          --border: var(--ig-border);
           --border-hover: rgba(143,101,194, 0.5);
-          --t1: #FFFFFF;
-          --t2: #E5E5E5;
-          --t3: #A0A0A0;
-          --t4: #707070;
+          --t1: var(--ig-text);
+          --t2: var(--ig-text);
+          --t3: var(--ig-muted);
+          --t4: var(--ig-dim);
           --r: 12px;
           --rs: 6px;
           --t: .18s cubic-bezier(.4,0,.2,1);
@@ -109,7 +109,7 @@ export function DemoStepper() {
           display: flex; align-items: center; justify-content: center;
           font-size: 12.5px; font-weight: 600;
           border: 2px solid var(--border);
-          background: rgba(0,0,0,0.3); color: var(--t4);
+          background: var(--ig-bg-2); color: var(--t4);
           transition: all var(--t); flex-shrink: 0;
         }
         .ds-step.done .ds-step-circle {
@@ -123,7 +123,7 @@ export function DemoStepper() {
           font-size: 10.5px; color: var(--t4);
           white-space: nowrap; font-weight: 500;
         }
-        .ds-step.active .ds-step-label { color: #fff; font-weight: 600; }
+        .ds-step.active .ds-step-label { color: var(--t1); font-weight: 600; }
         .ds-step.done .ds-step-label { color: var(--t3); }
         
         .ds-step-line {
@@ -138,7 +138,7 @@ export function DemoStepper() {
           display: flex; align-items: center; gap: 12px;
           padding: 0 20px 14px;
         }
-        .ds-prog-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+        .ds-prog-bar { flex: 1; height: 4px; background: var(--ig-border-soft); border-radius: 4px; overflow: hidden; }
         .ds-prog-fill {
           height: 100%;
           background: linear-gradient(90deg, var(--p-dark), var(--p));
@@ -188,13 +188,13 @@ export function DemoStepper() {
           width: 100%; padding: 10px 14px;
           font-size: 13.5px; border-radius: var(--rs);
           border: 1.5px solid var(--border);
-          background: rgba(0,0,0,0.2); color: var(--t1);
+          background: var(--surface2); color: var(--t1);
           outline: none; transition: all var(--t);
         }
-        .ds-field input:hover, .ds-field select:hover, .ds-field textarea:hover { border-color: var(--border-hover); background: rgba(0,0,0,0.3); }
+        .ds-field input:hover, .ds-field select:hover, .ds-field textarea:hover { border-color: var(--border-hover); }
         .ds-field input:focus, .ds-field select:focus, .ds-field textarea:focus {
           border-color: var(--p);
-          background: rgba(0,0,0,0.4);
+          background: var(--surface);
           box-shadow: 0 0 0 3px var(--p-glow);
         }
         .ds-hint { font-size: 11px; color: var(--t4); margin-top: 5px; line-height: 1.45; }
@@ -204,7 +204,7 @@ export function DemoStepper() {
           padding: 12px 14px; border-radius: var(--rs);
           border: 1.5px solid var(--border);
           margin-bottom: 12px; cursor: pointer;
-          transition: all var(--t); background: rgba(0,0,0,0.2);
+          transition: all var(--t); background: var(--surface2);
         }
         .ds-toggle-row:hover { border-color: var(--p-border); background: rgba(143,101,194,0.05); }
         .ds-toggle-row.checked { border-color: var(--p); background: var(--p-light); }
@@ -225,10 +225,10 @@ export function DemoStepper() {
           padding: 10px 22px; border-radius: var(--rs);
           font-size: 13.5px; font-weight: 600; cursor: pointer;
           border: 1.5px solid var(--border);
-          background: rgba(0,0,0,0.3); color: var(--t2);
+          background: var(--surface2); color: var(--t2);
           transition: all var(--t);
         }
-        .ds-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: #fff; }
+        .ds-btn:hover { background: var(--surface); border-color: var(--border-hover); color: var(--t1); }
         .ds-btn.primary {
           background: var(--p); border-color: var(--p); color: #fff;
           box-shadow: 0 1px 4px rgba(143,101,194,.35);
@@ -240,7 +240,7 @@ export function DemoStepper() {
         }
         .ds-btn.primary:active { transform: translateY(0); }
         .ds-btn.ghost { border-color: transparent; background: transparent; color: var(--t3); }
-        .ds-btn.ghost:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .ds-btn.ghost:hover { background: var(--ig-border-soft); color: var(--t1); }
 
         .ds-nav-btns {
           display: flex; align-items: center; justify-content: space-between;
@@ -412,8 +412,8 @@ export function DemoStepper() {
               <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4">
                 <CalendarCheck className="w-8 h-8 text-emerald-400" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Ready to see InfraGlide in action?</h3>
-              <p className="text-sm text-slate-400 mb-6 max-w-sm mx-auto">
+              <h3 className="text-lg font-bold text-[var(--ig-text)] mb-2">Ready to see InfraGlide in action?</h3>
+              <p className="text-sm text-[var(--ig-muted)] mb-6 max-w-sm mx-auto">
                 Submit your request and our team will prepare a personalized live demo environment for {formData.company || 'your organization'}.
               </p>
             </div>
@@ -427,7 +427,7 @@ export function DemoStepper() {
           {curStep > 0 && <button className="ds-btn" onClick={() => goStep(curStep - 1)}>← Back</button>}
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-[12.5px] text-slate-400 font-medium hidden sm:inline">Step {curStep + 1} of {TOTAL_STEPS}</span>
+          <span className="text-[12.5px] text-[var(--ig-muted)] font-medium hidden sm:inline">Step {curStep + 1} of {TOTAL_STEPS}</span>
           <button className="ds-btn primary flex items-center gap-2" onClick={nextStep}>
             {curStep === TOTAL_STEPS - 1 ? 'Submit Request ✓' : 'Continue →'}
           </button>

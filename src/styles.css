@@ -144,8 +144,26 @@
   }
 }
 
-/* ============ InfraGlide — Pure Black + Deep Purple ============ */
+/* ============ InfraGlide — Theme Variables ============ */
 :root {
+  --ig-bg: #f8fafc;
+  --ig-bg-2: #f1f5f9;
+  --ig-bg-3: #ffffff;
+  --ig-text: #0f172a;
+  --ig-muted: #64748b;
+  --ig-dim: #94a3b8;
+  --ig-border: rgba(138, 83, 214, 0.25);
+  --ig-border-soft: rgba(138, 83, 214, 0.12);
+  --ig-card: rgba(255, 255, 255, 0.7);
+  --ig-accent: #8A53D6;
+  --ig-accent-2: #6d28d9;
+  --ig-success: #10b981;
+  --ig-danger: #ef4444;
+  --ig-warning: #f59e0b;
+  font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+}
+
+.dark {
   --ig-bg: #000000;
   --ig-bg-2: #0a0510;
   --ig-bg-3: #1a0b2e;
@@ -160,10 +178,27 @@
   --ig-success: #34d399;
   --ig-danger: #f87171;
   --ig-warning: #fbbf24;
-  font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
 }
 
-html, body { background: #000000; color: var(--ig-text); }
+html, body { 
+  margin: 0; 
+  padding: 0; 
+  width: 100%; 
+  overflow-x: hidden;
+  background-color: var(--ig-bg);
+  color: var(--ig-text);
+  scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+/* Hide scrollbar globally for an immersive effect */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 
 /* Custom Purple Cursor for Working Components */
 .working-cursor, .working-cursor * {
@@ -179,15 +214,17 @@ html, body { background: #000000; color: var(--ig-text); }
 .hero-subheading { font-weight: 300; }
 
 .ig-metallic {
-  background: linear-gradient(to bottom, #ffffff 0%, #b07eff 100%);
+  background: linear-gradient(to bottom, var(--ig-text) 0%, var(--ig-accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
 }
 
 .ig-portal-bg {
-  background: radial-gradient(circle at center, rgba(138, 83, 214, 0.28) 0%, rgba(26, 11, 46, 0.4) 30%, rgba(0,0,0,1) 75%);
+  background: radial-gradient(circle at center, rgba(138, 83, 214, 0.28) 0%, var(--ig-bg-3) 30%, var(--ig-bg) 75%);
 }
 
 .ig-card {
@@ -247,7 +284,7 @@ html, body { background: #000000; color: var(--ig-text); }
 
 .ig-ghost {
   background: rgba(138,83,214,0.06);
-  color: #fff;
+  color: var(--ig-text);
   border: 1px solid var(--ig-border);
   border-radius: 9999px;
   transition: background 0.25s, border-color 0.25s;
@@ -278,13 +315,13 @@ html, body { background: #000000; color: var(--ig-text); }
 .ig-letter { display: inline-block; opacity: 0; animation: ig-letter 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 
 /* Marquee grayscale -> purple */
-.ig-mono { filter: grayscale(1) brightness(1.4); transition: filter 0.3s, color 0.3s; color: #b0b0b0; }
+.ig-mono { filter: grayscale(1) brightness(1.4); transition: filter 0.3s, color 0.3s; color: var(--ig-muted); }
 .ig-mono:hover { filter: none; color: #8A53D6; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: rgba(138,83,214,0.3); border-radius: 8px; }
+::-webkit-scrollbar-track { background: var(--ig-bg); }
+::-webkit-scrollbar-thumb { background: rgba(138,83,214,0.3); border-radius: 8px; border: 2px solid var(--ig-bg); }
 ::-webkit-scrollbar-thumb:hover { background: rgba(138,83,214,0.6); }
 
 /* Marquee Animation */
@@ -321,18 +358,18 @@ html, body { background: #000000; color: var(--ig-text); }
   gap: 0.5rem;
   padding: 0.5rem 0.9rem;
   border-radius: 9999px;
-  background: rgba(10, 5, 16, 0.75);
-  border: 1px solid rgba(138, 83, 214, 0.35);
+  background: var(--ig-card);
+  border: 1px solid var(--ig-border);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   font-size: 12px;
-  color: #e5e5e5;
+  color: var(--ig-text);
   white-space: nowrap;
-  box-shadow: 0 8px 30px rgba(0,0,0,.5), 0 0 18px rgba(138,83,214,.25);
+  box-shadow: 0 8px 30px rgba(0,0,0,.15), 0 0 18px rgba(138,83,214,.15);
   will-change: transform;
   transition: border-color .35s, box-shadow .35s;
 }
-.ig-badge:hover { border-color: rgba(176,126,255,.7); box-shadow: 0 8px 30px rgba(0,0,0,.6), 0 0 28px rgba(138,83,214,.55); }
+.ig-badge:hover { border-color: rgba(176,126,255,.7); box-shadow: 0 8px 30px rgba(0,0,0,.2), 0 0 28px rgba(138,83,214,.35); }
 .ig-badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: #8A53D6; box-shadow: 0 0 10px #8A53D6; }
 
 /* ===== Marquee with alpha mask (cards) ===== */
@@ -377,7 +414,7 @@ html, body { background: #000000; color: var(--ig-text); }
   --hue2: #b07eff;
   background:
     radial-gradient(120% 120% at 50% 0%, rgba(138,83,214,0.10), transparent 60%),
-    linear-gradient(180deg, rgba(20,10,35,0.85), rgba(8,4,14,0.92));
+    linear-gradient(180deg, var(--ig-bg-2), var(--ig-bg));
   border: 1px solid rgba(138,83,214,0.18);
   box-shadow: 0 10px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
   isolation: isolate;

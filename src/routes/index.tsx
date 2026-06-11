@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowRight, ChevronRight, Check, Code, Network, Boxes, ShieldCheck, Cpu, Database, Cloud, GitBranch, ArrowUpRight, Zap, Eye, Lock, RefreshCcw, Github, Twitter, Linkedin, AlertTriangle, Shield, Settings, Play, Menu, X, Send, DollarSign, Gauge, Workflow, Container, Sparkles, Server, Layers } from "lucide-react";
+import { ArrowRight, ChevronRight, Check, Code, Network, Boxes, ShieldCheck, Cpu, Database, Cloud, GitBranch, ArrowUpRight, Zap, Eye, Lock, RefreshCcw, Github, Twitter, Linkedin, AlertTriangle, Shield, Settings, Play, Menu, X, Send, DollarSign, Gauge, Workflow, Container, Sparkles, Server, Layers, Sun, Moon } from "lucide-react";
+import { InteractiveGrid } from "../components/InteractiveGrid";
 import { DemoStepper } from "../components/DemoStepper";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -132,70 +133,6 @@ function TiltCard({ children, className = "", strength = 8 }: { children: React.
     <div ref={ref} onMouseMove={onMove} onMouseLeave={onLeave} className={className} style={{ transition: "transform .35s cubic-bezier(.2,.9,.3,1)" }}>
       {children}
     </div>
-  );
-}
-
-/* ===================== Floating Nav ===================== */
-function Nav() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const f = () => setScrolled(window.scrollY > 16);
-    window.addEventListener("scroll", f); return () => window.removeEventListener("scroll", f);
-  }, []);
-  const links = ["Workspace", "Pipelines", "Topology", "Security", "Pricing"];
-  return (
-    <header className={`fixed top-4 left-1/2 z-50 w-[min(1200px,calc(100%-2rem))] -translate-x-1/2 transition-all duration-500 ${scrolled ? "top-3" : "top-6"}`}>
-      <nav 
-        className="rounded-full px-4 py-2 flex items-center justify-between transition-all duration-500" 
-        style={{ 
-          background: scrolled ? "rgba(10, 5, 16, 0.75)" : "rgba(255, 255, 255, 0.15)",
-          borderColor: scrolled ? "rgba(138, 83, 214, 0.25)" : "rgba(255, 255, 255, 0.22)",
-          borderWidth: "1px",
-          borderStyle: "solid",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          boxShadow: scrolled ? "0 4px 30px rgba(0, 0, 0, 0.5)" : "0 4px 30px rgba(255, 255, 255, 0.05)",
-        }}
-      >
-        <a href="#" className="flex items-center gap-2 pl-2">
-          <img src={logoUrl} alt="InfraGlide" className="h-8 w-auto" />
-          <span className="h-2 w-2 rounded-full bg-[#8A53D6] ig-blink" />
-        </a>
-        <ul className="hidden md:flex items-center gap-1 text-sm">
-          {links.map((l) => (
-            <li key={l}>
-              <a href={`#${l.toLowerCase()}`} className="px-3 py-2 rounded-full text-[#b0b0b0] hover:text-white hover:bg-[rgba(138,83,214,0.1)] transition-colors">{l}</a>
-            </li>
-          ))}
-        </ul>
-        <div className="flex items-center gap-2">
-          <a href="#jane" className="hidden sm:inline-flex ig-cta px-4 py-2 text-sm items-center gap-1">
-            Launch App <Arrow />
-          </a>
-          <button onClick={() => setOpen((o) => !o)} className="md:hidden ig-ghost p-2" aria-label="menu">
-            {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
-        </div>
-      </nav>
-      {open && (
-        <div 
-          className="md:hidden mt-2 rounded-2xl p-4 flex flex-col gap-2 transition-all duration-500"
-          style={{
-            background: scrolled ? "rgba(10, 5, 16, 0.75)" : "rgba(255, 255, 255, 0.15)",
-            borderColor: scrolled ? "rgba(138, 83, 214, 0.25)" : "rgba(255, 255, 255, 0.22)",
-            borderWidth: "1px",
-            borderStyle: "solid",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-          }}
-        >
-          {links.map((l) => (
-            <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setOpen(false)} className="px-3 py-2 rounded-lg text-[#b0b0b0] hover:bg-[rgba(138,83,214,0.1)] hover:text-white">{l}</a>
-          ))}
-        </div>
-      )}
-    </header>
   );
 }
 
@@ -364,7 +301,7 @@ function Hero() {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const count = Math.min(TERMINAL_LOGS.length, Math.floor(scrollY / 16) + 3);
-      setVisibleLinesCount(prev => Math.max(prev, count));
+      setVisibleLinesCount(count);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
@@ -414,11 +351,12 @@ function Hero() {
   const word = "InfraGlide";
 
   return (
-    <section ref={heroRef} className="relative pt-40 pb-28 overflow-hidden ig-noise" style={{ background: "radial-gradient(ellipse at top, #1a0b2e 0%, #0a0510 40%, #000 80%)" }}>
-      <div ref={gridRef} className="ig-grid-bg absolute inset-0 -z-0" style={{ transition: "transform .8s ease-out" }} />
-      <div className="ig-portal-bg absolute inset-0 -z-0 opacity-70" />
+    <section ref={heroRef} className="relative pb-16 overflow-hidden ig-noise" style={{ backgroundColor: "#8A53D6" }}>
+      <InteractiveGrid color="#ffffff" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 grid md:grid-cols-12 gap-12 items-center">
+      {/* The Glassmorphism Card */}
+      <div className="relative z-10 mx-auto w-[min(1200px,calc(100%-2rem))] mt-6 bg-[#f4ebfe] dark:bg-[#130922] border border-white/30 dark:border-white/10 rounded-[2.5rem] shadow-2xl transition-colors duration-500">
+        <div className="pt-32 pb-20 px-6 sm:px-12 grid md:grid-cols-12 gap-12 items-center">
         
         {/* Left Column: Left-aligned Text Content */}
         <div className="md:col-span-7 text-left flex flex-col justify-center">
@@ -427,10 +365,10 @@ function Hero() {
               <span key={i} className="hero-heading-char ig-metallic inline-block" style={{ animationDelay: `${i * 0.04}s` }}>{c}</span>
             ))}
           </h1>
-          <p ref={subheadingRef} className="hero-subheading mt-4 text-2xl md:text-5xl font-display-family text-[#b07eff]">
+          <p ref={subheadingRef} className="hero-subheading mt-4 text-2xl md:text-5xl font-display-family text-[var(--ig-accent-2)]">
             Your Cloud, Visualized.
           </p>
-          <p className="mt-6 text-[#b0b0b0] text-lg max-w-xl">
+          <p className="mt-6 text-[var(--ig-muted)] text-lg max-w-xl font-medium">
             Visualize, design, and deploy cloud infrastructure with AI. Terraform-native, real-time drift detection, and cost optimization — all on one canvas.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-start gap-4">
@@ -484,6 +422,7 @@ function Hero() {
         </div>
 
       </div>
+      </div>
 
       {/* Floating orb */}
       <div aria-hidden className="absolute left-1/2 top-[68%] -translate-x-1/2 h-[420px] w-[420px] rounded-full ig-portal-pulse"
@@ -500,14 +439,14 @@ function Metric({ target, suffix = "", label, decimals = 0, icon: Icon }: { targ
     <TiltCard className="ig-card rounded-2xl p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="h-9 w-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(138,83,214,.15)", border: "1px solid rgba(138,83,214,.3)" }}>
-          <Icon className="w-4 h-4 text-[#b07eff]" />
+          <Icon className="w-4 h-4 text-[var(--ig-accent-2)]" />
         </div>
-        <span className="text-xs text-[#5a3a8a]">live</span>
+        <span className="text-xs text-[var(--ig-dim)]">live</span>
       </div>
       <div className="font-display text-4xl md:text-5xl ig-metallic">
         <span ref={ref}>{display}</span>{suffix}
       </div>
-      <div className="mt-1 text-sm text-[#b0b0b0]">{label}</div>
+      <div className="mt-1 text-sm text-[var(--ig-muted)]">{label}</div>
     </TiltCard>
   );
 }
@@ -555,11 +494,11 @@ function TrendChart() {
 function Metrics() {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <section className="relative py-24 working-cursor" id="workspace" style={{ background: "radial-gradient(ellipse at top, #140b24 0%, #0a0510 50%, #000 90%)" }}>
+    <section className="relative py-24 working-cursor" id="workspace" style={{ background: "radial-gradient(ellipse at top, var(--ig-bg-3) 0%, var(--ig-bg-2) 50%, var(--ig-bg) 90%)" }}>
       <div ref={ref} className="mx-auto max-w-6xl px-6">
         <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
           <div>
-            <div className="text-xs uppercase tracking-[0.2em] text-[#8A53D6] mb-2">Visual Workspace</div>
+            <div className="text-xs uppercase tracking-[0.2em] text-[var(--ig-accent)] mb-2">Visual Workspace</div>
             <h2 className="font-display text-4xl md:text-5xl ig-metallic">Real-time, every second.</h2>
           </div>
         </div>
@@ -606,31 +545,31 @@ function Jane() {
           <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full" style={{ background: "radial-gradient(circle, rgba(138,83,214,.35), transparent 70%)", filter: "blur(40px)" }} />
           <div className="grid md:grid-cols-2 gap-10 relative">
             <div>
-              <div className="inline-flex items-center gap-2 ig-pill px-3 py-1 text-xs text-[#b07eff] mb-6">
+              <div className="inline-flex items-center gap-2 ig-pill px-3 py-1 text-xs text-[var(--ig-accent-2)] mb-6">
                 <Sparkles className="w-3 h-3" /> Jane AI · v3
               </div>
               <h2 className="font-display text-4xl md:text-6xl ig-metallic leading-[0.95]">Meet Jane,<br/>your AI infrastructure architect.</h2>
-              <p className="mt-5 text-[#b0b0b0] max-w-md">She speaks Terraform, reads your topology, and ships production changes — with the receipts.</p>
+              <p className="mt-5 text-[var(--ig-muted)] max-w-md">She speaks Terraform, reads your topology, and ships production changes — with the receipts.</p>
               <div className="mt-6 flex flex-wrap gap-2">
                 {suggestions.map((s) => (
                   <button key={s} onClick={() => send(s)} className="ig-ghost px-3 py-1.5 text-xs">{s}</button>
                 ))}
               </div>
             </div>
-            <div className="ig-card rounded-2xl p-4 flex flex-col h-[420px]" style={{ background: "rgba(0,0,0,.5)" }}>
+            <div className="ig-card rounded-2xl p-4 flex flex-col h-[420px]" style={{ background: "var(--ig-card)" }}>
               <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-3 pr-2">
                 {msgs.map((m, i) => (
                   <div key={i} className={`flex ${m.from === "user" ? "justify-end" : "justify-start"}`}>
                     <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
                       m.from === "user"
-                        ? "bg-[#8A53D6] text-white"
-                        : "bg-[rgba(138,83,214,0.08)] border border-[rgba(138,83,214,0.2)] text-[#e5e5e5]"
+                        ? "bg-[#8A53D6] text-[var(--ig-text)]"
+                        : "bg-[var(--ig-border-soft)] border border-[rgba(138,83,214,0.2)] text-[var(--ig-text)]"
                     }`}>{m.text}</div>
                   </div>
                 ))}
                 {typing && (
                   <div className="flex justify-start">
-                    <div className="rounded-2xl px-4 py-3 bg-[rgba(138,83,214,0.08)] border border-[rgba(138,83,214,0.2)] flex gap-1">
+                    <div className="rounded-2xl px-4 py-3 bg-[var(--ig-border-soft)] border border-[rgba(138,83,214,0.2)] flex gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-[#b07eff] ig-blink" />
                       <span className="h-1.5 w-1.5 rounded-full bg-[#b07eff] ig-blink" style={{ animationDelay: ".2s" }} />
                       <span className="h-1.5 w-1.5 rounded-full bg-[#b07eff] ig-blink" style={{ animationDelay: ".4s" }} />
@@ -641,29 +580,29 @@ function Jane() {
               <form onSubmit={(e) => { e.preventDefault(); send(input); }} className="mt-3 flex gap-2">
                 <input value={input} onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask AI to design a VPC or debug a pipeline..."
-                  className="flex-1 bg-black/60 border border-[rgba(138,83,214,0.3)] rounded-full px-4 py-2.5 text-sm text-white placeholder:text-[#5a3a8a] focus:outline-none focus:border-[#8A53D6] focus:ig-glow" />
+                  className="flex-1 bg-[var(--ig-bg)] border border-[rgba(138,83,214,0.3)] rounded-full px-4 py-2.5 text-sm text-[var(--ig-text)] placeholder:text-[var(--ig-dim)] focus:outline-none focus:border-[var(--ig-accent)] focus:ig-glow" />
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   type="submit"
-                  className="group relative isolate overflow-hidden rounded-full bg-neutral-950 px-5 py-2 text-[14px] font-medium text-white transition-all hover:bg-neutral-900 shrink-0 shadow-[0_0_20px_-5px_rgba(138,83,214,0.4)] hover:shadow-[0_0_25px_-5px_rgba(138,83,214,0.6)]"
+                  className="group relative isolate overflow-hidden rounded-full bg-[var(--ig-border-soft)] px-5 py-2 text-[14px] font-medium text-[var(--ig-text)] transition-all hover:bg-[var(--ig-border)] shrink-0 shadow-[0_0_20px_-5px_rgba(138,83,214,0.3)] hover:shadow-[0_0_25px_-5px_rgba(138,83,214,0.5)]"
                   aria-label="send"
                 >
                   <span className="relative z-10 flex items-center gap-1.5">
-                    ask AI <Sparkles className="w-4 h-4 text-violet-300" />
+                    ask AI <Sparkles className="w-4 h-4 text-[var(--ig-accent)]" />
                   </span>
                   
                   {/* Gradient Border Simulation */}
                   <div 
-                    className="absolute inset-0 -z-10 rounded-full p-[1px] animate-border-spin" 
+                    className="absolute inset-0 -z-10 rounded-full animate-border-spin opacity-80" 
                     style={{ 
                       '--gradient-angle': '0deg',
-                      background: 'conic-gradient(from var(--gradient-angle), transparent 0%, #8A53D6 40%, #38bdf8 50%, transparent 60%, transparent 100%)'
+                      background: 'conic-gradient(from var(--gradient-angle), transparent 0%, var(--ig-accent) 40%, #38bdf8 50%, transparent 60%, transparent 100%)'
                     } as React.CSSProperties} 
                   />
                   
                   {/* Inner Background (keeps text readable) */}
-                  <div className="absolute inset-[1px] -z-10 rounded-full bg-neutral-950" />
+                  <div className="absolute inset-[1px] -z-10 rounded-full bg-[var(--ig-bg)]" />
                   
                   {/* Shine Effect Overlay */}
                   <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_0%,rgba(138,83,214,0.15)_0%,transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -698,7 +637,7 @@ function DriftGauge() {
           style={{ transition: "stroke-dashoffset 2s cubic-bezier(.2,.9,.3,1)", transform: "rotate(-90deg)", transformOrigin: "70px 70px", filter: "drop-shadow(0 0 8px rgba(138,83,214,.7))" }} />
         <text x="70" y="76" textAnchor="middle" className="font-display" fill="#fff" fontSize="28">{pct}%</text>
       </svg>
-      <div className="text-xs text-[#b0b0b0] mt-2">Compliant infrastructure</div>
+      <div className="text-xs text-[var(--ig-muted)] mt-2">Compliant infrastructure</div>
     </div>
   );
 }
@@ -1082,10 +1021,10 @@ function InteractiveCanvas() {
           <span className="text-slate-500 hover:text-slate-700 px-3 py-1 cursor-pointer font-medium transition-colors">Terraform Configuration</span>
         </div>
         <div className="flex items-center gap-2">
-          <button className="bg-emerald-500 hover:bg-emerald-600 text-white rounded px-3.5 py-1.5 font-bold shadow-sm transition-colors">
+          <button className="bg-emerald-500 hover:bg-emerald-600 text-[var(--ig-text)] rounded px-3.5 py-1.5 font-bold shadow-sm transition-colors">
             🚀 Deploy
           </button>
-          <button className="bg-red-500 hover:bg-red-600 text-white rounded px-3.5 py-1.5 font-bold shadow-sm transition-colors">
+          <button className="bg-red-500 hover:bg-red-600 text-[var(--ig-text)] rounded px-3.5 py-1.5 font-bold shadow-sm transition-colors">
             Destroy
           </button>
         </div>
@@ -1301,7 +1240,7 @@ function InteractiveCanvas() {
                     {/* Delete button */}
                     <button
                       onClick={(e) => deleteNode(e, node.id)}
-                      className="no-drag absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold shadow-md cursor-pointer z-30"
+                      className="no-drag absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 hover:bg-red-600 text-[var(--ig-text)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold shadow-md cursor-pointer z-30"
                       title="Delete Resource"
                     >
                       ✕
@@ -1309,7 +1248,7 @@ function InteractiveCanvas() {
 
                     {/* Connection point dot */}
                     <div
-                      className={`no-drag absolute -right-1.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full border border-slate-200 bg-white hover:border-purple-400 flex items-center justify-center cursor-pointer transition-all hover:scale-110 z-30 ${isConnecting ? "bg-emerald-500 text-white" : "text-slate-400 hover:text-purple-600 bg-white"}`}
+                      className={`no-drag absolute -right-1.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full border border-slate-200 bg-white hover:border-purple-400 flex items-center justify-center cursor-pointer transition-all hover:scale-110 z-30 ${isConnecting ? "bg-emerald-500 text-[var(--ig-text)]" : "text-slate-400 hover:text-purple-600 bg-white"}`}
                       style={{ cursor: "crosshair" }}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1364,11 +1303,11 @@ function InteractiveCanvas() {
 function Features() {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <section id="features" className="relative py-24">
-      <div aria-hidden className="absolute inset-0 ig-dots-soft opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+    <section id="features" className="relative py-24 overflow-hidden bg-[var(--ig-bg)] transition-colors duration-500">
+      <InteractiveGrid color="#8A53D6" />
       <div ref={ref} className="relative mx-auto max-w-6xl px-6">
         <div className="text-center mb-12">
-          <div className="text-xs uppercase tracking-[0.2em] text-[#8A53D6] mb-2">Capabilities</div>
+          <div className="text-xs uppercase tracking-[0.2em] text-[var(--ig-accent)] mb-2">Capabilities</div>
           <h2 className="font-display text-4xl md:text-6xl ig-metallic">Everything cloud, in one canvas.</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-4 auto-rows-[260px]">
@@ -1376,12 +1315,12 @@ function Features() {
           <TiltCard className="ig-card rounded-2xl p-6 md:col-span-2 md:row-span-2 relative overflow-hidden flex flex-col">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs text-[#8A53D6] uppercase tracking-widest">Visual Canvas</div>
-                <h3 className="font-display text-3xl text-white mt-1">Drag, drop, deploy.</h3>
+                <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Visual Canvas</div>
+                <h3 className="font-display text-3xl text-[var(--ig-text)] mt-1">Drag, drop, deploy.</h3>
               </div>
-              <Boxes className="w-5 h-5 text-[#b07eff]" />
+              <Boxes className="w-5 h-5 text-[var(--ig-accent-2)]" />
             </div>
-            <div className="flex-1 mt-4 relative border border-[rgba(138,83,214,0.12)] rounded-2xl bg-[rgba(10,5,16,0.65)] p-4 overflow-x-auto md:overflow-hidden flex items-center justify-center min-h-[380px]">
+            <div className="flex-1 mt-4 relative border border-[var(--ig-border-soft)] rounded-2xl bg-[var(--ig-bg-2)] p-4 overflow-x-auto md:overflow-hidden flex items-center justify-center min-h-[380px]">
               <div className="w-[580px] h-[350px] relative shrink-0">
                 {/* Canvas Background Image */}
                 <img src={awsCanvasBgUrl} alt="AWS Cloud Canvas" className="absolute inset-0 w-full h-full object-cover rounded-2xl pointer-events-none opacity-80" />
@@ -1409,35 +1348,35 @@ function Features() {
 
                 {/* Resource Nodes (Code Overlays) */}
                 {/* EC2 Instance */}
-                <div className="absolute left-[40px] top-[125px] w-[170px] h-[58px] border border-white/10 hover:border-amber-500/40 hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] rounded-xl bg-black/85 backdrop-blur-md px-3 py-2 flex items-center gap-3 transition-all duration-300 group cursor-pointer z-20 hover:scale-[1.03]">
+                <div className="absolute left-[40px] top-[125px] w-[170px] h-[58px] border border-[var(--ig-border-soft)] hover:border-amber-500/40 hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] rounded-xl bg-[var(--ig-card)] backdrop-blur-md px-3 py-2 flex items-center gap-3 transition-all duration-300 group cursor-pointer z-20 hover:scale-[1.03]">
                   <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-500 group-hover:scale-105 transition-transform shrink-0">
                     <Server className="w-5 h-5" />
                   </div>
                   <div className="text-left overflow-hidden">
-                    <div className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors truncate">EC2 Instance</div>
-                    <div className="text-[9px] text-white/50 font-mono leading-none mt-1 truncate">web-01</div>
+                    <div className="text-xs font-bold text-[var(--ig-text)] group-hover:text-amber-400 transition-colors truncate">EC2 Instance</div>
+                    <div className="text-[9px] text-[var(--ig-muted)] font-mono leading-none mt-1 truncate">web-01</div>
                   </div>
                 </div>
 
                 {/* Lambda */}
-                <div className="absolute left-[310px] top-[125px] w-[170px] h-[58px] border border-white/10 hover:border-orange-500/40 hover:shadow-[0_0_15px_rgba(249,115,22,0.2)] rounded-xl bg-black/85 backdrop-blur-md px-3 py-2 flex items-center gap-3 transition-all duration-300 group cursor-pointer z-20 hover:scale-[1.03]">
+                <div className="absolute left-[310px] top-[125px] w-[170px] h-[58px] border border-[var(--ig-border-soft)] hover:border-orange-500/40 hover:shadow-[0_0_15px_rgba(249,115,22,0.2)] rounded-xl bg-[var(--ig-card)] backdrop-blur-md px-3 py-2 flex items-center gap-3 transition-all duration-300 group cursor-pointer z-20 hover:scale-[1.03]">
                   <div className="w-9 h-9 rounded-lg bg-orange-500/10 border border-orange-500/25 flex items-center justify-center text-orange-500 group-hover:scale-105 transition-transform shrink-0">
                     <Cpu className="w-5 h-5" />
                   </div>
                   <div className="text-left overflow-hidden">
-                    <div className="text-xs font-bold text-white group-hover:text-orange-400 transition-colors truncate">Lambda</div>
-                    <div className="text-[9px] text-white/50 font-mono leading-none mt-1 truncate">process-data</div>
+                    <div className="text-xs font-bold text-[var(--ig-text)] group-hover:text-orange-400 transition-colors truncate">Lambda</div>
+                    <div className="text-[9px] text-[var(--ig-muted)] font-mono leading-none mt-1 truncate">process-data</div>
                   </div>
                 </div>
 
                 {/* RDS */}
-                <div className="absolute left-[175px] top-[235px] w-[170px] h-[58px] border border-white/10 hover:border-blue-500/40 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] rounded-xl bg-black/85 backdrop-blur-md px-3 py-2 flex items-center gap-3 transition-all duration-300 group cursor-pointer z-20 hover:scale-[1.03]">
+                <div className="absolute left-[175px] top-[235px] w-[170px] h-[58px] border border-[var(--ig-border-soft)] hover:border-blue-500/40 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] rounded-xl bg-[var(--ig-card)] backdrop-blur-md px-3 py-2 flex items-center gap-3 transition-all duration-300 group cursor-pointer z-20 hover:scale-[1.03]">
                   <div className="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-blue-400 group-hover:scale-105 transition-transform shrink-0">
                     <Database className="w-5 h-5" />
                   </div>
                   <div className="text-left overflow-hidden">
-                    <div className="text-xs font-bold text-white group-hover:text-blue-400 transition-colors truncate">RDS</div>
-                    <div className="text-[9px] text-white/50 font-mono leading-none mt-1 truncate">mysql-db-01</div>
+                    <div className="text-xs font-bold text-[var(--ig-text)] group-hover:text-blue-400 transition-colors truncate">RDS</div>
+                    <div className="text-[9px] text-[var(--ig-muted)] font-mono leading-none mt-1 truncate">mysql-db-01</div>
                   </div>
                 </div>
               </div>
@@ -1447,11 +1386,11 @@ function Features() {
           <TiltCard className="ig-card rounded-2xl pt-6 pb-0 px-0 flex flex-col justify-between overflow-hidden">
             <div className="px-6 mb-3">
               <div className="flex items-center justify-between">
-                <div className="text-xs text-[#8A53D6] uppercase tracking-widest">Topology Map</div>
-                <Network className="w-4 h-4 text-[#b07eff]" />
+                <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Topology Map</div>
+                <Network className="w-4 h-4 text-[var(--ig-accent-2)]" />
               </div>
             </div>
-            <div className="flex-1 w-full border-t border-white/10 overflow-hidden rounded-t-xl bg-black/40 relative">
+            <div className="flex-1 w-full border-t border-[var(--ig-border-soft)] overflow-hidden rounded-t-xl bg-[var(--ig-card)] relative">
               <video 
                 src={topologyVideoUrl}
                 autoPlay
@@ -1466,16 +1405,16 @@ function Features() {
           <TiltCard className="ig-card rounded-2xl pt-5 pb-0 px-0 flex flex-col justify-between overflow-hidden">
             <div className="flex items-center justify-between mb-4 px-5">
               <div>
-                <div className="text-xs text-[#8A53D6] uppercase tracking-widest">Deployed Resources</div>
-                <div className="font-display text-2xl text-white mt-1">45 resources</div>
+                <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Deployed Resources</div>
+                <div className="font-display text-2xl text-[var(--ig-text)] mt-1">45 resources</div>
               </div>
-              <Boxes className="w-4 h-4 text-[#b07eff]" />
+              <Boxes className="w-4 h-4 text-[var(--ig-accent-2)]" />
             </div>
             <div className="mt-auto w-full flex justify-center">
               <img 
                 src={deployedResourcesUrl} 
                 alt="Deployed Resources" 
-                className="w-full h-auto rounded-t-xl border-t border-white/10 pointer-events-none select-none" 
+                className="w-full h-auto rounded-t-xl border-t border-[var(--ig-border-soft)] pointer-events-none select-none" 
               />
             </div>
           </TiltCard>
@@ -1484,23 +1423,23 @@ function Features() {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <div>
-                  <h4 className="text-xs font-bold text-white tracking-wide">Drift detection</h4>
-                  <p className="text-[9px] text-white/40 leading-none mt-0.5">Compare Terraform vs live resources</p>
+                  <h4 className="text-xs font-bold text-[var(--ig-text)] tracking-wide">Drift detection</h4>
+                  <p className="text-[9px] text-[var(--ig-text)]/40 leading-none mt-0.5">Compare Terraform vs live resources</p>
                 </div>
                 <ShieldCheck className="w-4 h-4 text-amber-500" />
               </div>
               
               {/* Filters */}
-              <div className="flex gap-3 my-2 border-t border-b border-white/5 py-1.5">
-                <div className="flex items-center gap-1 text-[9px] text-white/40">
+              <div className="flex gap-3 my-2 border-t border-b border-[var(--ig-border-soft)] py-1.5">
+                <div className="flex items-center gap-1 text-[9px] text-[var(--ig-text)]/40">
                   <span>Status:</span>
-                  <div className="flex items-center gap-0.5 border border-white/10 rounded px-1 py-0.2 bg-black/40 text-white font-medium">
+                  <div className="flex items-center gap-0.5 border border-[var(--ig-border-soft)] rounded px-1 py-0.2 bg-[var(--ig-card)] text-[var(--ig-text)] font-medium">
                     Open <span className="text-[6px]">▼</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-[9px] text-white/40">
+                <div className="flex items-center gap-1 text-[9px] text-[var(--ig-text)]/40">
                   <span>Pipeline:</span>
-                  <div className="flex items-center gap-0.5 border border-white/10 rounded px-1 py-0.2 bg-black/40 text-white font-medium truncate max-w-[85px]">
+                  <div className="flex items-center gap-0.5 border border-[var(--ig-border-soft)] rounded px-1 py-0.2 bg-[var(--ig-bg-2)] text-[var(--ig-text)] font-medium truncate max-w-[85px]">
                     All pipelines <span className="text-[6px]">▼</span>
                   </div>
                 </div>
@@ -1508,29 +1447,29 @@ function Features() {
 
               {/* Table */}
               <div className="mt-1">
-                <div className="flex justify-between text-[8px] font-bold uppercase tracking-wider text-[#8A53D6] pb-1">
+                <div className="flex justify-between text-[8px] font-bold uppercase tracking-wider text-[var(--ig-accent)] pb-1">
                   <span>Pipeline</span>
                   <span>Resource</span>
                 </div>
                 
-                <div className="text-[8px] font-mono text-white/30 mt-1">ALB-TEST-1</div>
+                <div className="text-[8px] font-mono text-[var(--ig-text)]/30 mt-1">ALB-TEST-1</div>
                 
                 <div className="flex justify-between items-start mt-1 bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/10 hover:border-amber-500/20 rounded-lg p-2 transition-all cursor-pointer">
-                  <div className="flex items-center gap-1 text-[10px] text-white font-medium">
+                  <div className="flex items-center gap-1 text-[10px] text-[var(--ig-text)] font-medium">
                     <span className="text-[7px] text-amber-500/80">▶</span>
                     <span>alb-test-1</span>
                   </div>
                   <div className="text-right">
                     <div className="text-[9px] text-amber-400 font-mono font-medium truncate max-w-[120px]">aws_alb_2_listener</div>
-                    <div className="text-[7px] text-white/30 font-mono tracking-tighter mt-0.5 truncate max-w-[100px]">99f0eca0-b9d4-494a-9db7...</div>
+                    <div className="text-[7px] text-[var(--ig-text)]/30 font-mono tracking-tighter mt-0.5 truncate max-w-[100px]">99f0eca0-b9d4-494a-9db7...</div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Bottom Status bar */}
-            <div className="flex items-center justify-between border-t border-white/5 pt-1.5 mt-2 text-[9px]">
-              <span className="text-white/40">Drift Compliant</span>
+            <div className="flex items-center justify-between border-t border-[var(--ig-border-soft)] pt-1.5 mt-2 text-[9px]">
+              <span className="text-[var(--ig-text)]/40">Drift Compliant</span>
               <span className="text-emerald-400 font-bold flex items-center gap-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 ig-blink" /> 98%
               </span>
@@ -1539,12 +1478,12 @@ function Features() {
 
           <TiltCard className="ig-card rounded-2xl p-6">
             <div className="flex items-center justify-between mb-3">
-              <div className="text-xs text-[#8A53D6] uppercase tracking-widest">Security</div>
-              <Cpu className="w-4 h-4 text-[#b07eff]" />
+              <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Security</div>
+              <Cpu className="w-4 h-4 text-[var(--ig-accent-2)]" />
             </div>
             <ul className="space-y-2 text-sm">
               {["TLS 1.3 enforced", "IAM least-privilege", "KMS rotation: 90d", "No public S3"].map((t) => (
-                <li key={t} className="flex items-center gap-2 text-[#e5e5e5]">
+                <li key={t} className="flex items-center gap-2 text-[var(--ig-muted)]">
                   <span className="h-5 w-5 rounded-full grid place-items-center" style={{ background: "rgba(52,211,153,.15)" }}>
                     <Check className="w-3 h-3 text-emerald-400" />
                   </span>
@@ -1557,11 +1496,11 @@ function Features() {
           <TiltCard className="ig-card rounded-2xl pt-6 pb-0 px-0 flex flex-col justify-between overflow-hidden">
             <div className="px-6 mb-3">
               <div className="flex items-center justify-between">
-                <div className="text-xs text-[#8A53D6] uppercase tracking-widest">Pipelines</div>
-                <GitBranch className="w-4 h-4 text-[#b07eff]" />
+                <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Pipelines</div>
+                <GitBranch className="w-4 h-4 text-[var(--ig-accent-2)]" />
               </div>
             </div>
-            <div className="flex-1 w-full border-t border-white/10 overflow-hidden rounded-t-xl bg-black/40 relative">
+            <div className="flex-1 w-full border-t border-[var(--ig-border-soft)] overflow-hidden rounded-t-xl bg-[var(--ig-card)] relative">
               <video 
                 src={pipelinesVideoUrl}
                 autoPlay
@@ -1582,24 +1521,24 @@ function Features() {
 function Pipelines() {
   const ref = useReveal<HTMLDivElement>();
   const items = [
-    { name: "checkout-service", branch: "main", status: "Draft", tone: "text-[#b0b0b0] border-[#5a3a8a]" },
+    { name: "checkout-service", branch: "main", status: "Draft", tone: "text-[var(--ig-muted)] border-[#5a3a8a]" },
     { name: "auth-gateway", branch: "release/2.4", status: "Success", tone: "text-emerald-400 border-emerald-500/40" },
     { name: "billing-worker", branch: "feature/retry", status: "Deployment Failed", tone: "text-red-400 border-red-500/40" },
   ];
   return (
-    <section id="pipelines" className="py-24">
-      <div ref={ref} className="mx-auto max-w-6xl px-6">
-        <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
+    <div id="pipelines" className="relative">
+      <div ref={ref}>
+        <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
           <h2 className="font-display text-4xl md:text-5xl ig-metallic">Continue where you left off</h2>
-          <a href="#" className="text-sm text-[#b07eff] hover:text-white inline-flex items-center gap-1">View all <Arrow /></a>
+          <a href="#" className="text-sm text-[var(--ig-accent-2)] hover:text-[var(--ig-text)] inline-flex items-center gap-1">View all <Arrow /></a>
         </div>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="flex flex-col gap-4">
           {items.map((p) => (
             <TiltCard key={p.name} className="ig-card rounded-2xl p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-display text-xl text-white">{p.name}</div>
-                  <div className="text-xs text-[#b0b0b0] mt-1">{p.branch}</div>
+                  <div className="font-display text-xl text-[var(--ig-text)]">{p.name}</div>
+                  <div className="text-xs text-[var(--ig-muted)] mt-1">{p.branch}</div>
                 </div>
                 <span className={`text-[10px] uppercase tracking-widest border rounded-full px-2 py-1 ${p.tone}`}>{p.status}</span>
               </div>
@@ -1611,7 +1550,7 @@ function Pipelines() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -1633,21 +1572,21 @@ function Providers() {
     { name: "Docker", desc: "Compose-to-cloud in seconds.", icon: dockerIcon },
   ];
   return (
-    <section id="topology" className="py-24">
-      <div className="mx-auto max-w-6xl px-6">
+    <section id="topology" className="pb-24">
+      <div className="mx-auto max-w-[1400px] px-6">
         <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
           <h2 className="font-display text-4xl md:text-5xl ig-metallic">One canvas, every cloud.</h2>
         </div>
         
-        <div className="ig-card rounded-2xl p-6 md:p-8 border border-[#8A53D6]/20 bg-black/40">
+        <div className="ig-card rounded-2xl p-6 md:p-8 border border-[#8A53D6]/20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {providers.map((p) => (
-              <div key={p.name} className="rounded-xl p-6 transition-all hover:-translate-y-1 bg-[#1a0b2e]/30 border border-[#8A53D6]/10 hover:border-[#8A53D6]/50 hover:shadow-[0_0_30px_rgba(138,83,214,0.15)] flex flex-col h-full">
+              <div key={p.name} className="rounded-xl p-6 transition-all hover:-translate-y-1 bg-[var(--ig-card)] border border-[var(--ig-border-soft)] hover:border-[var(--ig-border)] hover:ig-glow flex flex-col h-full">
                 <div className="h-12 w-12 rounded-xl grid place-items-center mb-5 shrink-0" style={{ background: "rgba(138,83,214,.1)", border: "1px solid rgba(138,83,214,.2)" }}>
                   <img src={p.icon} alt={p.name} className="w-7 h-7 object-contain opacity-90" />
                 </div>
-                <div className="font-display text-2xl text-white">{p.name}</div>
-                <p className="text-sm text-[#b0b0b0] mt-2 flex-1">{p.desc}</p>
+                <div className="font-display text-2xl text-[var(--ig-text)]">{p.name}</div>
+                <p className="text-sm text-[var(--ig-muted)] mt-2 flex-1">{p.desc}</p>
                 <button className="mt-6 ig-ghost px-4 py-2 text-xs self-start">Connect</button>
               </div>
             ))}
@@ -1664,7 +1603,7 @@ function Marquee() {
   const row = [...names, ...names];
   return (
     <section className="py-16 border-y" style={{ borderColor: "rgba(138,83,214,.15)" }}>
-      <div className="text-center text-xs uppercase tracking-[0.3em] text-[#5a3a8a] mb-6">Loved by engineers at</div>
+      <div className="text-center text-xs uppercase tracking-[0.3em] text-[var(--ig-dim)] mb-6">Loved by engineers at</div>
       <div className="overflow-hidden relative" style={{ maskImage: "linear-gradient(90deg, transparent, black 12%, black 88%, transparent)" }}>
         <div className="flex gap-12 ig-marquee whitespace-nowrap">
           {row.map((n, i) => (
@@ -1751,13 +1690,13 @@ function Testimonials() {
   return (
     <section id="security" className="py-24 overflow-hidden relative">
       <div className="mx-auto max-w-6xl px-6 mb-12 text-center">
-        <div className="text-xs uppercase tracking-[0.2em] text-[#8A53D6] mb-2">In their words</div>
+        <div className="text-xs uppercase tracking-[0.2em] text-[var(--ig-accent)] mb-2">In their words</div>
         <h2 className="font-display text-4xl md:text-5xl ig-metallic leading-[0.95]">Loved by developers & SREs.</h2>
       </div>
 
       {/* Edge Fade Overlays */}
-      <div className="absolute inset-y-0 left-0 w-[12vw] bg-gradient-to-r from-black to-transparent z-20 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-[12vw] bg-gradient-to-l from-black to-transparent z-20 pointer-events-none" />
+      <div className="absolute inset-y-0 left-0 w-[12vw] bg-gradient-to-r from-[var(--ig-bg)] to-transparent z-20 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-[12vw] bg-gradient-to-l from-[var(--ig-bg)] to-transparent z-20 pointer-events-none" />
 
       <div className="flex flex-col gap-6 w-full relative">
         {/* Row 1: Left moving */}
@@ -1766,22 +1705,22 @@ function Testimonials() {
             {row1.map((item, index) => (
               <div 
                 key={`r1-${index}`} 
-                className="ig-card rounded-2xl p-6 w-[340px] md:w-[380px] shrink-0 text-left flex flex-col justify-between relative overflow-hidden bg-[rgba(138,83,214,0.03)] border border-[rgba(138,83,214,0.15)] hover:border-[#8A53D6]/50 hover:bg-[rgba(138,83,214,0.06)] transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.3)]"
+                className="ig-card rounded-2xl p-6 w-[340px] md:w-[380px] shrink-0 text-left flex flex-col justify-between relative overflow-hidden bg-[rgba(138,83,214,0.03)] border border-[rgba(138,83,214,0.15)] hover:border-[var(--ig-border)] hover:bg-[rgba(138,83,214,0.06)] transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]"
               >
                 <div aria-hidden className="absolute inset-0 ig-dots opacity-10 pointer-events-none" />
                 <div className="relative z-10">
-                  <h3 className="text-base font-bold text-white mb-2">"{item.title}"</h3>
-                  <p className="text-xs md:text-sm text-[#b0b0b0] leading-relaxed mb-6">{item.text}</p>
+                  <h3 className="text-base font-bold text-[var(--ig-text)] mb-2">"{item.title}"</h3>
+                  <p className="text-xs md:text-sm text-[var(--ig-muted)] leading-relaxed mb-6">{item.text}</p>
                 </div>
                 <div className="relative z-10 flex items-center justify-between mt-auto">
                   <div className="flex items-center gap-2.5">
-                    <img src={item.avatar} alt={item.name} className="w-8 h-8 rounded-full border border-slate-800 object-cover shrink-0" />
+                    <img src={item.avatar} alt={item.name} className="w-8 h-8 rounded-full border border-[var(--ig-border)] object-cover shrink-0" />
                     <div>
-                      <div className="text-xs font-bold text-white">{item.name}</div>
-                      <div className="text-[10px] text-slate-400">{item.role}</div>
+                      <div className="text-xs font-bold text-[var(--ig-text)]">{item.name}</div>
+                      <div className="text-[10px] text-[var(--ig-muted)]">{item.role}</div>
                     </div>
                   </div>
-                  <span className="bg-[#1a0b2e]/60 border border-[#8A53D6]/30 text-[#b07eff] text-[9px] font-bold rounded px-2.5 py-0.5">
+                  <span className="bg-[var(--ig-bg-2)] border border-[var(--ig-border)] text-[var(--ig-accent-2)] text-[9px] font-bold rounded px-2.5 py-0.5">
                     {item.badge}
                   </span>
                 </div>
@@ -1796,22 +1735,22 @@ function Testimonials() {
             {row2.map((item, index) => (
               <div 
                 key={`r2-${index}`} 
-                className="ig-card rounded-2xl p-6 w-[340px] md:w-[380px] shrink-0 text-left flex flex-col justify-between relative overflow-hidden bg-[rgba(138,83,214,0.03)] border border-[rgba(138,83,214,0.15)] hover:border-[#8A53D6]/50 hover:bg-[rgba(138,83,214,0.06)] transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.3)]"
+                className="ig-card rounded-2xl p-6 w-[340px] md:w-[380px] shrink-0 text-left flex flex-col justify-between relative overflow-hidden bg-[rgba(138,83,214,0.03)] border border-[rgba(138,83,214,0.15)] hover:border-[var(--ig-border)] hover:bg-[rgba(138,83,214,0.06)] transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]"
               >
                 <div aria-hidden className="absolute inset-0 ig-dots opacity-10 pointer-events-none" />
                 <div className="relative z-10">
-                  <h3 className="text-base font-bold text-white mb-2">"{item.title}"</h3>
-                  <p className="text-xs md:text-sm text-[#b0b0b0] leading-relaxed mb-6">{item.text}</p>
+                  <h3 className="text-base font-bold text-[var(--ig-text)] mb-2">"{item.title}"</h3>
+                  <p className="text-xs md:text-sm text-[var(--ig-muted)] leading-relaxed mb-6">{item.text}</p>
                 </div>
                 <div className="relative z-10 flex items-center justify-between mt-auto">
                   <div className="flex items-center gap-2.5">
-                    <img src={item.avatar} alt={item.name} className="w-8 h-8 rounded-full border border-slate-800 object-cover shrink-0" />
+                    <img src={item.avatar} alt={item.name} className="w-8 h-8 rounded-full border border-[var(--ig-border)] object-cover shrink-0" />
                     <div>
-                      <div className="text-xs font-bold text-white">{item.name}</div>
-                      <div className="text-[10px] text-slate-400">{item.role}</div>
+                      <div className="text-xs font-bold text-[var(--ig-text)]">{item.name}</div>
+                      <div className="text-[10px] text-[var(--ig-muted)]">{item.role}</div>
                     </div>
                   </div>
-                  <span className="bg-[#1a0b2e]/60 border border-[#8A53D6]/30 text-[#b07eff] text-[9px] font-bold rounded px-2.5 py-0.5">
+                  <span className="bg-[var(--ig-bg-2)] border border-[var(--ig-border)] text-[var(--ig-accent-2)] text-[9px] font-bold rounded px-2.5 py-0.5">
                     {item.badge}
                   </span>
                 </div>
@@ -1827,18 +1766,18 @@ function Testimonials() {
 /* ===================== CTA ===================== */
 function FinalCTA() {
   return (
-    <section id="pricing" className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 ig-portal-bg opacity-70" />
+    <section id="pricing" className="py-24 relative overflow-hidden bg-[var(--ig-bg)] transition-colors duration-500">
+      <InteractiveGrid color="#8A53D6" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div className="text-left">
             <h2 className="font-display text-5xl md:text-7xl ig-metallic leading-[0.95]">Ship the cloud<br/>you can see.</h2>
-            <p className="mt-8 text-lg text-[#b0b0b0] max-w-md">Free for solo. $19/seat for teams. No credit card to start.</p>
+            <p className="mt-8 text-lg text-[var(--ig-muted)] max-w-md">Free for solo. $19/seat for teams. No credit card to start.</p>
             <div className="mt-10 flex flex-wrap gap-4">
               <a href="#jane" className="ig-cta px-8 py-4 inline-flex items-center gap-2">Start Designing <Arrow /></a>
             </div>
             
-            <div className="mt-12 pt-8 border-t border-white/10 flex items-center gap-6">
+            <div className="mt-12 pt-8 border-t border-[var(--ig-border)] flex items-center gap-6 transition-colors duration-500">
               <div className="flex -space-x-3">
                 {[1, 2, 3, 4].map(i => (
                   <img key={i} src={`https://i.pravatar.cc/100?img=${i+10}`} className="w-10 h-10 rounded-full border-2 border-black" alt="" />
@@ -1857,46 +1796,11 @@ function FinalCTA() {
   );
 }
 
-/* ===================== Footer ===================== */
-function Footer() {
-  return (
-    <footer className="border-t py-12 mt-10" style={{ borderColor: "rgba(138,83,214,.15)" }}>
-      <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-4 gap-8">
-        <div>
-          <img src={logoUrl} alt="InfraGlide" className="h-9 w-auto mb-3" />
-          <p className="text-sm text-[#b0b0b0] max-w-xs">Design, deploy, scale — the visual cloud platform.</p>
-        </div>
-        {[
-          { h: "Product", l: ["Workspace","Pipelines","Topology","Security"] },
-          { h: "Company", l: ["About","Careers","Blog","Press"] },
-          { h: "Resources", l: ["Docs","Changelog","Status","Support"] },
-        ].map((col) => (
-          <div key={col.h}>
-            <div className="text-xs uppercase tracking-widest text-[#8A53D6] mb-3">{col.h}</div>
-            <ul className="space-y-2">
-              {col.l.map((x) => <li key={x}><a className="text-sm text-[#b0b0b0] hover:text-white" href="#">{x}</a></li>)}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <div className="mx-auto max-w-6xl px-6 mt-10 flex flex-wrap items-center justify-between gap-4 border-t pt-6" style={{ borderColor: "rgba(138,83,214,.12)" }}>
-        <div className="text-xs text-[#5a3a8a]">© {new Date().getFullYear()} InfraGlide Labs. All rights reserved.</div>
-        <div className="flex items-center gap-3 text-[#b0b0b0]">
-          <a href="#" aria-label="GitHub" className="hover:text-[#b07eff]"><Github className="w-4 h-4" /></a>
-          <a href="#" aria-label="Twitter" className="hover:text-[#b07eff]"><Twitter className="w-4 h-4" /></a>
-          <a href="#" aria-label="LinkedIn" className="hover:text-[#b07eff]"><Linkedin className="w-4 h-4" /></a>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 /* ===================== Page ===================== */
 function InfraGlideLanding() {
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-x-hidden ig-noise">
+    <div className="relative min-h-screen overflow-x-hidden ig-noise">
       <CursorGlow />
-      <Nav />
       <main className="relative z-10">
         <Hero />
         <Metrics />
@@ -1904,13 +1808,14 @@ function InfraGlideLanding() {
         <Jane />
         <Features />
         <ScrollGallery />
-        <MarqueeCards />
-        <Pipelines />
+        <section className="mx-auto max-w-[1400px] px-6 grid lg:grid-cols-2 gap-12 items-start pt-24 pb-16">
+          <MarqueeCards />
+          <Pipelines />
+        </section>
         <Providers />
         <Testimonials />
         <FinalCTA />
       </main>
-      <Footer />
     </div>
   );
 }
@@ -1948,26 +1853,26 @@ function IOSIssuesPanel({ progress }: { progress: number }) {
   
   return (
     <div className="flex-1 bg-white p-4 flex flex-col justify-between text-slate-800">
-      <div>
+      <div className="flex-1 flex flex-col">
         <div className="flex items-center justify-between mb-3">
           <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-            <Settings className="w-3.5 h-3.5 text-[#8A53D6]" /> Issues
+            <Settings className="w-3.5 h-3.5 text-[var(--ig-accent)]" /> Issues
           </h4>
           <span className={`text-[9px] rounded-full px-2 py-0.5 font-bold transition-all duration-300 ${isResolved ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-600 animate-pulse"}`}>
             {isResolved ? "Resolved" : "1 Error"}
           </span>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3 flex-1 flex flex-col justify-center">
           {/* Deployment Row */}
-          <div className="rounded-lg border border-slate-100 bg-slate-50/50 p-2.5 transition-all">
+          <div className="rounded-lg border border-slate-100 bg-slate-50/50 p-4 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-slate-700">Deployment</span>
-              <span className={`text-[8px] px-1.5 py-0.5 rounded font-bold uppercase ${isResolved ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-600"}`}>
+              <span className="text-[12px] font-bold text-slate-700">Deployment</span>
+              <span className={`text-[9px] px-2 py-0.5 rounded font-bold uppercase ${isResolved ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-600"}`}>
                 {isResolved ? "Success" : "Failed"}
               </span>
             </div>
-            <pre className={`mt-1.5 rounded bg-slate-900 p-2 text-[9px] font-mono text-slate-300 whitespace-pre-wrap transition-all duration-300 ${isResolved ? "border border-emerald-500/20" : "border border-red-500/20"}`}>
+            <pre className={`mt-3 rounded bg-slate-900 p-3.5 text-[10px] font-mono text-slate-300 whitespace-pre-wrap transition-all duration-300 ${isResolved ? "border border-emerald-500/20" : "border border-red-500/20"}`}>
               {isResolved 
                 ? "Re-queued with quota request to cluster47 (cores: 22). Success." 
                 : "User SubscriptionId 'dce40f03...' does not have cores left. Required: 22, Available: 0."}
@@ -1975,9 +1880,9 @@ function IOSIssuesPanel({ progress }: { progress: number }) {
           </div>
           
           {/* Preview Row */}
-          <div className="rounded-lg border border-slate-100 bg-slate-50/50 p-2 flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-600">Preview</span>
-            <span className="text-[8px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold uppercase">Success</span>
+          <div className="rounded-lg border border-slate-100 bg-slate-50/50 p-3.5 flex items-center justify-between">
+            <span className="text-[12px] font-semibold text-slate-600">Preview</span>
+            <span className="text-[9px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold uppercase">Success</span>
           </div>
         </div>
       </div>
@@ -2009,7 +1914,7 @@ function IOSPipelineStages({ progress }: { progress: number }) {
       <div>
         <div className="flex items-center justify-between mb-3">
           <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-            <GitBranch className="w-3.5 h-3.5 text-[#8A53D6]" /> Pipeline #3414
+            <GitBranch className="w-3.5 h-3.5 text-[var(--ig-accent)]" /> Pipeline #3414
           </h4>
           <span className="text-[9px] text-slate-400 font-mono">env: prod</span>
         </div>
@@ -2024,7 +1929,7 @@ function IOSPipelineStages({ progress }: { progress: number }) {
                   done 
                     ? "border-emerald-200 bg-emerald-50 text-emerald-700" 
                     : isActive 
-                      ? "border-[#8A53D6] bg-[#8A53D6]/10 text-[#8A53D6] font-bold shadow-sm" 
+                      ? "border-[#8A53D6] bg-[#8A53D6]/10 text-[var(--ig-accent)] font-bold shadow-sm" 
                       : "border-slate-100 bg-slate-50/50 text-slate-400"
                 }`}>
                   <div className="text-[8px] uppercase tracking-wider font-semibold">{s}</div>
@@ -2038,7 +1943,7 @@ function IOSPipelineStages({ progress }: { progress: number }) {
           })}
         </div>
 
-        <div className="mt-3.5 rounded-lg bg-slate-900 p-2.5 font-mono text-[9px] text-slate-300 h-36 overflow-hidden border border-slate-800">
+        <div className="mt-3.5 flex-1 flex flex-col justify-center rounded-lg bg-slate-900 p-4 font-mono text-[10px] leading-relaxed text-slate-300 overflow-hidden border border-slate-800 shadow-inner">
           <p className="text-slate-500">$ infraglide pipeline run --env prod</p>
           {activeStage >= 0 && <p className="text-emerald-400">✓ Plan: 12 to add, 3 to change, 0 to destroy</p>}
           {activeStage >= 1 && <p className="text-emerald-400">✓ Policy checks passed (sentinel/4)</p>}
@@ -2049,7 +1954,7 @@ function IOSPipelineStages({ progress }: { progress: number }) {
 
       <div className="flex items-center justify-between border-t border-slate-100 pt-2 mt-2 text-[9px] text-slate-400">
         <span>Dynamic scroll telemetry</span>
-        <span className="text-[#8A53D6] font-bold uppercase tracking-wider">
+        <span className="text-[var(--ig-accent)] font-bold uppercase tracking-wider">
           {activeStage === 3 ? "Complete" : "Running..."}
         </span>
       </div>
@@ -2077,7 +1982,7 @@ function IOSDriftReport({ progress }: { progress: number }) {
       <div>
         <div className="flex items-center justify-between mb-2">
           <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-            <AlertTriangle className="w-3.5 h-3.5 text-[#8A53D6]" /> Drift Report
+            <AlertTriangle className="w-3.5 h-3.5 text-[var(--ig-accent)]" /> Drift Report
           </h4>
           <span className="text-[9px] text-slate-400">auto-scanning</span>
         </div>
@@ -2142,7 +2047,7 @@ function IOSRBACMatrix({ progress }: { progress: number }) {
       <div>
         <div className="flex items-center justify-between mb-2">
           <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-            <Shield className="w-3.5 h-3.5 text-[#8A53D6]" /> RBAC Matrix
+            <Shield className="w-3.5 h-3.5 text-[var(--ig-accent)]" /> RBAC Matrix
           </h4>
           <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Access levels</span>
         </div>
@@ -2198,35 +2103,49 @@ function ScrollGallery() {
       ctx = gsap.context(() => {
         const scrollDistance = () => {
           const dist = track.scrollWidth - window.innerWidth;
-          console.log("[ScrollGallery] scrollWidth:", track.scrollWidth, "innerWidth:", window.innerWidth, "dist:", dist);
           return Math.max(100, dist);
         };
 
-        const tween = gsap.to(track, {
-          x: () => -scrollDistance(),
-          ease: "none",
-          force3D: true,
+        const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,
             pin: true,
-            scrub: 2.2,
+            scrub: 1,
             anticipatePin: 1,
             start: "top top",
-            end: () => `+=${scrollDistance()}`,
+            end: () => `+=${scrollDistance() + 800}`,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               setScrollProgress(self.progress);
             }
-          },
+          }
         });
-        st = tween.scrollTrigger || null;
+
+        tl.to({}, { duration: 0.05 })
+          .to(track, {
+            x: () => -scrollDistance(),
+            ease: "power1.inOut",
+            force3D: true,
+            duration: 0.9
+          })
+          .to({}, { duration: 0.05 });
+
+        st = tl.scrollTrigger || null;
         ScrollTrigger.refresh();
       }, section);
     }, 120);
 
+    let resizeTimeout: number;
+    let lastWidth = track.scrollWidth;
     const observer = new ResizeObserver(() => {
       if (st) {
-        ScrollTrigger.refresh();
+        window.clearTimeout(resizeTimeout);
+        resizeTimeout = window.setTimeout(() => {
+          if (Math.abs(track.scrollWidth - lastWidth) > 5) {
+            lastWidth = track.scrollWidth;
+            ScrollTrigger.refresh();
+          }
+        }, 300);
       }
     });
     observer.observe(track);
@@ -2240,46 +2159,42 @@ function ScrollGallery() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-screen overflow-hidden" id="gallery">
+    <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[var(--ig-bg)]" id="gallery">
       <div aria-hidden className="absolute inset-0 ig-dots opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_80%)]" />
-    <div className="absolute top-0 left-0 right-0 z-20 pt-20 pointer-events-none">
-      <div className="mx-auto max-w-6xl px-6 flex items-end justify-between flex-wrap gap-4">
-        <div>
-          <div className="text-xs uppercase tracking-[0.3em] text-[#8A53D6] mb-2">Product tour</div>
-          <h2 className="font-display text-4xl md:text-6xl ig-metallic leading-[0.95]">Features.</h2>
+      
+      <div className="absolute top-0 left-0 right-0 z-20 pt-8 md:pt-12 pointer-events-none">
+        <div className="mx-auto max-w-6xl px-6 flex items-end justify-between flex-wrap gap-4">
+          <div>
+            <div className="text-xs uppercase tracking-[0.3em] text-[var(--ig-accent)] mb-2">Product tour</div>
+            <h2 className="font-display text-4xl md:text-6xl ig-metallic leading-[0.95]">Features.</h2>
+          </div>
         </div>
       </div>
-    </div>
 
-    {/* Edge Fade Overlays */}
-    <div className="absolute inset-y-0 left-0 w-[12vw] bg-gradient-to-r from-black to-transparent z-30 pointer-events-none" />
-    <div className="absolute inset-y-0 right-0 w-[12vw] bg-gradient-to-l from-black to-transparent z-30 pointer-events-none" />
+      <div className="absolute inset-y-0 left-0 w-[12vw] bg-gradient-to-r from-[var(--ig-bg)] to-transparent z-30 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-[12vw] bg-gradient-to-l from-[var(--ig-bg)] to-transparent z-30 pointer-events-none" />
 
-    <div ref={trackRef} className="absolute top-0 left-0 bottom-0 flex items-end gap-12 pl-[38vw] pr-[15vw] pb-[8vh] will-change-transform">
-      {SCROLL_CARDS.map((card, i) => {
-        const Widget = card.component;
-        return (
-          <article 
-            key={i} 
-            className="w-[85vw] md:w-[580px] h-[60vh] shrink-0 relative flex flex-col rounded-3xl bg-slate-50 border border-slate-200/80 shadow-2xl overflow-hidden text-slate-800 transition-all select-none"
-          >
-            {/* Mac Header Shell */}
-            <MacHeader title={card.tag} />
-            
-            {/* Coded Widget Content */}
-            <Widget progress={scrollProgress} />
-          </article>
-        );
-      })}
+      <div ref={trackRef} className="absolute top-0 left-0 bottom-0 flex items-center pt-[15vh] gap-12 pl-[38vw] pr-[20vw] will-change-transform w-max">
+        {SCROLL_CARDS.map((card, i) => {
+          const Widget = card.component;
+          return (
+            <article 
+              key={i} 
+              className="w-[85vw] md:w-[680px] h-[480px] shrink-0 relative flex flex-col rounded-3xl bg-slate-50 border border-slate-200/80 shadow-2xl overflow-hidden text-slate-800 transition-all select-none"
+            >
+              <MacHeader title={card.tag} />
+              <Widget progress={scrollProgress} />
+            </article>
+          );
+        })}
 
-      {/* End cap */}
-      <article className="w-[85vw] md:w-[580px] h-[60vh] shrink-0 flex items-center justify-center relative select-none">
-        <div className="text-center p-6 bg-[rgba(138,83,214,0.06)] border border-[rgba(138,83,214,0.2)] rounded-3xl backdrop-blur-md">
-          <h3 className="font-display text-4xl md:text-5xl ig-metallic leading-[0.95]">Experience the canvas.</h3>
-          <a href="#jane" className="ig-cta px-7 py-3.5 inline-flex items-center gap-2 mt-6">Start Designing <Arrow /></a>
-        </div>
-      </article>
-    </div>
+        <article className="w-[85vw] md:w-[680px] h-[480px] shrink-0 flex items-center justify-center relative select-none">
+          <div className="text-center p-8 bg-[rgba(138,83,214,0.06)] border border-[rgba(138,83,214,0.2)] rounded-3xl backdrop-blur-md">
+            <h3 className="font-display text-4xl md:text-5xl ig-metallic leading-[0.95]">Experience the canvas.</h3>
+            <a href="#jane" className="ig-cta px-8 py-4 inline-flex items-center gap-2 mt-8 text-sm uppercase tracking-wider">Start Designing <Arrow /></a>
+          </div>
+        </article>
+      </div>
     </section>
   );
 }
@@ -2300,31 +2215,51 @@ function MarqueeCards() {
   ];
   const row = [...cards, ...cards];
   return (
-    <section className="relative py-24">
-      <div className="mx-auto max-w-6xl px-6 mb-10 flex items-end justify-between flex-wrap gap-4">
-        <div>
-          <div className="text-xs uppercase tracking-[0.3em] text-[#8A53D6] mb-2">Live tiles</div>
+    <div className="relative flex flex-col h-full">
+      <div>
+        <div className="mb-10">
           <h2 className="font-display text-4xl md:text-5xl ig-metallic">Your fleet, in motion.</h2>
         </div>
-        <div className="text-xs text-[#b0b0b0]">Hover to pause</div>
-      </div>
-      <div className="ig-mask-x overflow-hidden">
-        <div className="flex gap-4 ig-marquee-slow w-max">
-          {row.map((c, i) => (
-            <div key={i} className="ig-card rounded-2xl p-4 w-[260px] flex items-center gap-3 relative overflow-hidden">
-              <div aria-hidden className="absolute inset-0 ig-dots opacity-20" />
-              <div className="relative h-10 w-10 rounded-xl grid place-items-center" style={{ background: "rgba(138,83,214,.15)", border: "1px solid rgba(138,83,214,.3)" }}>
-                <c.i className="w-4 h-4 text-[#b07eff]" />
+        <div className="ig-mask-x overflow-hidden">
+          <div className="flex gap-4 ig-marquee-slow w-max">
+            {row.map((c, i) => (
+              <div key={i} className="ig-card rounded-2xl p-4 w-[260px] flex items-center gap-3 relative overflow-hidden">
+                <div aria-hidden className="absolute inset-0 ig-dots opacity-20" />
+                <div className="relative h-10 w-10 rounded-xl grid place-items-center" style={{ background: "rgba(138,83,214,.15)", border: "1px solid rgba(138,83,214,.3)" }}>
+                  <c.i className="w-4 h-4 text-[var(--ig-accent-2)]" />
+                </div>
+                <div className="relative flex-1 min-w-0">
+                  <div className="text-sm text-[var(--ig-text)] truncate">{c.t}</div>
+                  <div className="text-xs text-[var(--ig-muted)] truncate">{c.s}</div>
+                </div>
+                <span className={`relative h-2 w-2 rounded-full ig-blink ${c.c === "ok" ? "bg-emerald-400" : "bg-yellow-400"}`} />
               </div>
-              <div className="relative flex-1 min-w-0">
-                <div className="text-sm text-white truncate">{c.t}</div>
-                <div className="text-xs text-[#b0b0b0] truncate">{c.s}</div>
-              </div>
-              <span className={`relative h-2 w-2 rounded-full ig-blink ${c.c === "ok" ? "bg-emerald-400" : "bg-yellow-400"}`} />
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </section>
+      <div className="flex-1 mt-10 rounded-[2rem] bg-[#8a53d6] relative overflow-hidden min-h-[320px] shadow-2xl flex flex-col justify-center p-8 md:p-12">
+        <div className="absolute inset-0 opacity-50 mix-blend-screen" style={{ backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.5) 2px, transparent 2px)', backgroundSize: '32px 32px', backgroundPosition: 'center' }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#8a53d6] to-transparent opacity-60 pointer-events-none" />
+        
+        <div className="relative z-10 w-full md:w-1/2">
+          <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/60 mb-3">Templating Engine</div>
+          <h3 className="text-3xl md:text-[32px] leading-[1.15] text-white mb-4 italic font-medium" style={{ fontFamily: 'Georgia, serif' }}>
+            Standards applied <br className="hidden md:block" />automatically.
+          </h3>
+          <p className="text-white/80 text-sm md:text-[15px] font-medium leading-relaxed mb-6 pr-4">
+            Define your infra patterns once. InfraGlide enforces them at the design level — across every team, every cloud.
+          </p>
+          <a href="/templates" className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white font-medium transition-all text-sm">
+            Browse templates <Arrow className="w-3.5 h-3.5" />
+          </a>
+        </div>
+
+        {/* Screenshot Image */}
+        <div className="absolute bottom-0 right-0 w-[45%] md:w-[35%] h-[80%] rounded-tl-3xl shadow-[-15px_-10px_40px_rgba(0,0,0,0.2)] overflow-hidden hidden md:block border-t border-l border-white/10 translate-y-4 hover:translate-y-0 transition-transform duration-500">
+           <img src="/assets/templates.png" alt="Templates UI" className="w-full h-full object-cover object-left-top" />
+        </div>
+      </div>
+    </div>
   );
 }

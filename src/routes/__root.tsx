@@ -8,6 +8,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 
+import { Nav } from "../components/Nav";
+import { Footer } from "../components/Footer";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -82,6 +84,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       {
+        rel: "icon",
+        type: "image/png",
+        href: "/favicon.png",
+      },
+      {
         rel: "stylesheet",
         href: appCss,
       },
@@ -112,7 +119,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <Nav />
+      <div className="min-h-screen">
+        <Outlet />
+      </div>
+      <Footer />
     </QueryClientProvider>
   );
 }
