@@ -1,6 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 
-export function InteractiveGrid({ color = "#8A53D6" }) {
+interface InteractiveGridProps {
+  color?: string;
+  className?: string;
+}
+
+export function InteractiveGrid({ 
+  color = "#8A53D6",
+  className = "absolute inset-0 w-full h-full pointer-events-none z-0"
+}: InteractiveGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -95,5 +103,5 @@ export function InteractiveGrid({ color = "#8A53D6" }) {
     };
   }, [color]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />;
+  return <canvas ref={canvasRef} className={className} />;
 }

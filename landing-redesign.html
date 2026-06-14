@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InfraGlide — Your Cloud, Visualized</title>
+  <!-- Google Fonts: Inter (weights 400 and 500) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandViolet: '#7F77DD',
+            brandVioletDark: '#534AB7',
+            brandVioletDeep: '#26215C',
+            tealLive: '#1D9E75',
+            coralAlert: '#D85A30',
+            amberPending: '#BA7517',
+            bgDarkHero: '#0F0D1A',
+            bgDarkSection: '#1A1828',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    /* Global styles matching product spec */
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      background-color: #0F0D1A;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+    
+    .font-medium-weight {
+      font-weight: 500;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0F0D1A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #534AB7;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #7F77DD;
+    }
+
+    /* Grid & Dot Backgrounds */
+    .ig-dots {
+      background-image: radial-gradient(rgba(127, 119, 221, 0.15) 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+    }
+    
+    /* 3D Glassmorphism Cards */
+    .ig-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(127, 119, 221, 0.2);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+
+    /* Glow pulse effect */
+    @keyframes glowPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(127, 119, 221, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 12px rgba(127, 119, 221, 0);
+      }
+    }
+    .glow-pulse {
+      animation: glowPulse 2s infinite;
+    }
+
+    /* Vertical float oscillation */
+    @keyframes floatOscillation {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+    .float-panel-0 { animation: floatOscillation 4s ease-in-out infinite; }
+    .float-panel-1 { animation: floatOscillation 4s ease-in-out infinite 1.3s; }
+    .float-panel-2 { animation: floatOscillation 4s ease-in-out infinite 2.1s; }
+
+    /* SVG edge flow dashed animations */
+    @keyframes edgeFlow {
+      to {
+        stroke-dashoffset: -20px;
+      }
+    }
+    .ig-flow-line {
+      stroke-dasharray: 6 4;
+      animation: edgeFlow 1.2s linear infinite;
+    }
+
+    /* Shimmer effect for eyebrow badges */
+    @keyframes badgePulse {
+      0%, 100% { border-color: rgba(127, 119, 221, 0.2); }
+      50% { border-color: rgba(127, 119, 221, 0.6); }
+    }
+    .badge-pulse-border {
+      animation: badgePulse 2.5s infinite;
+    }
+
+    /* Fade up scroll transitions */
+    .fade-up-scroll {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fade-up-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Underline drawer */
+    .draw-underline {
+      position: relative;
+    }
+    .draw-underline::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: #7F77DD;
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .draw-underline.active::after {
+      width: 100%;
+    }
+
+    /* Blinking dot for live signals */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    .ig-blink {
+      animation: blink 1.4s infinite ease-in-out;
+    }
+
+    /* 3D tilt transformation classes */
+    .tilt-card {
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .reflection-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      border-radius: inherit;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.06) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tilt-card:hover .reflection-overlay {
+      opacity: 1;
+    }
+
+    /* Prefers-reduced-motion override */
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up-scroll {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        transition: none !important;
+      }
+      .glow-pulse, .float-panel-0, .float-panel-1, .float-panel-2, .ig-flow-line, .badge-pulse-border, .ig-blink {
+        animation: none !important;
+      }
+      .tilt-card {
+        transform: none !important;
+        transition: none !important;
+      }
+      .reflection-overlay {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="selection:bg-brandViolet/30">
+
+  <!-- Fullscreen Particle Canvas Background behind Hero -->
+  <div class="absolute inset-0 z-0 h-screen overflow-hidden pointer-events-none">
+    <canvas id="particle-canvas" class="w-full h-full"></canvas>
+  </div>
+
+  <!-- NAVIGATION BAR -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md bg-opacity-80 border-b border-transparent">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2 select-none group">
+        <!-- Cloud Circuit SVG Logo -->
+        <svg class="w-8 h-8 text-brandViolet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-3.25-5.5-6.5-6.5C13.25 5.5 10 3 6.5 3 3.46 3 1 5.46 1 8.5c0 1.5.5 3 1.5 4" stroke-linecap="round" />
+          <circle cx="8" cy="12" r="2" fill="currentColor" />
+          <circle cx="16" cy="11" r="1.5" fill="currentColor" />
+          <path d="M8 12 h8" stroke-dasharray="2 2" />
+        </svg>
+        <span class="text-xl font-medium-weight tracking-tight">
+          <span class="text-white">Infra</span><span class="text-brandViolet">Glide</span>
+        </span>
+      </a>
+
+      <!-- Left nav links -->
+      <div class="hidden md:flex items-center gap-8 text-sm text-[#888780] font-medium-weight">
+        <a href="#features" class="hover:text-white transition-colors">Features</a>
+        <a href="#use-cases" class="hover:text-white transition-colors">Use Cases</a>
+        <a href="#comparison" class="hover:text-white transition-colors">Compare</a>
+        <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
+        <a href="#docs" class="hover:text-white transition-colors">Docs</a>
+      </div>
+
+      <!-- Right nav actions -->
+      <div class="hidden md:flex items-center gap-6">
+        <a href="#" class="text-sm font-medium-weight text-[#888780] hover:text-white transition-colors">Log In</a>
+        <a href="#pricing" class="bg-brandViolet text-white font-medium-weight text-sm px-6 py-2.5 rounded-full hover:bg-brandVioletDark transition-all glow-pulse hover:scale-105 duration-200">
+          Start Free →
+        </a>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button id="mobile-nav-toggle" class="md:hidden text-white hover:text-brandViolet focus:outline-none" aria-label="Toggle menu">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-drawer" class="fixed inset-y-0 right-0 z-50 w-64 bg-bgDarkSection border-l border-brandViolet/10 p-6 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-between">
+      <div class="flex flex-col gap-6">
+        <div class="flex items-center justify-between">
+          <span class="text-lg font-medium-weight text-white">Menu</span>
+          <button id="mobile-nav-close" class="text-[#888780] hover:text-white focus:outline-none">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+        <div class="flex flex-col gap-4 text-[#888780] text-sm">
+          <a href="#features" class="hover:text-white py-2 border-b border-white/5">Features</a>
+          <a href="#use-cases" class="hover:text-white py-2 border-b border-white/5">Use Cases</a>
+          <a href="#comparison" class="hover:text-white py-2 border-b border-white/5">Compare</a>
+          <a href="#pricing" class="hover:text-white py-2 border-b border-white/5">Pricing</a>
+          <a href="#docs" class="hover:text-white py-2 border-b border-white/5">Docs</a>
+        </div>
+      </div>
+      <div class="flex flex-col gap-4">
+        <a href="#" class="text-center text-sm font-medium-weight text-[#888780] hover:text-white py-2.5">Log In</a>
+        <a href="#pricing" class="bg-brandViolet text-white text-center font-medium-weight text-sm py-3 rounded-full hover:bg-brandVioletDark transition-all">
+          Start Free
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="relative min-h-screen pt-32 pb-20 flex items-center justify-center z-10 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- LEFT COL: Content -->
+      <div class="lg:col-span-7 flex flex-col justify-center text-left">
+        <!-- Eyebrow Pill -->
+        <div class="inline-flex items-center gap-2 bg-[#EEEDFE] border border-brandViolet/25 rounded-full px-4 py-1.5 self-start mb-6 badge-pulse-border select-none">
+          <span class="text-brandViolet animate-pulse">✦</span>
+          <span class="text-xs text-[#534AB7] font-medium-weight">Now with Jane AI — your infra co-pilot</span>
+        </div>
+
+        <!-- Heading -->
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-medium-weight text-white leading-tight tracking-tight select-none">
+          <span class="block opacity-0 transform translate-y-4 transition-all duration-700 ease-out" style="transition-delay: 100ms;">Design. Deploy.</span>
+          <span class="block opacity-0 transform translate-y-4 transition-all duration-700 ease-out" style="transition-delay: 250ms;">Observe.</span>
+          <span class="block opacity-0 transform translate-y-4 transition-all duration-700 ease-out" style="transition-delay: 400ms;">
+            Your cloud, finally <span id="hero-underline-word" class="draw-underline text-brandViolet">visual</span>.
+          </span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p class="mt-6 text-sm sm:text-base md:text-lg text-[#888780] leading-relaxed max-w-xl opacity-0 transform translate-y-4 transition-all duration-700 ease-out" style="transition-delay: 550ms;">
+          InfraGlide turns your cloud infrastructure into a live drag-and-drop canvas — auto-generating Terraform, deploying in one click, and watching everything after. AWS, GCP, and Azure. All in one place.
+        </p>
+
+        <!-- CTA row -->
+        <div class="mt-8 flex flex-wrap items-center gap-4 opacity-0 transform translate-y-4 transition-all duration-700 ease-out" style="transition-delay: 700ms;">
+          <a href="#pricing" class="bg-brandViolet text-white font-medium-weight px-8 py-3.5 rounded-full hover:bg-brandVioletDark transition-all glow-pulse hover:scale-105 duration-200">
+            Start building free →
+          </a>
+          <a href="#workflow" class="border border-brandViolet/40 text-[#7F77DD] hover:bg-brandViolet/5 font-medium-weight px-8 py-3.5 rounded-full transition-all">
+            Watch 2-min demo ▶
+          </a>
+        </div>
+
+        <div class="mt-4 text-xs text-[#888780] opacity-0 transform translate-y-4 transition-all duration-700 ease-out" style="transition-delay: 800ms;">
+          No credit card <span class="mx-1.5">•</span> Free 14-day trial <span class="mx-1.5">•</span> SOC2 compliant
+        </div>
+      </div>
+
+      <!-- RIGHT COL: Live Canvas Mockup -->
+      <div class="lg:col-span-5 flex items-center justify-center">
+        <!-- 3D Card Parallax Wrapper -->
+        <div class="tilt-card relative w-full max-w-[480px] rounded-2xl bg-bgDarkSection border border-brandViolet/25 shadow-2xl p-4 flex flex-col pointer-events-auto select-none float-panel-0" style="perspective: 800px;">
+          <!-- Custom light reflection layer inside card -->
+          <div class="reflection-overlay"></div>
+          
+          <!-- Mockup top bar with live badge -->
+          <div class="flex items-center justify-between border-b border-brandViolet/10 pb-3 mb-4">
+            <div class="flex items-center gap-1.5">
+              <span class="h-2.5 w-2.5 rounded-full bg-red-500/80"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-yellow-500/80"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-green-500/80"></span>
+            </div>
+            
+            <div class="text-[10px] text-brandViolet font-semibold tracking-wider font-mono bg-brandViolet/10 border border-brandViolet/20 rounded px-2.5 py-0.5">
+              infraglide://canvas-view
+            </div>
+            
+            <span class="flex items-center gap-1.5 bg-tealLive/10 border border-tealLive/30 text-tealLive text-[9px] font-bold rounded-full px-2 py-0.5 uppercase tracking-wider">
+              <span class="h-1.5 w-1.5 rounded-full bg-tealLive ig-blink"></span>
+              LIVE
+            </span>
+          </div>
+
+          <!-- Mini Canvas with connected nodes -->
+          <div class="relative w-full aspect-[4/3] bg-bgDarkHero rounded-xl border border-brandViolet/10 overflow-hidden ig-dots flex items-center justify-center p-4">
+            
+            <!-- SVG paths representing cloud connections -->
+            <svg class="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 400 300" fill="none">
+              <!-- Path definitions for arrows -->
+              <defs>
+                <marker id="arrow-teal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#1D9E75" />
+                </marker>
+              </defs>
+              <!-- CloudFront to ALB -->
+              <path d="M 70,55 L 140,55" stroke="#1D9E75" stroke-width="1.8" class="ig-flow-line" marker-end="url(#arrow-teal)" />
+              <!-- ALB to EC2 -->
+              <path d="M 170,85 L 170,130" stroke="#1D9E75" stroke-width="1.8" class="ig-flow-line" marker-end="url(#arrow-teal)" />
+              <!-- EC2 to RDS -->
+              <path d="M 230,160 Q 320,160 320,115" stroke="#1D9E75" stroke-width="1.8" class="ig-flow-line" marker-end="url(#arrow-teal)" />
+              <!-- EC2 to S3 -->
+              <path d="M 170,190 L 170,225" stroke="#1D9E75" stroke-width="1.8" class="ig-flow-line" marker-end="url(#arrow-teal)" />
+              <!-- Lambda to S3 -->
+              <path d="M 270,250 Q 220,250 210,250" stroke="#1D9E75" stroke-width="1.8" class="ig-flow-line" marker-end="url(#arrow-teal)" />
+            </svg>
+
+            <!-- Node 1: CloudFront -->
+            <div class="absolute w-[60px] h-[44px] bg-slate-900/90 border border-white/10 rounded-lg shadow flex flex-col items-center justify-center z-20 hover:border-brandViolet/50 transition-colors" style="left: 20px; top: 35px;">
+              <i data-lucide="cloud" class="w-4 h-4 text-orange-400"></i>
+              <span class="text-[7px] font-mono text-slate-300 mt-1">CF_CDN</span>
+            </div>
+
+            <!-- Node 2: ALB -->
+            <div class="absolute w-[60px] h-[44px] bg-slate-900/90 border border-white/10 rounded-lg shadow flex flex-col items-center justify-center z-20 hover:border-brandViolet/50 transition-colors" style="left: 140px; top: 35px;">
+              <i data-lucide="network" class="w-4 h-4 text-sky-400"></i>
+              <span class="text-[7px] font-mono text-slate-300 mt-1">ALB_web</span>
+            </div>
+
+            <!-- Node 3: EC2 Cluster -->
+            <div class="absolute w-[80px] h-[48px] bg-slate-900/90 border border-white/10 rounded-lg shadow flex flex-col items-center justify-center z-20 hover:border-brandViolet/50 transition-colors" style="left: 130px; top: 135px;">
+              <i data-lucide="server" class="w-4 h-4 text-purple-400"></i>
+              <span class="text-[7px] font-mono text-slate-300 mt-1">EC2_group</span>
+            </div>
+
+            <!-- Node 4: RDS MySQL -->
+            <div class="absolute w-[60px] h-[44px] bg-slate-900/90 border border-white/10 rounded-lg shadow flex flex-col items-center justify-center z-20 hover:border-brandViolet/50 transition-colors" style="left: 290px; top: 70px;">
+              <i data-lucide="database" class="w-4 h-4 text-blue-400"></i>
+              <span class="text-[7px] font-mono text-slate-300 mt-1">RDS_db</span>
+            </div>
+
+            <!-- Node 5: S3 Bucket -->
+            <div class="absolute w-[60px] h-[44px] bg-slate-900/90 border border-white/10 rounded-lg shadow flex flex-col items-center justify-center z-20 hover:border-brandViolet/50 transition-colors" style="left: 140px; top: 225px;">
+              <i data-lucide="layers" class="w-4 h-4 text-emerald-400"></i>
+              <span class="text-[7px] font-mono text-slate-300 mt-1">S3_assets</span>
+            </div>
+
+            <!-- Node 6: Lambda -->
+            <div class="absolute w-[60px] h-[44px] bg-slate-900/90 border border-white/10 rounded-lg shadow flex flex-col items-center justify-center z-20 hover:border-brandViolet/50 transition-colors" style="left: 270px; top: 225px;">
+              <i data-lucide="cpu" class="w-4 h-4 text-amber-500"></i>
+              <span class="text-[7px] font-mono text-slate-300 mt-1">Lambda_f</span>
+            </div>
+
+          </div>
+
+          <!-- Bottom scrolling console logs representing terraform creation states -->
+          <div class="mt-4 rounded-xl bg-black/60 border border-brandViolet/10 p-3 h-20 overflow-hidden font-mono text-[9px] text-[#888780] relative flex flex-col">
+            <span class="absolute top-1 right-2 text-[8px] text-brandViolet select-none">main.tf</span>
+            <div id="hero-console-lines" class="space-y-0.5 transition-transform duration-500 ease-out select-none">
+              <!-- Lines will populate dynamically from Javascript -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Background Logos Bar -->
+    <div class="absolute bottom-6 left-0 right-0 z-10 w-full overflow-hidden select-none opacity-40">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <p class="text-xs uppercase tracking-[0.2em] text-[#888780] mb-4">Trusted by teams at</p>
+        <div class="flex flex-wrap items-center justify-center gap-12 font-mono text-sm tracking-widest text-[#888780]">
+          <span class="hover:text-brandViolet transition-colors duration-200 cursor-default">AWS</span>
+          <span class="hover:text-brandViolet transition-colors duration-200 cursor-default">AZURE</span>
+          <span class="hover:text-brandViolet transition-colors duration-200 cursor-default">GCP</span>
+          <span class="hover:text-brandViolet transition-colors duration-200 cursor-default">KUBERNETES</span>
+          <span class="hover:text-brandViolet transition-colors duration-200 cursor-default">TERRAFORM</span>
+          <span class="hover:text-brandViolet transition-colors duration-200 cursor-default">HELM</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF / STATS BAR -->
+  <section class="relative bg-bgDarkSection py-16 border-y border-brandViolet/10">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 items-center">
+      
+      <!-- Stat 1 -->
+      <div class="flex flex-col items-center text-center relative md:after:content-[''] md:after:absolute md:after:right-0 md:after:top-2 md:after:w-[1px] md:after:h-12 md:after:bg-white/10">
+        <div class="text-4xl md:text-5xl font-medium-weight text-brandViolet font-mono">
+          <span class="stat-counter" data-target="49">0</span>+
+        </div>
+        <p class="text-[11px] uppercase tracking-wider text-[#888780] mt-2">Resource types</p>
+      </div>
+
+      <!-- Stat 2 -->
+      <div class="flex flex-col items-center text-center relative md:after:content-[''] md:after:absolute md:after:right-0 md:after:top-2 md:after:w-[1px] md:after:h-12 md:after:bg-white/10">
+        <div class="text-4xl md:text-5xl font-medium-weight text-brandViolet font-mono">
+          <span class="stat-counter" data-target="3">0</span>
+        </div>
+        <p class="text-[11px] uppercase tracking-wider text-[#888780] mt-2">Cloud providers</p>
+      </div>
+
+      <!-- Stat 3 -->
+      <div class="flex flex-col items-center text-center relative md:after:content-[''] md:after:absolute md:after:right-0 md:after:top-2 md:after:w-[1px] md:after:h-12 md:after:bg-white/10">
+        <div class="text-4xl md:text-5xl font-medium-weight text-brandViolet font-mono">
+          <span class="stat-counter" data-target="0">0</span>
+        </div>
+        <p class="text-[11px] uppercase tracking-wider text-[#888780] mt-2">Lines of Terraform to write</p>
+      </div>
+
+      <!-- Stat 4 -->
+      <div class="flex flex-col items-center text-center">
+        <div class="text-4xl md:text-5xl font-medium-weight text-brandViolet font-mono">
+          <span class="stat-counter" data-target="1">0</span>
+        </div>
+        <p class="text-[11px] uppercase tracking-wider text-[#888780] mt-2">Canvas for everything</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS SECTION -->
+  <section id="workflow" class="py-28 relative overflow-hidden bg-bgDarkHero">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      
+      <!-- Section Header -->
+      <div class="max-w-xl mx-auto mb-20 fade-up-scroll">
+        <span class="text-xs font-semibold tracking-[0.2em] text-brandViolet uppercase block mb-3">// Workflow</span>
+        <h2 class="text-3xl md:text-4xl font-medium-weight text-white mb-4">From idea to infrastructure in three steps</h2>
+        <p class="text-[#888780] text-sm">No Terraform expertise required. Just drag, configure, and ship.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 items-stretch relative">
+        
+        <!-- Step 1: Design -->
+        <div class="flex flex-col items-center text-center px-4 relative fade-up-scroll">
+          <!-- step watermark -->
+          <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-[100px] font-medium-weight text-brandViolet/5 font-mono select-none pointer-events-none">1</div>
+          
+          <!-- Isometric SVG / Icon visual container -->
+          <div class="h-36 w-full flex items-center justify-center mb-6 relative bg-bgDarkSection rounded-2xl border border-brandViolet/10 overflow-hidden shadow-inner select-none">
+            <div class="absolute inset-0 ig-dots opacity-20"></div>
+            <div class="relative w-48 h-20">
+              <!-- node 1 -->
+              <div class="absolute left-4 top-2 bg-white/95 text-slate-800 border border-brandViolet/30 rounded-lg p-1.5 flex items-center gap-1.5 shadow-sm text-[10px] font-bold">
+                <i data-lucide="server" class="w-3.5 h-3.5 text-brandViolet"></i>
+                EC2_web
+              </div>
+              <!-- node 2 -->
+              <div class="absolute right-4 bottom-2 bg-white/95 text-slate-800 border border-brandViolet/30 rounded-lg p-1.5 flex items-center gap-1.5 shadow-sm text-[10px] font-bold">
+                <i data-lucide="database" class="w-3.5 h-3.5 text-brandViolet"></i>
+                RDS_mysql
+              </div>
+              <svg class="absolute inset-0 w-full h-full pointer-events-none" fill="none">
+                <path d="M 90,30 Q 120,40 142,50" stroke="#7F77DD" stroke-width="2" stroke-dasharray="4 4" class="ig-flow-line" />
+              </svg>
+            </div>
+            
+            <!-- floating chip annotation -->
+            <span class="absolute top-2.5 right-2.5 bg-brandViolet text-white text-[8px] font-bold tracking-wider rounded px-2 py-0.5 shadow">
+              49+ Resources
+            </span>
+          </div>
+
+          <h3 class="text-lg font-medium-weight text-white mb-2 relative z-10">1. Drag resources</h3>
+          <p class="text-xs text-[#888780] leading-relaxed relative z-10">Drag cloud resources onto the canvas. Connect them the way your architecture should actually work.</p>
+          
+          <!-- horizontal SVG connecting arrow -->
+          <div class="hidden md:flex absolute top-16 -right-6 z-20 items-center justify-center pointer-events-none">
+            <svg width="40" height="24" viewBox="0 0 40 24" fill="none" class="w-10 text-brandViolet">
+              <path d="M4 12 H36 M30 6 L36 12 L30 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4" class="ig-flow-line" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Step 2: Configure -->
+        <div class="flex flex-col items-center text-center px-4 relative fade-up-scroll" style="transition-delay: 80ms;">
+          <!-- step watermark -->
+          <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-[100px] font-medium-weight text-brandViolet/5 font-mono select-none pointer-events-none">2</div>
+          
+          <!-- Configuration UI sync visual -->
+          <div class="h-36 w-full flex items-center justify-center mb-6 relative bg-bgDarkSection rounded-2xl border border-brandViolet/10 overflow-hidden shadow-inner select-none p-4">
+            <div class="absolute inset-0 ig-dots opacity-20"></div>
+            
+            <div class="grid grid-cols-2 gap-4 w-full h-full items-center relative">
+              <!-- Left side fields -->
+              <div class="bg-black/40 border border-white/5 rounded-lg p-2 flex flex-col gap-1.5 text-left text-[8px] font-mono text-slate-300">
+                <div>region: "us-east-1"</div>
+                <div>instance_type: "t3.medium"</div>
+                <div>storage_gb: 40</div>
+              </div>
+              
+              <!-- Right side generated code -->
+              <div class="bg-black/75 border border-brandViolet/10 rounded-lg p-2 h-full flex items-start text-left text-[7px] font-mono text-brandViolet overflow-hidden relative">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/80"></div>
+                <div class="space-y-0.5">
+                  <p class="text-white">resource "aws" "web" {</p>
+                  <p class="pl-2">instance_type = "t3.medium"</p>
+                  <p class="pl-2">ebs_size = 40</p>
+                  <p>}</p>
+                </div>
+              </div>
+
+              <!-- Center rotating sync icon -->
+              <div class="absolute inset-0 m-auto w-6 h-6 rounded-full bg-brandViolet/10 border border-brandViolet/30 flex items-center justify-center text-brandViolet backdrop-blur">
+                <i data-lucide="refresh-cw" class="w-3 h-3 animate-spin" style="animation-duration: 4s;"></i>
+              </div>
+            </div>
+            
+            <span class="absolute top-2.5 right-2.5 bg-brandViolet text-white text-[8px] font-bold tracking-wider rounded px-2 py-0.5 shadow">
+              Real HCL Code
+            </span>
+          </div>
+
+          <h3 class="text-lg font-medium-weight text-white mb-2 relative z-10">2. Configure</h3>
+          <p class="text-xs text-[#888780] leading-relaxed relative z-10">Configure in the UI. InfraGlide writes the Terraform. Every change in the form updates the HCL code in real time.</p>
+          
+          <!-- horizontal SVG connecting arrow -->
+          <div class="hidden md:flex absolute top-16 -right-6 z-20 items-center justify-center pointer-events-none">
+            <svg width="40" height="24" viewBox="0 0 40 24" fill="none" class="w-10 text-brandViolet">
+              <path d="M4 12 H36 M30 6 L36 12 L30 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4" class="ig-flow-line" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Step 3: Deploy -->
+        <div class="flex flex-col items-center text-center px-4 relative fade-up-scroll" style="transition-delay: 160ms;">
+          <!-- step watermark -->
+          <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-[100px] font-medium-weight text-brandViolet/5 font-mono select-none pointer-events-none">3</div>
+          
+          <!-- Deploy observablity graphs -->
+          <div class="h-36 w-full flex items-center justify-center mb-6 bg-bgDarkSection rounded-2xl border border-brandViolet/10 overflow-hidden shadow-inner p-4 relative select-none">
+            <div class="absolute inset-0 ig-dots opacity-20"></div>
+            
+            <!-- Dashboard view inside step -->
+            <div class="flex flex-col gap-2 w-full h-full">
+              <!-- Live health bar -->
+              <div class="flex items-center justify-between bg-black/40 border border-white/5 rounded px-2 py-1 text-[8px] font-medium-weight">
+                <span class="text-[#888780]">Stack status</span>
+                <span class="text-tealLive flex items-center gap-1">
+                  <span class="h-1.5 w-1.5 rounded-full bg-tealLive ig-blink"></span>
+                  Operational
+                </span>
+              </div>
+              
+              <!-- Metrics grids -->
+              <div class="grid grid-cols-3 gap-2 flex-1 items-stretch">
+                <div class="bg-black/50 border border-white/5 rounded p-1 flex flex-col justify-between text-left">
+                  <span class="text-[7px] text-[#888780]">CPU</span>
+                  <span class="text-xs text-white font-mono font-medium-weight mt-1">34%</span>
+                </div>
+                <div class="bg-black/50 border border-white/5 rounded p-1 flex flex-col justify-between text-left">
+                  <span class="text-[7px] text-[#888780]">Mem</span>
+                  <span class="text-xs text-white font-mono font-medium-weight mt-1">67%</span>
+                </div>
+                <div class="bg-black/50 border border-white/5 rounded p-1 flex flex-col justify-between text-left">
+                  <span class="text-[7px] text-[#888780]">Requests</span>
+                  <span class="text-xs text-white font-mono font-medium-weight mt-1">1.2k/m</span>
+                </div>
+              </div>
+            </div>
+            
+            <span class="absolute top-2.5 right-2.5 bg-brandViolet text-white text-[8px] font-bold tracking-wider rounded px-2 py-0.5 shadow">
+              Live Monitoring
+            </span>
+          </div>
+
+          <h3 class="text-lg font-medium-weight text-white mb-2 relative z-10">3. Deploy & Observe</h3>
+          <p class="text-xs text-[#888780] leading-relaxed relative z-10">Hit deploy. Watch it provision. Then keep watching — live metrics, drift alerts, and Jane AI watching over it all.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE DEEP-DIVES (ALTERNATING LAYOUT) -->
+  <section id="features" class="relative overflow-hidden bg-bgDarkSection">
+    
+    <!-- Feature 1: Canvas -->
+    <div class="py-24 border-b border-brandViolet/10">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <!-- Text side -->
+        <div class="lg:col-span-6 flex flex-col justify-center text-left order-2 lg:order-1 fade-up-scroll">
+          <span class="text-xs font-semibold tracking-wider text-brandViolet uppercase block mb-2">Pipeline Designer</span>
+          <h3 class="text-3xl font-medium-weight text-white mb-6">Your infrastructure, finally drawable</h3>
+          <p class="text-sm text-[#888780] leading-relaxed mb-6">
+            Drop any AWS, GCP, or Azure resource onto the infinite canvas. InfraGlide understands the relationships — VPCs wrap subnets, ALBs route to EC2 clusters, RDS instances sit inside security groups. Connect them visually and the Terraform writes itself.
+          </p>
+          <ul class="space-y-3 text-sm text-[#888780]">
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              49+ resource types across AWS, GCP, Azure
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Auto-generated Terraform HCL — real, deployable code
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Blueprint library with production-ready templates
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Version history on every pipeline
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Visual side -->
+        <div class="lg:col-span-6 flex items-center justify-center order-1 lg:order-2">
+          <!-- Tilted container mockup screenshot -->
+          <div class="tilt-card relative w-full aspect-[4/3] rounded-2xl bg-bgDarkHero border border-brandViolet/20 shadow-2xl p-2 float-panel-1 select-none overflow-hidden" style="perspective: 800px;">
+            <div class="reflection-overlay"></div>
+            <!-- Header bar mockup -->
+            <div class="flex items-center gap-1 border-b border-brandViolet/10 pb-2 mb-2">
+              <span class="h-2 w-2 rounded-full bg-red-500/80"></span>
+              <span class="h-2 w-2 rounded-full bg-yellow-500/80"></span>
+              <span class="h-2 w-2 rounded-full bg-green-500/80"></span>
+              <span class="text-[9px] font-mono text-slate-500 ml-4">infraglide.io/app/canvas/editor</span>
+            </div>
+            
+            <div class="relative w-full h-[85%] rounded-lg border border-brandViolet/5 bg-slate-900/60 overflow-hidden ig-dots p-6">
+              <!-- Visual nodes canvas elements layout -->
+              <div class="flex flex-col gap-6 items-center justify-center h-full relative">
+                <!-- Group Container -->
+                <div class="border border-dashed border-brandViolet/40 rounded-xl p-4 bg-brandViolet/5 relative w-80 h-36 flex flex-col justify-between">
+                  <span class="absolute -top-3 left-4 bg-slate-800 border border-brandViolet/30 text-brandViolet text-[8px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                    us-east-1
+                  </span>
+                  
+                  <div class="flex items-center justify-between">
+                    <div class="bg-bgDarkHero border border-white/10 rounded-lg p-2 flex items-center gap-2 text-xs">
+                      <i data-lucide="server" class="w-4 h-4 text-orange-400"></i>
+                      <span>EC2 App</span>
+                    </div>
+                    
+                    <div class="bg-bgDarkHero border border-white/10 rounded-lg p-2 flex items-center gap-2 text-xs">
+                      <i data-lucide="database" class="w-4 h-4 text-blue-400"></i>
+                      <span>RDS Prod</span>
+                    </div>
+                  </div>
+                  
+                  <div class="flex justify-center">
+                    <div class="bg-bgDarkHero border border-white/10 rounded-lg p-2 flex items-center gap-2 text-xs w-fit">
+                      <i data-lucide="layers" class="w-4 h-4 text-emerald-400"></i>
+                      <span>S3 Assets</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating annotations bubbles -->
+            <div class="absolute bottom-6 left-6 bg-slate-900 border border-tealLive/30 text-tealLive text-[10px] font-medium-weight px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 animate-bounce select-none">
+              <i data-lucide="sparkles" class="w-3 h-3"></i>
+              Auto Terraform ✓
+            </div>
+            <div class="absolute top-12 right-6 bg-slate-900 border border-brandViolet/30 text-white text-[10px] font-medium-weight px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 animate-bounce select-none" style="animation-delay: 0.8s;">
+              <i data-lucide="boxes" class="w-3.5 h-3.5 text-brandViolet"></i>
+              49 resource types
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 2: Deployment -->
+    <div class="py-24 bg-bgDarkHero border-b border-brandViolet/10">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <!-- Visual side -->
+        <div class="lg:col-span-6 flex items-center justify-center order-1 lg:order-1">
+          <!-- Monospace terminal panel -->
+          <div class="tilt-card relative w-full max-w-[480px] rounded-2xl bg-[#0F0C1B] border border-brandViolet/25 shadow-2xl p-4 flex flex-col font-mono text-[11px] leading-relaxed select-none float-panel-2" style="perspective: 800px; height: 320px;">
+            <div class="reflection-overlay"></div>
+            <!-- Header mac style -->
+            <div class="flex items-center justify-between border-b border-white/5 pb-2 mb-3">
+              <div class="flex items-center gap-1">
+                <span class="h-2 w-2 rounded-full bg-red-500/80"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-yellow-500/80"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-green-500/80"></span>
+              </div>
+              <div class="text-[10px] text-brandViolet font-semibold">deploy-pipeline</div>
+              <div class="w-10"></div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="mb-3">
+              <div class="flex justify-between items-center text-[10px] text-[#888780] mb-1.5">
+                <span>Deploying · 3 of 7 resources</span>
+                <span class="text-tealLive">75%</span>
+              </div>
+              <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-brandViolet to-tealLive" style="width: 75%;"></div>
+              </div>
+            </div>
+
+            <!-- Terminal scroll rows -->
+            <div id="feature-deploy-terminal" class="flex-1 overflow-y-auto space-y-1 text-left text-slate-300 scrollbar-thin">
+              <!-- Typewriter log lines appear on load -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Text side -->
+        <div class="lg:col-span-6 flex flex-col justify-center text-left order-2 lg:order-2 fade-up-scroll">
+          <span class="text-xs font-semibold tracking-wider text-brandViolet uppercase block mb-2">One-Click Deploy</span>
+          <h3 class="text-3xl font-medium-weight text-white mb-6">Terraform plan → apply, without the terminal</h3>
+          <p class="text-sm text-[#888780] leading-relaxed mb-6">
+            InfraGlide orchestrates the full terraform lifecycle. Hit deploy and watch a live log stream as each resource provisions. If something fails, the error is surfaced immediately with a suggested fix.
+          </p>
+          <ul class="space-y-3 text-sm text-[#888780]">
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Live deployment log stream
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              terraform init → plan → apply managed for you
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Per-resource status indicators (creating / complete / error)
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Rollback on failure
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 3: Jane AI co-pilot -->
+    <div id="jane-features" class="py-24 border-b border-brandViolet/10">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <!-- Text side -->
+        <div class="lg:col-span-6 flex flex-col justify-center text-left order-2 lg:order-1 fade-up-scroll">
+          <span class="text-xs font-semibold tracking-wider text-tealLive uppercase flex items-center gap-1.5 mb-2">
+            Jane AI  ✦
+          </span>
+          <h3 class="text-3xl font-medium-weight text-white mb-6">Your infrastructure has a co-pilot now</h3>
+          <p class="text-sm text-[#888780] leading-relaxed mb-6">
+            Jane AI watches your deployed infrastructure around the clock. She detects anomalies, predicts issues before they become incidents, and surfaces one-click fix suggestions. She's not a chatbot — she's an infrastructure intelligence layer.
+          </p>
+          <ul class="space-y-3 text-sm text-[#888780]">
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Proactive anomaly detection — no manual polling
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Natural language infrastructure queries
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              One-click suggested optimizations
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Integrated into every page, not a separate tool
+            </li>
+          </ul>
+          <a href="#jane-exclusive" class="text-sm text-tealLive font-medium-weight mt-6 inline-flex items-center gap-1 hover:underline">
+            Meet Jane AI →
+          </a>
+        </div>
+
+        <!-- Visual side -->
+        <div class="lg:col-span-6 flex items-center justify-center order-1 lg:order-2">
+          <!-- Chat UI Mockup Panel -->
+          <div class="tilt-card relative w-full max-w-[480px] rounded-2xl bg-bgDarkHero border border-tealLive/25 shadow-2xl p-4 flex flex-col select-none float-panel-0" style="perspective: 800px; box-shadow: 0 0 40px rgba(29,158,117,0.15);">
+            <div class="reflection-overlay"></div>
+            <!-- Header bar chat -->
+            <div class="flex items-center gap-2 border-b border-white/5 pb-3 mb-4">
+              <span class="w-2.5 h-2.5 rounded-full bg-tealLive animate-pulse"></span>
+              <span class="text-xs font-semibold text-white flex items-center gap-1">
+                Jane AI <span class="text-brandViolet">✦</span>
+              </span>
+              <span class="text-[9px] text-[#888780] font-mono ml-auto">co-pilot active</span>
+            </div>
+
+            <!-- Message bubble container -->
+            <div class="space-y-3 flex-1 flex flex-col text-xs leading-relaxed">
+              <div class="bg-slate-900 border border-white/5 rounded-xl p-3.5 max-w-[90%] text-slate-300">
+                I detected a CPU spike on your EC2 cluster (us-east-1). Average utilization hit 89% over the last 20 minutes.
+              </div>
+              
+              <div class="bg-slate-900 border border-white/5 rounded-xl p-3.5 max-w-[90%] text-slate-300">
+                Recommendation: Scale from <span class="text-brandViolet font-mono">t3.medium</span> to <span class="text-brandViolet font-mono">t3.large</span>. Estimated cost increase: <span class="text-tealLive font-medium-weight">~$12/month</span>.
+              </div>
+
+              <!-- CTA apply inside chat -->
+              <button onclick="triggerJaneAction(this)" class="self-start ml-2 bg-tealLive hover:bg-emerald-600 text-white font-bold text-[10px] px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5">
+                <i data-lucide="bolt" class="w-3.5 h-3.5"></i>
+                Apply suggestion
+              </button>
+
+              <!-- Typing indicator at bottom -->
+              <div class="flex items-center gap-1.5 pl-2 mt-4 text-[#888780] text-[10px]">
+                <span class="h-1.5 w-1.5 rounded-full bg-tealLive ig-blink"></span>
+                <span class="h-1.5 w-1.5 rounded-full bg-tealLive ig-blink" style="animation-delay: 0.2s;"></span>
+                <span class="h-1.5 w-1.5 rounded-full bg-tealLive ig-blink" style="animation-delay: 0.4s;"></span>
+                <span class="font-mono ml-1">Jane is analyzing...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 4: Observability + Topology -->
+    <div class="py-24 bg-bgDarkHero border-b border-brandViolet/10">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <!-- Visual side -->
+        <div class="lg:col-span-6 flex items-center justify-center order-1 lg:order-1">
+          <!-- Observability Card mockup -->
+          <div class="tilt-card relative w-full aspect-[4/3] rounded-2xl bg-bgDarkSection border border-brandViolet/25 shadow-2xl p-4 flex flex-col justify-between float-panel-1 select-none" style="perspective: 800px;">
+            <div class="reflection-overlay"></div>
+            <!-- Header bar metrics -->
+            <div class="flex items-center justify-between border-b border-brandViolet/10 pb-3">
+              <div class="flex items-center gap-1">
+                <span class="h-2 w-2 rounded-full bg-red-500/80"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-yellow-500/80"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-green-500/80"></span>
+              </div>
+              <div class="text-[9px] text-[#888780] font-mono">monitoring-hub</div>
+            </div>
+
+            <!-- Force directed style map mockup grid -->
+            <div class="relative flex-1 bg-black/40 rounded-xl my-3 border border-white/5 overflow-hidden flex items-center justify-center p-4">
+              <!-- Grid dot background -->
+              <div class="absolute inset-0 ig-dots opacity-20"></div>
+              
+              <svg class="w-full h-full max-h-40" viewBox="0 0 200 120" fill="none">
+                <!-- Connected lines -->
+                <path d="M 40,60 L 100,30 M 40,60 L 100,90 M 100,30 L 160,60 M 100,90 L 160,60" stroke="#1D9E75" stroke-opacity="0.6" stroke-width="1" />
+                
+                <!-- Nodes circles -->
+                <circle cx="40" cy="60" r="8" fill="#534AB7" stroke="#7F77DD" stroke-width="1" />
+                <circle cx="100" cy="30" r="8" fill="#1A1828" stroke="#1D9E75" stroke-width="1.5" />
+                <circle cx="100" cy="90" r="8" fill="#1A1828" stroke="#1D9E75" stroke-width="1.5" />
+                <circle cx="160" cy="60" r="8" fill="#534AB7" stroke="#7F77DD" stroke-width="1" />
+              </svg>
+            </div>
+
+            <!-- Floating metric badges -->
+            <div class="absolute top-12 left-10 bg-slate-900 border border-tealLive/30 text-tealLive text-[10px] font-bold px-3 py-1.5 rounded-full shadow flex items-center gap-1.5 animate-bounce select-none">
+              CPU 34% ↓
+            </div>
+            <div class="absolute top-16 right-10 bg-slate-900 border border-coralAlert/30 text-coralAlert text-[10px] font-bold px-3 py-1.5 rounded-full shadow flex items-center gap-1.5 animate-bounce select-none" style="animation-delay: 0.5s;">
+              2 resources drifted !
+            </div>
+            <div class="absolute bottom-12 right-24 bg-slate-900 border border-tealLive/30 text-tealLive text-[10px] font-bold px-3 py-1.5 rounded-full shadow flex items-center gap-1.5 animate-bounce select-none" style="animation-delay: 1s;">
+              Uptime 99.98%
+            </div>
+          </div>
+        </div>
+
+        <!-- Text side -->
+        <div class="lg:col-span-6 flex flex-col justify-center text-left order-2 lg:order-2 fade-up-scroll">
+          <span class="text-xs font-semibold tracking-wider text-brandViolet uppercase block mb-2">Observability</span>
+          <h3 class="text-3xl font-medium-weight text-white mb-6">Your infrastructure, live and in full colour</h3>
+          <p class="text-sm text-[#888780] leading-relaxed mb-6">
+            InfraGlide doesn't stop at deployment. A live topology graph shows every resource and how it's connected. Real-time metrics — CPU, memory, throughput, error rates — update every 30 seconds. Drift Detection alerts you the moment production diverges from your pipeline.
+          </p>
+          <ul class="space-y-3 text-sm text-[#888780]">
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Force-directed topology map of all deployed resources
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Live metrics: CPU, memory, request rate, error rate
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Drift Detection — compare live infra vs pipeline state
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Scheduler: cron-based automation for infra operations
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 5: Security + Compliance + RBAC -->
+    <div class="py-24 border-b border-brandViolet/10">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <!-- Text side -->
+        <div class="lg:col-span-6 flex flex-col justify-center text-left order-2 lg:order-1 fade-up-scroll">
+          <span class="text-xs font-semibold tracking-wider text-brandViolet uppercase block mb-2">Enterprise-Ready</span>
+          <h3 class="text-3xl font-medium-weight text-white mb-6">Built for teams that can't afford to get it wrong</h3>
+          <p class="text-sm text-[#888780] leading-relaxed mb-6">
+            Role-based access control at module level — your developers can't accidentally touch production credentials. The compliance engine scans your infrastructure against CIS benchmarks continuously. AES-256 encrypted credential vault. Every action is audited.
+          </p>
+          <ul class="space-y-3 text-sm text-[#888780]">
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Module-level RBAC — granular, not just Admin/Viewer
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Automated compliance scanning (CIS, SOC2 controls)
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              AES-256 credential vault — no plaintext cloud keys ever
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-tealLive"></i>
+              Full audit trail — who deployed what, when
+            </li>
+          </ul>
+        </div>
+
+        <!-- Visual side -->
+        <div class="lg:col-span-6 flex items-center justify-center order-1 lg:order-2">
+          <!-- Permission Matrix Mini Mockup -->
+          <div class="tilt-card relative w-full max-w-[480px] rounded-2xl bg-bgDarkHero border border-brandViolet/25 shadow-2xl p-4 flex flex-col select-none float-panel-2" style="perspective: 800px;">
+            <div class="reflection-overlay"></div>
+            <!-- Header bar table -->
+            <div class="flex items-center justify-between border-b border-white/5 pb-3 mb-4">
+              <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                <i data-lucide="shield" class="w-3.5 h-3.5 text-brandViolet"></i> Permissions Matrix
+              </h4>
+              <span class="text-[9px] text-[#888780] font-semibold uppercase tracking-wider">module levels</span>
+            </div>
+
+            <!-- Table content -->
+            <div class="overflow-hidden rounded-lg border border-brandViolet/10">
+              <table class="w-full text-left font-mono text-[9px] text-[#888780]">
+                <thead>
+                  <tr class="bg-white/[0.02] border-b border-brandViolet/10 text-white/60">
+                    <th class="px-3 py-2 font-medium">User Role</th>
+                    <th class="px-2 py-2 text-center">Pipeline</th>
+                    <th class="px-2 py-2 text-center">Deploy</th>
+                    <th class="px-2 py-2 text-center">Observe</th>
+                    <th class="px-2 py-2 text-center">Security</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-white/5 hover:bg-white/[0.01]">
+                    <td class="px-3 py-2 text-white font-medium">SK Org Admin</td>
+                    <td class="px-2 py-2 text-center text-tealLive font-bold">✓</td>
+                    <td class="px-2 py-2 text-center text-tealLive font-bold">✓</td>
+                    <td class="px-2 py-2 text-center text-tealLive font-bold">✓</td>
+                    <td class="px-2 py-2 text-center text-tealLive font-bold">✓</td>
+                  </tr>
+                  <tr class="border-b border-white/5 hover:bg-white/[0.01]">
+                    <td class="px-3 py-2 text-white font-medium">AR Developer</td>
+                    <td class="px-2 py-2 text-center text-tealLive font-bold">✓</td>
+                    <td class="px-2 py-2 text-center text-tealLive font-bold">✓</td>
+                    <td class="px-2 py-2 text-center text-tealLive font-bold">✓</td>
+                    <td class="px-2 py-2 text-center text-coralAlert font-bold">✗</td>
+                  </tr>
+                  <tr class="hover:bg-white/[0.01]">
+                    <td class="px-3 py-2 text-white font-medium">MJ Viewer</td>
+                    <td class="px-2 py-2 text-center text-tealLive font-bold">✓</td>
+                    <td class="px-2 py-2 text-center text-coralAlert font-bold">✗</td>
+                    <td class="px-2 py-2 text-center text-coralAlert font-bold">✗</td>
+                    <td class="px-2 py-2 text-center text-coralAlert font-bold">✗</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Dynamic Save indicator -->
+            <div class="mt-4 flex items-center justify-between text-[9px] text-[#888780] border-t border-white/5 pt-3">
+              <span>Policies synced dynamically</span>
+              <span class="text-tealLive font-bold">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- JANE AI SPOTLIGHT SECTION -->
+  <section id="jane-exclusive" class="py-28 relative overflow-hidden bg-bgDarkHero">
+    <!-- Teal glow radial backdrop -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(29,158,117,0.06)_0%,transparent_60%)] pointer-events-none z-0"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-6 z-10 text-center">
+      
+      <!-- Header block -->
+      <div class="max-w-2xl mx-auto mb-20 fade-up-scroll">
+        <span class="text-xs font-semibold tracking-[0.25em] text-tealLive uppercase block mb-3">✦ JANE AI — EXCLUSIVE TO INFRAGLIDE</span>
+        <h2 class="text-3xl md:text-5xl font-medium-weight text-white mb-6 leading-tight">The only cloud platform with a built-in AI co-pilot</h2>
+        <p class="text-sm text-[#888780] leading-relaxed">
+          Brainboard lets you design. InfraGlide lets you design, deploy, AND sends Jane AI to guard it after.
+        </p>
+      </div>
+
+      <!-- 4 capability cards grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        
+        <!-- Card 1 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:border-tealLive/40 hover:shadow-[0_0_20px_rgba(29,158,117,0.15)] flex flex-col group select-none">
+          <div class="h-10 w-10 rounded-xl bg-tealLive/10 border border-tealLive/25 flex items-center justify-center text-tealLive mb-4 group-hover:scale-105 transition-transform duration-200">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-medium-weight text-white mb-2">Anomaly detection</h3>
+          <p class="text-xs text-[#888780] leading-relaxed">
+            Jane monitors CPU, memory, and network patterns. She knows what normal looks like for your infra — and alerts you the moment it changes.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:border-tealLive/40 hover:shadow-[0_0_20px_rgba(29,158,117,0.15)] flex flex-col group select-none">
+          <div class="h-10 w-10 rounded-xl bg-tealLive/10 border border-tealLive/25 flex items-center justify-center text-tealLive mb-4 group-hover:scale-105 transition-transform duration-200">
+            <i data-lucide="bolt" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-medium-weight text-white mb-2">Proactive suggestions</h3>
+          <p class="text-xs text-[#888780] leading-relaxed">
+            Before you ask, Jane surfaces cost savings, right-sizing opportunities, and security improvements automatically.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:border-tealLive/40 hover:shadow-[0_0_20px_rgba(29,158,117,0.15)] flex flex-col group select-none">
+          <div class="h-10 w-10 rounded-xl bg-tealLive/10 border border-tealLive/25 flex items-center justify-center text-tealLive mb-4 group-hover:scale-105 transition-transform duration-200">
+            <i data-lucide="message-circle" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-medium-weight text-white mb-2">Natural language queries</h3>
+          <p class="text-xs text-[#888780] leading-relaxed">
+            Ask Jane: "Which resources have public IPs?" or "When did my RDS instance last scale?" She knows your topology inside out.
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:border-tealLive/40 hover:shadow-[0_0_20px_rgba(29,158,117,0.15)] flex flex-col group select-none">
+          <div class="h-10 w-10 rounded-xl bg-tealLive/10 border border-tealLive/25 flex items-center justify-center text-tealLive mb-4 group-hover:scale-105 transition-transform duration-200">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-medium-weight text-white mb-2">Security watchdog</h3>
+          <p class="text-xs text-[#888780] leading-relaxed">
+            Jane continuously cross-references your deployed infrastructure against compliance policies and flags any security violations immediately.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMPARISON TABLE SECTION -->
+  <section id="comparison" class="py-28 relative overflow-hidden bg-bgDarkSection border-t border-brandViolet/10">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      
+      <!-- Section Header -->
+      <div class="max-w-xl mx-auto mb-20 fade-up-scroll">
+        <span class="text-xs font-semibold tracking-wider text-brandViolet uppercase block mb-3">// Comparison</span>
+        <h2 class="text-3xl md:text-4xl font-medium-weight text-white mb-4">InfraGlide vs the alternatives</h2>
+      </div>
+
+      <!-- Feature Table Grid -->
+      <div class="ig-card rounded-2xl border border-brandViolet/20 overflow-hidden bg-black/40 max-w-5xl mx-auto fade-up-scroll">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-brandViolet/15 bg-brandViolet/5">
+                <th class="p-4 md:p-6 font-semibold text-slate-400">Feature</th>
+                <th class="p-4 md:p-6 font-semibold text-white bg-brandViolet/10 relative">
+                  <div class="absolute -top-1 left-0 right-0 h-1 bg-brandViolet"></div>
+                  <span class="inline-flex items-center gap-1 text-brandViolet font-bold uppercase tracking-wider text-[10px]">
+                    ✦ InfraGlide
+                  </span>
+                </th>
+                <th class="p-4 md:p-6 font-semibold text-slate-400">Brainboard</th>
+                <th class="p-4 md:p-6 font-semibold text-slate-400">Terraform Cloud</th>
+                <th class="p-4 md:p-6 font-semibold text-slate-400">Manual HCL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 -->
+              <tr class="border-b border-brandViolet/5 hover:bg-brandViolet/5 transition-colors duration-150">
+                <td class="p-4 md:p-5 font-medium text-slate-300">Visual drag-and-drop canvas</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold bg-brandViolet/5">✓</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold">✓</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+              </tr>
+              <!-- Row 2 -->
+              <tr class="border-b border-brandViolet/5 hover:bg-brandViolet/5 transition-colors duration-150">
+                <td class="p-4 md:p-5 font-medium text-slate-300">Auto-generated Terraform</td>
+                <td class="p-5 md:p-5 text-tealLive font-bold bg-brandViolet/5">✓</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold">✓</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+              </tr>
+              <!-- Row 3 -->
+              <tr class="border-b border-brandViolet/5 hover:bg-brandViolet/5 transition-colors duration-150">
+                <td class="p-4 md:p-5 font-medium text-slate-300">One-click deploy</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold bg-brandViolet/5">✓</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold">✓</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold">✓</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+              </tr>
+              <!-- Row 4 -->
+              <tr class="border-b border-brandViolet/5 hover:bg-brandViolet/5 transition-colors duration-150">
+                <td class="p-4 md:p-5 font-medium text-slate-300">Live observability & metrics</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold bg-brandViolet/5">✓</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-amberPending italic">Partial</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+              </tr>
+              <!-- Row 5 -->
+              <tr class="border-b border-brandViolet/5 hover:bg-brandViolet/5 transition-colors duration-150">
+                <td class="p-4 md:p-5 font-medium text-slate-300">Force-directed topology map</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold bg-brandViolet/5">✓</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+              </tr>
+              <!-- Row 6 -->
+              <tr class="border-b border-brandViolet/5 hover:bg-brandViolet/5 transition-colors duration-150">
+                <td class="p-4 md:p-5 font-medium text-slate-300">AI co-pilot (Jane AI)</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold bg-brandViolet/5">✓</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+              </tr>
+              <!-- Row 7 -->
+              <tr class="border-b border-brandViolet/5 hover:bg-brandViolet/5 transition-colors duration-150">
+                <td class="p-4 md:p-5 font-medium text-slate-300">Scheduler / cron automation</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold bg-brandViolet/5">✓</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+              </tr>
+              <!-- Row 8 -->
+              <tr class="border-b border-brandViolet/5 hover:bg-brandViolet/5 transition-colors duration-150">
+                <td class="p-4 md:p-5 font-medium text-slate-300">Template converter (ARM→TF)</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold bg-brandViolet/5">✓</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+              </tr>
+              <!-- Row 9 -->
+              <tr class="border-b border-brandViolet/5 hover:bg-brandViolet/5 transition-colors duration-150">
+                <td class="p-4 md:p-5 font-medium text-slate-300">Module-level RBAC</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold bg-brandViolet/5">✓</td>
+                <td class="p-4 md:p-5 text-slate-500 italic">Basic</td>
+                <td class="p-4 md:p-5 text-tealLive font-bold">✓</td>
+                <td class="p-4 md:p-5 text-coralAlert font-bold">✗</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- USE CASES GRID -->
+  <section id="use-cases" class="py-28 relative overflow-hidden bg-bgDarkHero">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      
+      <!-- Section Header -->
+      <div class="max-w-xl mx-auto mb-20 fade-up-scroll">
+        <span class="text-xs font-semibold tracking-wider text-brandViolet uppercase block mb-3">// Solutions</span>
+        <h2 class="text-3xl md:text-4xl font-medium-weight text-white mb-4">Built for every cloud team</h2>
+      </div>
+
+      <!-- 6 cards grid 3x2 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        
+        <!-- Card 1 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:-translate-y-1 hover:border-brandViolet/50 flex flex-col justify-between select-none group h-64">
+          <div>
+            <div class="h-9 w-9 rounded-lg bg-brandViolet/10 border border-brandViolet/25 flex items-center justify-center text-brandViolet mb-4 group-hover:scale-105 transition-transform duration-200">
+              <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-medium-weight text-white mb-2">Move to IaC</h3>
+            <p class="text-[11px] text-[#888780] leading-relaxed">
+              Convert your existing CloudFormation or ARM templates to Terraform in one click with the template converter. No manual rewriting.
+            </p>
+          </div>
+          <span class="bg-brandViolet/15 text-brandViolet text-[9px] font-bold rounded px-2.5 py-0.5 w-fit mt-4">
+            Template Converter
+          </span>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:-translate-y-1 hover:border-brandViolet/50 flex flex-col justify-between select-none group h-64">
+          <div>
+            <div class="h-9 w-9 rounded-lg bg-brandViolet/10 border border-brandViolet/25 flex items-center justify-center text-brandViolet mb-4 group-hover:scale-105 transition-transform duration-200">
+              <i data-lucide="cloud" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-medium-weight text-white mb-2">Multi-cloud architecture</h3>
+            <p class="text-[11px] text-[#888780] leading-relaxed">
+              Design architectures that span AWS, GCP, and Azure on the same canvas. Deploy to all three from one pipeline.
+            </p>
+          </div>
+          <span class="bg-brandViolet/15 text-brandViolet text-[9px] font-bold rounded px-2.5 py-0.5 w-fit mt-4">
+            Multi-cloud
+          </span>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:-translate-y-1 hover:border-brandViolet/50 flex flex-col justify-between select-none group h-64">
+          <div>
+            <div class="h-9 w-9 rounded-lg bg-brandViolet/10 border border-brandViolet/25 flex items-center justify-center text-brandViolet mb-4 group-hover:scale-105 transition-transform duration-200">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-medium-weight text-white mb-2">Team collaboration</h3>
+            <p class="text-[11px] text-[#888780] leading-relaxed">
+              Invite your team, set module-level roles, and collaborate on pipelines without stepping on each other's deployments.
+            </p>
+          </div>
+          <span class="bg-brandViolet/15 text-brandViolet text-[9px] font-bold rounded px-2.5 py-0.5 w-fit mt-4">
+            RBAC
+          </span>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:-translate-y-1 hover:border-brandViolet/50 flex flex-col justify-between select-none group h-64">
+          <div>
+            <div class="h-9 w-9 rounded-lg bg-brandViolet/10 border border-brandViolet/25 flex items-center justify-center text-brandViolet mb-4 group-hover:scale-105 transition-transform duration-200">
+              <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-medium-weight text-white mb-2">Compliance & security</h3>
+            <p class="text-[11px] text-[#888780] leading-relaxed">
+              Continuously scan your infrastructure against CIS benchmarks. Get failing controls surfaced before your auditor does.
+            </p>
+          </div>
+          <span class="bg-brandViolet/15 text-brandViolet text-[9px] font-bold rounded px-2.5 py-0.5 w-fit mt-4">
+            Compliance
+          </span>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:-translate-y-1 hover:border-brandViolet/50 flex flex-col justify-between select-none group h-64">
+          <div>
+            <div class="h-9 w-9 rounded-lg bg-brandViolet/10 border border-brandViolet/25 flex items-center justify-center text-brandViolet mb-4 group-hover:scale-105 transition-transform duration-200">
+              <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-medium-weight text-white mb-2">Disaster recovery</h3>
+            <p class="text-[11px] text-[#888780] leading-relaxed">
+              Clone a production pipeline to a new region in two clicks. InfraGlide keeps your DR architecture in sync automatically.
+            </p>
+          </div>
+          <span class="bg-brandViolet/15 text-brandViolet text-[9px] font-bold rounded px-2.5 py-0.5 w-fit mt-4">
+            Scheduler
+          </span>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="ig-card rounded-2xl p-6 text-left hover:-translate-y-1 hover:border-brandViolet/50 flex flex-col justify-between select-none group h-64">
+          <div>
+            <div class="h-9 w-9 rounded-lg bg-brandViolet/10 border border-brandViolet/25 flex items-center justify-center text-brandViolet mb-4 group-hover:scale-105 transition-transform duration-200">
+              <i data-lucide="trending-down" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-medium-weight text-white mb-2">Reduce cloud costs</h3>
+            <p class="text-[11px] text-[#888780] leading-relaxed">
+              Jane AI identifies over-provisioned resources, unused reserved capacity, and right-sizing opportunities automatically.
+            </p>
+          </div>
+          <span class="bg-brandViolet/15 text-brandViolet text-[9px] font-bold rounded px-2.5 py-0.5 w-fit mt-4">
+            Jane AI
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TEMPLATE CONVERTER SPOTLIGHT -->
+  <section class="py-28 relative overflow-hidden bg-bgDarkSection border-t border-brandViolet/10">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      
+      <!-- Header block -->
+      <div class="max-w-3xl mx-auto mb-20 fade-up-scroll">
+        <span class="text-xs font-semibold tracking-wider text-brandViolet uppercase block mb-3">// Migration</span>
+        <h2 class="text-3xl md:text-4xl font-medium-weight text-white mb-6">Already on CloudFormation or ARM? You're not starting over.</h2>
+        <p class="text-sm text-[#888780] max-w-xl mx-auto leading-relaxed">
+          Paste your existing AWS CloudFormation or Azure ARM template. InfraGlide converts it to Terraform and opens it on your canvas — ready to extend, deploy, and monitor.
+        </p>
+      </div>
+
+      <!-- Diff layout illustration -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-5xl mx-auto items-center fade-up-scroll">
+        
+        <!-- Left CFN Panel -->
+        <div class="lg:col-span-5 bg-black/50 border border-orange-500/20 rounded-xl p-4 text-left font-mono text-[10px] text-orange-400 select-none">
+          <div class="flex items-center justify-between border-b border-orange-500/10 pb-2 mb-3">
+            <span>CloudFormation Input</span>
+            <span class="text-[8px] bg-orange-500/10 border border-orange-500/20 rounded px-1.5 py-0.2">CFN</span>
+          </div>
+          <div class="space-y-0.5 leading-normal">
+            <p class="text-[#888780]">AWSTemplateFormatVersion: '2010-09-09'</p>
+            <p class="text-white">Resources:</p>
+            <p class="pl-2">WebServerInstance:</p>
+            <p class="pl-4">Type: <span class="text-orange-400">'AWS::EC2::Instance'</span></p>
+            <p class="pl-4">Properties:</p>
+            <p class="pl-6">InstanceType: <span class="text-orange-400">t3.medium</span></p>
+            <p class="pl-6">ImageId: <span class="text-orange-400">ami-0c55b159...</span></p>
+            <p class="pl-2">DatabaseInstance:</p>
+            <p class="pl-4">Type: <span class="text-orange-400">'AWS::RDS::DBInstance'</span></p>
+            <p class="pl-4">Properties:</p>
+            <p class="pl-6">DBInstanceClass: <span class="text-orange-400">db.t3.micro</span></p>
+            <p class="pl-6">Engine: <span class="text-orange-400">mysql</span></p>
+          </div>
+        </div>
+
+        <!-- Center arrow transition state -->
+        <div class="lg:col-span-2 flex flex-col items-center justify-center py-4">
+          <!-- Blinking / pulsing conversion arrows -->
+          <div id="converter-arrow" class="w-12 h-12 rounded-full bg-brandViolet/10 border border-brandViolet/30 flex items-center justify-center text-brandViolet mb-2 shadow-lg">
+            <i data-lucide="arrow-right" class="w-6 h-6 animate-pulse"></i>
+          </div>
+          <span id="converter-status-text" class="text-[9px] font-mono tracking-wider uppercase text-brandViolet">Converting...</span>
+        </div>
+
+        <!-- Right Terraform Output -->
+        <div class="lg:col-span-5 bg-black/50 border border-brandViolet/20 rounded-xl p-4 text-left font-mono text-[10px] text-brandViolet select-none relative">
+          <!-- Copied toast -->
+          <span id="copied-badge" class="absolute top-12 right-4 bg-tealLive/10 border border-tealLive/20 text-tealLive text-[8px] font-bold rounded px-2 py-0.5 shadow opacity-0 transition-opacity duration-300">
+            Copied to clipboard ✓
+          </span>
+          
+          <div class="flex items-center justify-between border-b border-brandViolet/10 pb-2 mb-3">
+            <span>Terraform Output</span>
+            <span class="text-[8px] bg-brandViolet/10 border border-brandViolet/20 rounded px-1.5 py-0.2">HCL</span>
+          </div>
+          <div class="space-y-0.5 leading-normal">
+            <p class="text-white">resource <span class="text-[#7F77DD]">"aws_instance"</span> "web" {</p>
+            <p class="pl-2">ami           = "ami-0c55b159..."</p>
+            <p class="pl-2">instance_type = "t3.medium"</p>
+            <p class="text-white">}</p>
+            <p class="text-white">resource <span class="text-[#7F77DD]">"aws_db_instance"</span> "rds" {</p>
+            <p class="pl-2">allocated_storage = 20</p>
+            <p class="pl-2">engine            = "mysql"</p>
+            <p class="pl-2">instance_class    = "db.t3.micro"</p>
+            <p class="text-white">}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Supported formats pills -->
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3 select-none text-[10px] font-mono text-[#888780]">
+        <span class="border border-white/5 bg-black/20 rounded-full px-4 py-1.5">AWS CloudFormation</span>
+        <span class="border border-white/5 bg-black/20 rounded-full px-4 py-1.5">Azure ARM</span>
+        <span class="border border-white/5 bg-black/20 rounded-full px-4 py-1.5">Azure Bicep</span>
+        <span class="border border-white/5 bg-black/20 rounded-full px-4 py-1.5">Pulumi</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS SECTION -->
+  <section class="py-28 relative overflow-hidden bg-bgDarkHero">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      
+      <!-- Section Header -->
+      <div class="max-w-xl mx-auto mb-20 fade-up-scroll">
+        <span class="text-xs font-semibold tracking-wider text-brandViolet uppercase block mb-3">// Endorsements</span>
+        <h2 class="text-3xl md:text-4xl font-medium-weight text-white mb-4">What teams say about InfraGlide</h2>
+      </div>
+
+      <!-- 3 quotes cards grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        
+        <!-- Testimonial 1 -->
+        <div class="ig-card rounded-2xl p-6 text-left flex flex-col justify-between select-none h-64 bg-white/[0.02] border-white/5 hover:border-brandViolet/30">
+          <div>
+            <div class="flex gap-1 text-[#fbbf24] mb-4">
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+            </div>
+            <p class="text-xs md:text-sm text-[#888780] leading-relaxed mb-6 italic">
+              "We went from 5-day environment setups to same-day. The template converter alone saved us 3 weeks of manual Terraform migration."
+            </p>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-brandViolet/10 border border-brandViolet/30 flex items-center justify-center text-[10px] font-bold text-brandViolet font-mono">
+              AM
+            </div>
+            <div>
+              <div class="text-xs font-bold text-white">Arjun Mehta</div>
+              <div class="text-[10px] text-[#888780]">Platform Engineer, FinTech startup</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="ig-card rounded-2xl p-6 text-left flex flex-col justify-between select-none h-64 bg-white/[0.02] border-white/5 hover:border-brandViolet/30">
+          <div>
+            <div class="flex gap-1 text-[#fbbf24] mb-4">
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+            </div>
+            <p class="text-xs md:text-sm text-[#888780] leading-relaxed mb-6 italic">
+              "Jane AI caught a misconfigured security group before our compliance review did. That's the kind of co-pilot I want watching my infra 24/7."
+            </p>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-tealLive/10 border border-tealLive/30 flex items-center justify-center text-[10px] font-bold text-tealLive font-mono">
+              SK
+            </div>
+            <div>
+              <div class="text-xs font-bold text-white">Sarah K.</div>
+              <div class="text-[10px] text-[#888780]">Cloud Architect, Healthcare SaaS</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="ig-card rounded-2xl p-6 text-left flex flex-col justify-between select-none h-64 bg-white/[0.02] border-white/5 hover:border-brandViolet/30">
+          <div>
+            <div class="flex gap-1 text-[#fbbf24] mb-4">
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+            </div>
+            <p class="text-xs md:text-sm text-[#888780] leading-relaxed mb-6 italic">
+              "I was a Terraform novice. InfraGlide's canvas let me contribute to infrastructure from day one. The auto-generated code actually taught me how to write."
+            </p>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-coralAlert/10 border border-coralAlert/30 flex items-center justify-center text-[10px] font-bold text-coralAlert font-mono">
+              MT
+            </div>
+            <div>
+              <div class="text-xs font-bold text-white">Marcus T.</div>
+              <div class="text-[10px] text-[#888780]">Junior DevOps, E-commerce platform</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PRICING SECTION -->
+  <section id="pricing" class="py-28 relative overflow-hidden bg-bgDarkSection border-t border-brandViolet/10">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      
+      <!-- Section Header -->
+      <div class="max-w-xl mx-auto mb-12 fade-up-scroll">
+        <span class="text-xs font-semibold tracking-wider text-brandViolet uppercase block mb-3">// Plans</span>
+        <h2 class="text-3xl md:text-4xl font-medium-weight text-white mb-6">Simple, developer-first pricing</h2>
+        
+        <!-- Toggle button monthly / annual -->
+        <div class="inline-flex items-center bg-black/40 border border-brandViolet/20 rounded-full p-1 select-none mt-4">
+          <button id="btn-toggle-monthly" class="px-4 py-1.5 rounded-full text-xs font-medium-weight text-white bg-brandViolet transition-all duration-200">
+            Monthly
+          </button>
+          <button id="btn-toggle-annual" class="px-4 py-1.5 rounded-full text-xs font-medium-weight text-[#888780] hover:text-white transition-all duration-200 flex items-center gap-1">
+            Annual <span class="bg-tealLive/20 text-tealLive text-[8px] font-bold rounded px-1.5 py-0.2 uppercase tracking-tighter">save 20%</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pricing cards list -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto items-stretch items-center fade-up-scroll">
+        
+        <!-- Starter Plan -->
+        <div class="ig-card rounded-2xl p-6 text-left flex flex-col justify-between h-[420px] select-none hover:border-brandViolet/40">
+          <div>
+            <h3 class="text-lg font-bold text-slate-300 uppercase tracking-wider">Starter</h3>
+            <p class="text-xs text-[#888780] mt-1">Perfect for solo projects and learning.</p>
+            
+            <div class="my-6">
+              <span class="text-4xl font-medium-weight text-white font-mono">$0</span>
+              <span class="text-[#888780] text-xs">/month</span>
+            </div>
+            
+            <ul class="space-y-3.5 text-xs text-[#888780] border-t border-white/5 pt-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Up to 3 active pipelines</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> 1 Cloud Provider (AWS)</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Basic RBAC & access levels</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Community support</li>
+            </ul>
+          </div>
+          <button class="w-full border border-brandViolet/35 hover:bg-brandViolet/5 text-white font-medium-weight py-3 rounded-full transition-all text-xs">
+            Get started free
+          </button>
+        </div>
+
+        <!-- Team Plan (Most Popular) -->
+        <div class="ig-card rounded-2xl p-6 text-left flex flex-col justify-between h-[440px] select-none border-2 border-brandViolet relative shadow-2xl bg-black/60 z-10 hover:shadow-brandViolet/10">
+          <!-- Badge pill most popular -->
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brandViolet text-white text-[8px] font-bold tracking-wider rounded-full px-3 py-1 uppercase shadow select-none">
+            Most Popular
+          </span>
+
+          <div>
+            <h3 class="text-lg font-bold text-white uppercase tracking-wider">Team</h3>
+            <p class="text-xs text-[#888780] mt-1">Built for growing development teams.</p>
+            
+            <div class="my-6">
+              <span id="price-team-value" class="text-4xl font-medium-weight text-white font-mono">$49</span>
+              <span class="text-[#888780] text-xs">/month</span>
+            </div>
+            
+            <ul class="space-y-3.5 text-xs text-slate-300 border-t border-brandViolet/10 pt-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Unlimited active pipelines</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> All 3 Cloud Providers (AWS/GCP/AZ)</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Jane AI co-pilot active</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Live Observability & Drift alerts</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Priority support ticket</li>
+            </ul>
+          </div>
+          <button class="w-full bg-brandViolet hover:bg-brandVioletDark text-white font-medium-weight py-3 rounded-full transition-all text-xs glow-pulse">
+            Start free trial
+          </button>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="ig-card rounded-2xl p-6 text-left flex flex-col justify-between h-[420px] select-none hover:border-brandViolet/40">
+          <div>
+            <h3 class="text-lg font-bold text-slate-300 uppercase tracking-wider">Enterprise</h3>
+            <p class="text-xs text-[#888780] mt-1">Scale controls, audits, SLAs.</p>
+            
+            <div class="my-6">
+              <span class="text-4xl font-medium-weight text-white font-mono">Custom</span>
+              <span class="text-[#888780] text-xs">/annual</span>
+            </div>
+            
+            <ul class="space-y-3.5 text-xs text-[#888780] border-t border-white/5 pt-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Dedicated single-tenant infra</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> SSO / LDAP directories sync</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Custom compliance benchmarks</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-tealLive"></i> Dedicated support + Slack</li>
+            </ul>
+          </div>
+          <button class="w-full border border-brandViolet/35 hover:bg-brandViolet/5 text-white font-medium-weight py-3 rounded-full transition-all text-xs">
+            Contact sales
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FINAL CTA SECTION -->
+  <section class="py-32 relative overflow-hidden bg-[#0A0814] border-t border-brandViolet/10">
+    <div class="absolute inset-0 bg-[radial-gradient(circle,rgba(127,119,221,0.08)_0%,transparent_70%)] pointer-events-none z-0"></div>
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <!-- content left -->
+        <div class="text-left">
+          <h2 class="text-4xl md:text-5xl font-medium-weight text-white mb-6 leading-tight select-none">
+            Your cloud deserves <br> to be visible.
+          </h2>
+          <p class="text-[#888780] text-sm md:text-base leading-relaxed mb-8 max-w-md">
+            Join teams who've stopped writing Terraform by hand and started shipping infrastructure visually.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#pricing" class="bg-brandViolet text-white font-medium-weight px-8 py-3.5 rounded-full hover:bg-brandVioletDark transition-all glow-pulse hover:scale-105 duration-200">
+              Start building free →
+            </a>
+            <a href="#" class="border border-brandViolet/40 text-[#7F77DD] hover:bg-brandViolet/5 font-medium-weight px-8 py-3.5 rounded-full transition-all">
+              Book a demo
+            </a>
+          </div>
+          <p class="text-xs text-[#888780] mt-6">
+            No credit card • SOC2 compliant • Deploy in minutes
+          </p>
+        </div>
+        
+        <!-- terminal right -->
+        <div class="flex justify-center lg:justify-end">
+          <div class="tilt-card relative w-full max-w-[480px] rounded-2xl bg-[#0F0C1B] border border-brandViolet/25 shadow-2xl p-4 flex flex-col font-mono text-[11px] leading-relaxed select-none float-panel-1" style="perspective: 800px; height: 260px;">
+            <div class="reflection-overlay"></div>
+            <!-- Header bar cta terminal -->
+            <div class="flex items-center justify-between border-b border-white/5 pb-2 mb-3">
+              <div class="flex items-center gap-1">
+                <span class="h-2 w-2 rounded-full bg-red-500/80"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-yellow-500/80"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-green-500/80"></span>
+              </div>
+              <div class="text-[10px] text-brandViolet font-semibold">deploy.log</div>
+              <div class="w-10"></div>
+            </div>
+            
+            <!-- Terminal console messages container -->
+            <div id="cta-console-lines" class="flex-1 overflow-y-auto space-y-1 text-left text-slate-300 scrollbar-thin">
+              <!-- Cycles automatically via Javascript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-bgDarkHero border-t border-brandViolet/10 py-16">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div>
+        <a href="#" class="flex items-center gap-2 select-none group mb-4">
+          <svg class="w-7 h-7 text-brandViolet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-3.25-5.5-6.5-6.5C13.25 5.5 10 3 6.5 3 3.46 3 1 5.46 1 8.5c0 1.5.5 3 1.5 4" stroke-linecap="round" />
+            <circle cx="8" cy="12" r="2" fill="currentColor" />
+            <circle cx="16" cy="11" r="1.5" fill="currentColor" />
+            <path d="M8 12 h8" stroke-dasharray="2 2" />
+          </svg>
+          <span class="text-lg font-medium-weight text-white">InfraGlide</span>
+        </a>
+        <p class="text-xs text-[#888780] leading-relaxed mb-6">Your Cloud, Visualized. Redefining Multi-Cloud Infrastructure as Code.</p>
+        
+        <!-- Social rows -->
+        <div class="flex items-center gap-4 text-[#888780]">
+          <a href="#" class="hover:text-brandViolet transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+          <a href="#" class="hover:text-brandViolet transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+          <a href="#" class="hover:text-brandViolet transition-colors"><i data-lucide="github" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+
+      <!-- Col 2: Product -->
+      <div>
+        <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Product</h4>
+        <ul class="space-y-2.5 text-xs text-[#888780]">
+          <li><a href="#" class="hover:text-white transition-colors">Pipeline Designer</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Deployed Resources</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Observability</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Jane AI co-pilot</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Drift Detection</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Use cases -->
+      <div>
+        <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Use Cases</h4>
+        <ul class="space-y-2.5 text-xs text-[#888780]">
+          <li><a href="#" class="hover:text-white transition-colors">Move to IaC</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Multi-cloud Pipelines</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Team Collaboration</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Security Scanning</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Company -->
+      <div>
+        <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Company</h4>
+        <ul class="space-y-2.5 text-xs text-[#888780]">
+          <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Changelog</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Status</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom border and badges -->
+    <div class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-brandViolet/10 flex flex-wrap items-center justify-between gap-4">
+      <span class="text-xs text-[#888780]">© 2025 InfraGlide • v1.2.0 • infraglide.io</span>
+      <div class="flex items-center gap-3 select-none opacity-50 text-[10px] font-bold font-mono tracking-widest text-[#888780]">
+        <span class="border border-white/20 rounded px-2.5 py-1">SOC2</span>
+        <span class="border border-white/20 rounded px-2.5 py-1">GDPR</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT ANIMATIONS & LOGIC -->
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // 1) Fullscreen Particle Canvas Background behind Hero
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let animationId;
+    let nodes = [];
+    const maxNodes = 120;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    }
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.6; // vx ±0.3px/frame
+        this.vy = (Math.random() - 0.5) * 0.6; // vy ±0.3px/frame
+        this.radius = 2;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      nodes = [];
+      for (let i = 0; i < maxNodes; i++) {
+        nodes.push(new Particle());
+      }
+    }
+
+    function drawConnections() {
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 120) {
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            // Alpha proportional to distance
+            const alpha = (1 - distance / 120) * 0.08;
+            ctx.strokeStyle = `rgba(127, 119, 221, ${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      nodes.forEach(node => {
+        node.update();
+        node.draw();
+      });
+      drawConnections();
+      animationId = requestAnimationFrame(animateParticles);
+    }
+
+    // Window event listeners for background
+    window.addEventListener('resize', resizeCanvas);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationId);
+      } else {
+        animateParticles();
+      }
+    });
+
+    resizeCanvas();
+    animateParticles();
+
+    // 2) 3D Parallax Tilt with cursor light reflection overlay
+    const tiltCards = document.querySelectorAll('.tilt-card');
+    tiltCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Calculate percentages
+        const px = (x / rect.width) * 100;
+        const py = (y / rect.height) * 100;
+        
+        card.style.setProperty('--mouse-x', `${px}%`);
+        card.style.setProperty('--mouse-y', `${py}%`);
+        
+        // Compute tilt angles (max ±8 degrees)
+        const dx = x - rect.width / 2;
+        const dy = y - rect.height / 2;
+        const rotateY = (dx / (rect.width / 2)) * 6; // Max 6°
+        const rotateX = -(dy / (rect.height / 2)) * 6; // Max 6°
+        
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
+        card.style.transition = 'transform 0.4s ease-out';
+      });
+
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'none';
+      });
+    });
+
+    // 3) Navigation solid transition on scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 80) {
+        navbar.classList.add('bg-bgDarkHero', 'border-brandViolet/10');
+        navbar.classList.remove('border-transparent');
+      } else {
+        navbar.classList.remove('bg-bgDarkHero', 'border-brandViolet/10');
+        navbar.classList.add('border-transparent');
+      }
+    });
+
+    // Mobile nav drawer toggles
+    const mobileToggle = document.getElementById('mobile-nav-toggle');
+    const mobileClose = document.getElementById('mobile-nav-close');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+
+    mobileToggle.addEventListener('click', () => {
+      mobileDrawer.classList.remove('translate-x-full');
+    });
+    mobileClose.addEventListener('click', () => {
+      mobileDrawer.classList.add('translate-x-full');
+    });
+
+    // 4) Scroll Stagger Animations (IntersectionObserver)
+    const fadeUpElements = document.querySelectorAll('.fade-up-scroll');
+    const scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Add underline active drawer trigger inside hero
+          if (entry.target.querySelector('#hero-underline-word')) {
+            setTimeout(() => {
+              document.getElementById('hero-underline-word').classList.add('active');
+            }, 600);
+          }
+          scrollObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    fadeUpElements.forEach(el => scrollObserver.observe(el));
+
+    // Force hero headings stagger on load
+    window.addEventListener('load', () => {
+      const lineSpans = document.querySelectorAll('h1 span');
+      lineSpans.forEach(span => {
+        span.classList.remove('opacity-0', 'translate-y-4');
+      });
+      const heroParagraph = document.querySelector('h1 + p');
+      if (heroParagraph) heroParagraph.classList.remove('opacity-0', 'translate-y-4');
+      const heroCTA = document.querySelector('h1 + p + div');
+      if (heroCTA) heroCTA.classList.remove('opacity-0', 'translate-y-4');
+      const heroDisclaimer = document.querySelector('h1 + p + div + div');
+      if (heroDisclaimer) heroDisclaimer.classList.remove('opacity-0', 'translate-y-4');
+      
+      // Underlying hero trigger after fade
+      setTimeout(() => {
+        const underlineWord = document.getElementById('hero-underline-word');
+        if (underlineWord) underlineWord.classList.add('active');
+      }, 1000);
+    });
+
+    // 5) Stat Counters increment on view
+    const statElements = document.querySelectorAll('.stat-counter');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.getAttribute('data-target'), 10);
+          if (target === 0) {
+            el.innerText = '0';
+            counterObserver.unobserve(el);
+            return;
+          }
+          let count = 0;
+          const duration = 1500; // 1.5s
+          const increment = target / (duration / 16);
+          const timer = setInterval(() => {
+            count += increment;
+            if (count >= target) {
+              el.innerText = target;
+              clearInterval(timer);
+            } else {
+              el.innerText = Math.floor(count);
+            }
+          }, 16);
+          counterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    statElements.forEach(stat => counterObserver.observe(stat));
+
+    // 6) Typewriter logs console tickers (Hero, Features, final CTA)
+    const HERO_LOGS = [
+      "$ terraform init",
+      "Initializing modules...",
+      "✓ HashiCorp AWS provider registry successful.",
+      "$ terraform plan",
+      "Plan: 6 to add, 0 to change, 0 to destroy.",
+      "$ terraform apply --auto-approve",
+      "aws_vpc.main: Creating...",
+      "aws_subnet.public_a: Creating...",
+      "aws_vpc.main: Creation complete (2.1s)",
+      "aws_subnet.public_a: Creation complete (1.2s)",
+      "aws_db_instance.rds: Creating...",
+      "aws_db_instance.rds: Still creating (10s elapsed)",
+      "aws_db_instance.rds: Creation complete (14s)",
+      "✓ Live sync topology map active.",
+      "✓ Jane co-pilot scanner: OK"
+    ];
+
+    const heroConsole = document.getElementById('hero-console-lines');
+    let lineIdx = 0;
+    
+    function addHeroConsoleLine() {
+      if (lineIdx >= HERO_LOGS.length) {
+        // restart loop
+        heroConsole.innerHTML = '';
+        lineIdx = 0;
+      }
+      const line = document.createElement('p');
+      line.className = 'truncate';
+      if (HERO_LOGS[lineIdx].startsWith('$')) {
+        line.innerHTML = `<span class="text-brandViolet">${HERO_LOGS[lineIdx].slice(0, 1)}</span>${HERO_LOGS[lineIdx].slice(1)}`;
+      } else if (HERO_LOGS[lineIdx].startsWith('✓')) {
+        line.innerHTML = `<span class="text-tealLive">✓</span>${HERO_LOGS[lineIdx].slice(1)}`;
+      } else {
+        line.innerText = HERO_LOGS[lineIdx];
+      }
+      heroConsole.appendChild(line);
+      lineIdx++;
+      
+      // Auto scroll container
+      if (heroConsole.children.length > 5) {
+        heroConsole.style.transform = `translateY(-${(heroConsole.children.length - 5) * 16}px)`;
+      }
+      setTimeout(addHeroConsoleLine, 1500);
+    }
+    setTimeout(addHeroConsoleLine, 500);
+
+    // Feature 2 Typewriter logs
+    const FEATURE_LOGS = [
+      "✓ Initializing the backend...",
+      "✓ Initializing provider plugins...",
+      "✓ aws_vpc.main: Creating...",
+      "✓ aws_vpc.main: Creation complete after 2s [id=vpc-0a1b2c]",
+      "● aws_instance.app_server: Creating...",
+      "● aws_db_instance.postgres: Creating...",
+      "● aws_lb.main: Creating..."
+    ];
+    const featureConsole = document.getElementById('feature-deploy-terminal');
+    let featLineIdx = 0;
+
+    function addFeatureConsoleLine() {
+      if (featLineIdx < FEATURE_LOGS.length) {
+        const line = document.createElement('p');
+        line.className = 'opacity-0 transition-opacity duration-300';
+        if (FEATURE_LOGS[featLineIdx].startsWith('✓')) {
+          line.innerHTML = `<span class="text-tealLive">✓</span> ${FEATURE_LOGS[featLineIdx].slice(2)}`;
+        } else {
+          line.innerHTML = `<span class="text-brandViolet animate-pulse">●</span> ${FEATURE_LOGS[featLineIdx].slice(2)}`;
+        }
+        featureConsole.appendChild(line);
+        setTimeout(() => { line.classList.remove('opacity-0'); }, 50);
+        featLineIdx++;
+        setTimeout(addFeatureConsoleLine, 1200);
+      }
+    }
+
+    // Trigger feature logs when terminal section scrolls into view
+    const featureConsoleObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          addFeatureConsoleLine();
+          featureConsoleObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    featureConsoleObserver.observe(featureConsole);
+
+    // 7) CTA terminal logs cycling
+    const ctaConsole = document.getElementById('cta-console-lines');
+    let ctaLineIdx = 0;
+
+    function addCtaConsoleLine() {
+      if (ctaLineIdx >= HERO_LOGS.length) {
+        ctaConsole.innerHTML = '';
+        ctaLineIdx = 0;
+      }
+      const line = document.createElement('p');
+      line.className = 'truncate';
+      if (HERO_LOGS[ctaLineIdx].startsWith('$')) {
+        line.innerHTML = `<span class="text-brandViolet">$</span> ${HERO_LOGS[ctaLineIdx].slice(2)}`;
+      } else if (HERO_LOGS[ctaLineIdx].startsWith('✓')) {
+        line.innerHTML = `<span class="text-tealLive">✓</span> ${HERO_LOGS[ctaLineIdx].slice(2)}`;
+      } else {
+        line.innerText = HERO_LOGS[ctaLineIdx];
+      }
+      ctaConsole.appendChild(line);
+      ctaLineIdx++;
+      
+      // Auto-scroll
+      if (ctaConsole.children.length > 8) {
+        ctaConsole.scrollTop = ctaConsole.scrollHeight;
+      }
+      setTimeout(addCtaConsoleLine, 1000);
+    }
+    setTimeout(addCtaConsoleLine, 1000);
+
+    // 8) Template Converter spotlight logic
+    const arrow = document.getElementById('converter-arrow');
+    const statusText = document.getElementById('converter-status-text');
+    const copiedBadge = document.getElementById('copied-badge');
+
+    function runConverterDiffLoop() {
+      // Loop: Converting -> Done (with toast) -> reset
+      setTimeout(() => {
+        statusText.innerText = "Done ✓";
+        statusText.classList.remove('text-brandViolet');
+        statusText.classList.add('text-tealLive');
+        arrow.classList.remove('border-brandViolet/30', 'text-brandViolet');
+        arrow.classList.add('border-tealLive/40', 'text-tealLive');
+        copiedBadge.classList.remove('opacity-0');
+        
+        // reset cycle after 4 seconds
+        setTimeout(() => {
+          statusText.innerText = "Converting...";
+          statusText.classList.add('text-brandViolet');
+          statusText.classList.remove('text-tealLive');
+          arrow.classList.add('border-brandViolet/30', 'text-brandViolet');
+          arrow.classList.remove('border-tealLive/40', 'text-tealLive');
+          copiedBadge.classList.add('opacity-0');
+          runConverterDiffLoop();
+        }, 4000);
+
+      }, 2000);
+    }
+    runConverterDiffLoop();
+
+    // 9) Pricing toggle value shift
+    const toggleMonthly = document.getElementById('btn-toggle-monthly');
+    const toggleAnnual = document.getElementById('btn-toggle-annual');
+    const priceTeam = document.getElementById('price-team-value');
+
+    toggleAnnual.addEventListener('click', () => {
+      toggleMonthly.classList.remove('bg-brandViolet', 'text-white');
+      toggleMonthly.classList.add('text-[#888780]');
+      toggleAnnual.classList.add('bg-brandViolet', 'text-white');
+      toggleAnnual.classList.remove('text-[#888780]');
+      
+      // Shift price with 20% discount (e.g. $49 -> $39)
+      priceTeam.innerText = '$39';
+    });
+
+    toggleMonthly.addEventListener('click', () => {
+      toggleAnnual.classList.remove('bg-brandViolet', 'text-white');
+      toggleAnnual.classList.add('text-[#888780]');
+      toggleMonthly.classList.add('bg-brandViolet', 'text-white');
+      toggleMonthly.classList.remove('text-[#888780]');
+      
+      // Reset original price
+      priceTeam.innerText = '$49';
+    });
+
+    // 10) Jane co-pilot interaction trigger
+    function triggerJaneAction(btn) {
+      btn.disabled = true;
+      btn.innerText = "Optimizing...";
+      btn.classList.remove('bg-tealLive');
+      btn.classList.add('bg-slate-700');
+      
+      setTimeout(() => {
+        btn.innerText = "Success ✓";
+        btn.classList.remove('bg-slate-700');
+        btn.classList.add('bg-emerald-600');
+        
+        // alert toast feedback
+        const toast = document.createElement('div');
+        toast.className = 'fixed bottom-6 right-6 bg-emerald-600 text-white font-bold text-xs px-5 py-3 rounded-full shadow-lg z-50 animate-bounce';
+        toast.innerText = "AWS cluster scaled up to t3.large successfully!";
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          toast.remove();
+          // reset button
+          btn.disabled = false;
+          btn.innerText = "Apply suggestion";
+          btn.classList.remove('bg-emerald-600');
+          btn.classList.add('bg-tealLive');
+        }, 3000);
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

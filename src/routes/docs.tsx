@@ -22,23 +22,23 @@ function DocsPage() {
       <div className="relative z-10 pt-32 px-6 max-w-[1400px] mx-auto flex flex-col md:flex-row items-start gap-12">
         
         {/* Sidebar */}
-        <aside className="w-full md:w-64 shrink-0 md:sticky md:top-32 max-h-[calc(100vh-8rem)] overflow-y-auto pr-4 hidden md:block">
-          <div className="relative mb-8">
+        <aside className="w-full md:w-64 shrink-0 md:sticky md:top-28 p-5 hidden md:block ig-card rounded-[2rem] shadow-sm overflow-hidden select-none">
+          <div className="relative mb-5">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--ig-muted)]" />
             <input 
               type="text" 
               placeholder="Search..." 
-              className="w-full bg-[var(--ig-card)] border border-[var(--ig-border)] rounded-lg py-2.5 pl-10 pr-4 text-sm text-[var(--ig-text)] placeholder-[var(--ig-muted)] focus:outline-none focus:border-[#8A53D6] transition-all"
+              className="w-full bg-[var(--ig-card)] border border-[var(--ig-border)] rounded-lg py-2 pl-10 pr-4 text-xs text-[var(--ig-text)] placeholder-[var(--ig-muted)] focus:outline-none focus:border-[#8A53D6] transition-all"
             />
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-5">
             {categories.map((cat, i) => (
               <div key={i}>
-                <h4 className="flex items-center gap-2 text-sm font-bold text-[var(--ig-text)] mb-3">
+                <h4 className="flex items-center gap-2 text-sm font-bold text-[var(--ig-text)] mb-2.5">
                   <cat.icon className="w-4 h-4 text-[#8A53D6]" /> {cat.title}
                 </h4>
-                <ul className="space-y-2 border-l border-[var(--ig-border)] ml-2 pl-4">
+                <ul className="space-y-1.5 border-l border-[var(--ig-border)] ml-2 pl-4">
                   {cat.links.map(link => (
                     <li key={link}>
                       <a href="#" className={`text-sm font-medium transition-colors ${link === 'Quickstart Guide' ? 'text-[#8A53D6]' : 'text-[var(--ig-muted)] hover:text-[var(--ig-text)]'}`}>
@@ -53,7 +53,7 @@ function DocsPage() {
         </aside>
 
         {/* Content Area */}
-        <main className="flex-1 max-w-4xl">
+        <main className="flex-1 max-w-4xl ig-card rounded-[2rem] p-8 md:p-12 shadow-sm">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[rgba(138,83,214,0.1)] border border-[rgba(138,83,214,0.2)] text-[10px] font-bold uppercase tracking-wider text-[#8A53D6] mb-6">
             Getting Started
           </div>

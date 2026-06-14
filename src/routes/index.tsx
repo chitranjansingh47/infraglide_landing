@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowRight, ChevronRight, Check, Code, Network, Boxes, ShieldCheck, Cpu, Database, Cloud, GitBranch, ArrowUpRight, Zap, Eye, Lock, RefreshCcw, Github, Twitter, Linkedin, AlertTriangle, Shield, Settings, Play, Menu, X, Send, DollarSign, Gauge, Workflow, Container, Sparkles, Server, Layers, Sun, Moon } from "lucide-react";
+import { ArrowLeft, FileText, Target, FileUp, FileCode, FileDown, Share2, Save, Minus, Plus, Maximize, Rocket, ArrowRight, ChevronRight, ChevronDown, Check, Code, Network, Boxes, ShieldCheck, Cpu, Database, Cloud, GitBranch, ArrowUpRight, Zap, Eye, Lock, RefreshCcw, Github, Twitter, Linkedin, AlertTriangle, Shield, Settings, Play, Menu, X, Send, DollarSign, Gauge, Workflow, Container, Sparkles, Server, Layers, Sun, Moon, LayoutGrid } from "lucide-react";
 import { InteractiveGrid } from "../components/InteractiveGrid";
 import { DemoStepper } from "../components/DemoStepper";
+import TextScrollMarquee from "../components/TextScrollMarquee";
+import { TypingText } from "../components/TypingText";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
@@ -14,6 +16,12 @@ import deployedResourcesUrl from "@/assets/deployed_resources.png";
 import handCursorUrl from "@/assets/hand_cursor.png";
 import pipelinesVideoUrl from "@/assets/pipelines.mp4";
 import topologyVideoUrl from "@/assets/topology.mp4";
+import templatedVideoUrl from "@/assets/templated.mp4";
+import architectVisuallyUiUrl from "@/assets/architect_visually_ui.png";
+import accelerateAiUiUrl from "@/assets/accelerate_ai_ui.png";
+import deployConfidenceUiUrl from "@/assets/deploy_confidence_ui.png";
+import secureCompliantUiUrl from "@/assets/secure_compliant_ui.png";
+import operateScaleUiUrl from "@/assets/operate_scale_ui.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -178,7 +186,7 @@ const TERMINAL_LOGS: TerminalLine[] = [
 ];
 
 function RenderTerminalLine({ line, isLast }: { line: TerminalLine; isLast: boolean }) {
-  const cursor = isLast ? <span className="terminal-cursor" /> : null;
+  const cursor = null; // No blinking cursor for read-only logs
   
   if (line.text === "") {
     return <div className="h-4 flex items-center">{cursor}</div>;
@@ -385,22 +393,30 @@ function Hero() {
         <div className="md:col-span-5 flex items-center justify-center relative min-h-[440px]">
           <div className="w-full max-w-[480px] rounded-xl overflow-hidden bg-[#0d1117] border border-[#30363d] flex flex-col font-mono text-[13px] leading-relaxed select-none h-[420px]">
             
-            {/* macOS Title Bar */}
-            <div className="w-full bg-[#161b22] border-b border-[#30363d] px-4 py-3 flex items-center justify-between relative shrink-0">
-              {/* macOS Traffic Lights */}
-              <div className="flex items-center gap-1.5 z-10">
-                <span className="h-3 w-3 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
-                <span className="h-3 w-3 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
-                <span className="h-3 w-3 rounded-full bg-[#27c93f] border border-[#1aab29]" />
+            {/* Windows-style Title Bar */}
+            <div className="w-full bg-[#161b22] border-b border-[#30363d] px-4 py-1.5 flex items-center justify-between relative shrink-0 select-none">
+              {/* Left aligned title and spinner */}
+              <div className="flex items-center gap-2 text-xs font-semibold text-[#e6edf3]">
+                <span className="font-bold text-[#58a6ff]">&gt;_</span>
+                <span>Terraform Deploy</span>
+                <span className="inline-block animate-spin text-slate-400 text-[10px]">↻</span>
               </div>
               
-              {/* Centered Title */}
-              <div className="absolute inset-0 flex items-center justify-center text-[#8b949e] font-semibold text-xs pointer-events-none">
-                &gt;_ Terraform Deploy ↻
+              {/* Windows control buttons */}
+              <div className="flex items-center text-slate-400 text-xs">
+                <button className="w-7 h-7 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors rounded">
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <button className="w-7 h-7 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors rounded">
+                  <Maximize className="w-3 h-3" />
+                </button>
+                <button className="w-7 h-7 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors rounded">
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+                <button className="w-7 h-7 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors rounded">
+                  <X className="w-3.5 h-3.5" />
+                </button>
               </div>
-              
-              {/* Right side spacer for centering */}
-              <div className="w-16" />
             </div>
 
             {/* Terminal Body Console */}
@@ -494,14 +510,8 @@ function TrendChart() {
 function Metrics() {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <section className="relative py-24 working-cursor" id="workspace" style={{ background: "radial-gradient(ellipse at top, var(--ig-bg-3) 0%, var(--ig-bg-2) 50%, var(--ig-bg) 90%)" }}>
-      <div ref={ref} className="mx-auto max-w-6xl px-6">
-        <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
-          <div>
-            <div className="text-xs uppercase tracking-[0.2em] text-[var(--ig-accent)] mb-2">Visual Workspace</div>
-            <h2 className="font-display text-4xl md:text-5xl ig-metallic">Real-time, every second.</h2>
-          </div>
-        </div>
+    <section className="relative py-24 working-cursor z-40" id="workspace" style={{ background: "radial-gradient(ellipse at top, var(--ig-bg-3) 0%, var(--ig-bg-2) 50%, var(--ig-bg) 90%)" }}>
+      <div ref={ref} className="mx-auto max-w-6xl px-6 relative z-40 -mt-[200px] md:-mt-[280px]">
         <InteractiveCanvas />
       </div>
     </section>
@@ -564,7 +574,13 @@ function Jane() {
                       m.from === "user"
                         ? "bg-[#8A53D6] text-[var(--ig-text)]"
                         : "bg-[var(--ig-border-soft)] border border-[rgba(138,83,214,0.2)] text-[var(--ig-text)]"
-                    }`}>{m.text}</div>
+                    }`}>
+                      {m.from === "jane" ? (
+                        <TypingText text={m.text} speed={0.02} />
+                      ) : (
+                        m.text
+                      )}
+                    </div>
                   </div>
                 ))}
                 {typing && (
@@ -1000,7 +1016,7 @@ function InteractiveCanvas() {
   return (
     <div
       ref={cardRef}
-      className="flex-1 mt-4 relative border border-slate-200 bg-white rounded-2xl overflow-hidden flex flex-col min-h-[460px] w-full shadow-2xl text-slate-800"
+      className="flex-1 mt-4 relative border border-slate-200 bg-white rounded-2xl overflow-hidden flex flex-col h-[500px] w-full shadow-2xl text-slate-800"
       style={{
         perspective: "1000px",
         cursor: cursorUrl ? `url(${cursorUrl}) 16 16, auto` : 'auto',
@@ -1008,24 +1024,51 @@ function InteractiveCanvas() {
       onClick={handleCanvasClick}
     >
       {/* Product Top Header Bar */}
-      <div className="w-full shrink-0 bg-[#f8f9fa] border-b border-slate-200 px-4 py-2.5 flex items-center justify-between text-xs select-none">
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-1 text-slate-600 hover:text-slate-900 border border-slate-200 rounded px-2.5 py-1 bg-white shadow-sm font-semibold transition-colors">
-            <span className="font-mono">←</span> Back
+      <div className="w-full shrink-0 bg-white border-b border-slate-200 px-3 py-2 flex items-center justify-between text-[11px] font-semibold select-none overflow-x-auto overflow-y-hidden hide-scrollbar">
+        <div className="flex items-center gap-1.5 min-w-max">
+          <button className="flex items-center gap-1.5 text-slate-700 hover:text-slate-900 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white shadow-sm transition-colors">
+            <ArrowLeft className="w-3.5 h-3.5" /> Back
           </button>
-          <span className="font-bold text-slate-700">linux-web-app</span>
-          <span className="bg-amber-50 text-amber-700 border border-amber-200/50 rounded px-2.5 py-0.5 text-[10px] font-bold">Destroyed</span>
-        </div>
-        <div className="flex items-center gap-1 bg-slate-200/60 p-0.5 rounded-lg border border-slate-200/80">
-          <span className="bg-white text-purple-600 rounded-md px-3 py-1 font-bold shadow-sm cursor-default">Canvas</span>
-          <span className="text-slate-500 hover:text-slate-700 px-3 py-1 cursor-pointer font-medium transition-colors">Terraform Configuration</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="bg-emerald-500 hover:bg-emerald-600 text-[var(--ig-text)] rounded px-3.5 py-1.5 font-bold shadow-sm transition-colors">
-            🚀 Deploy
+          
+          <div className="w-px h-5 bg-slate-200 mx-0.5"></div>
+          
+          <span className="font-bold text-slate-900 text-[13px] tracking-tight ml-0.5">Pipeline</span>
+          
+          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-600 ml-0.5">
+            <FileText className="w-3 h-3" /> Draft
+          </div>
+          <div className="flex items-center gap-1 bg-amber-50 border border-amber-200 rounded-lg px-2 py-1.5 text-amber-700 uppercase font-bold text-[10px]">
+            <Target className="w-3 h-3" /> DRIFT
+          </div>
+          
+          <div className="w-px h-5 bg-slate-200 mx-0.5"></div>
+          
+          <button className="flex items-center gap-1.5 text-purple-600 border border-purple-200 bg-purple-50 hover:bg-purple-100 rounded-lg px-2.5 py-1.5 transition-colors">
+            <Sparkles className="w-3 h-3" /> Review
           </button>
-          <button className="bg-red-500 hover:bg-red-600 text-[var(--ig-text)] rounded px-3.5 py-1.5 font-bold shadow-sm transition-colors">
-            Destroy
+          <button className="text-purple-600 border border-purple-200 hover:bg-purple-50 rounded-lg px-2.5 py-1.5 transition-colors">
+            Migrate
+          </button>
+          <button className="flex items-center gap-1 text-purple-600 border border-purple-200 hover:bg-purple-50 rounded-lg px-2.5 py-1.5 transition-colors">
+            <Cloud className="w-3 h-3" /> Azure1
+          </button>
+        </div>
+
+        <div className="flex items-center gap-1.5 ml-2 min-w-max">
+          <button className="p-1.5 border border-blue-200 text-blue-500 rounded-lg hover:bg-blue-50 transition-colors"><Save className="w-3.5 h-3.5" /></button>
+          <button className="p-1.5 border border-blue-200 text-blue-500 rounded-lg hover:bg-blue-50 transition-colors"><FileUp className="w-3.5 h-3.5" /></button>
+          <button className="p-1.5 border border-blue-200 text-blue-500 rounded-lg hover:bg-blue-50 transition-colors"><FileCode className="w-3.5 h-3.5" /></button>
+          <button className="p-1.5 border border-purple-200 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"><Eye className="w-3.5 h-3.5" /></button>
+          <button className="p-1.5 border border-purple-200 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"><Share2 className="w-3.5 h-3.5" /></button>
+          <button className="p-1.5 border border-purple-200 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"><Send className="w-3.5 h-3.5" /></button>
+          
+          <div className="w-px h-5 bg-slate-200 mx-1"></div>
+          
+          <button className="flex items-center gap-1 text-emerald-600 border border-emerald-200 hover:bg-emerald-50 rounded-lg px-2.5 py-1.5 font-bold transition-colors">
+            <Rocket className="w-3 h-3" /> Deploy
+          </button>
+          <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white rounded-lg px-2.5 py-1.5 font-bold shadow-sm transition-colors">
+            <Zap className="w-3 h-3" /> Destroy
           </button>
         </div>
       </div>
@@ -1069,22 +1112,69 @@ function InteractiveCanvas() {
         </div>
 
         {/* Canvas Area - right side */}
-        <div className="flex-1 relative overflow-hidden h-full flex items-center justify-center bg-[#f4f5f7]/60">
+        <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+          
+          {/* Secondary Canvas Header */}
+          <div className="w-full shrink-0 bg-white border-b border-slate-200 px-3 py-1.5 flex items-center justify-between text-[11px] select-none z-30">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 bg-purple-600 rounded-md p-0.5 shadow-sm text-white font-bold">
+                <button className="flex items-center gap-1.5 bg-purple-600 rounded text-white px-2.5 py-1">
+                  <LayoutGrid className="w-3.5 h-3.5" /> Canvas
+                </button>
+                <div className="w-px h-3.5 bg-purple-400"></div>
+                <button className="flex items-center gap-1.5 bg-white text-slate-500 hover:text-slate-700 rounded px-2.5 py-1 font-semibold ml-0.5">
+                  <FileCode className="w-3.5 h-3.5" /> Terraform Configuration
+                </button>
+              </div>
+              
+              <button className="flex items-center gap-1.5 text-slate-700 border border-slate-200 bg-white hover:bg-slate-50 rounded-md px-3 py-1.5 font-bold shadow-sm ml-1">
+                <GitBranch className="w-3.5 h-3.5" /> Pipeline Diff
+              </button>
+              
+              <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-md px-2 py-1 text-slate-700 cursor-pointer hover:bg-slate-100 transition-colors ml-1">
+                <span className="font-bold">v2</span>
+                <span className="bg-[#8A53D6] text-white text-[9px] px-1.5 py-0.5 rounded font-bold">LATEST</span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 text-slate-500 font-semibold">
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] font-bold tracking-wider text-slate-400">SANDBOX</span>
+                <span className="bg-slate-100 text-slate-700 border border-slate-200 px-2 py-1 rounded-md font-bold">azure_sandbox1</span>
+              </div>
+              <button className="text-slate-700 border border-slate-200 bg-white hover:bg-slate-50 rounded-md px-3 py-1.5 font-bold shadow-sm">
+                Promote
+              </button>
+              <span className="text-slate-400">All changes saved</span>
+              <div className="flex items-center gap-1 text-slate-500 font-bold">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                LIVE
+              </div>
+              <span className="text-slate-400 text-[10px]">SOLO</span>
+            </div>
+          </div>
+
+          <div 
+            className="flex-1 relative overflow-hidden h-full flex items-center justify-center"
+            style={{
+              background: "#f8f9fa",
+              backgroundImage: "radial-gradient(#ccd0d5 1px, transparent 1px)",
+              backgroundSize: "16px 16px"
+            }}
+          >
           <div 
             ref={canvasRef} 
             className="w-[580px] h-[350px] relative shrink-0 transform-gpu"
             style={{ transformStyle: "preserve-3d" }}
           >
-            {/* Layer 1: Background grid image */}
+            {/* Layer 1: Background grid image (removed, moved to parent) */}
             <div 
               ref={layerBgRef}
               className="absolute inset-0 pointer-events-none transition-transform duration-100 ease-out transform-gpu"
               style={{ 
                 transformStyle: "preserve-3d", 
-                transform: "translate3d(0, 0, 0px)",
-                background: "#f8f9fa",
-                backgroundImage: "radial-gradient(#ccd0d5 1px, transparent 1px)",
-                backgroundSize: "16px 16px"
+                transform: "translate3d(0, 0, 0px)"
               }}
             />
 
@@ -1265,13 +1355,35 @@ function InteractiveCanvas() {
             </div>
           </div>
 
-          {/* Zoom controls bottom left */}
-          <div className="absolute bottom-3 left-3 bg-white border border-slate-200 rounded-lg shadow-sm flex flex-col p-1 gap-1 z-30 select-none">
-            <button className="w-6 h-6 hover:bg-slate-100 text-slate-600 rounded flex items-center justify-center font-bold text-sm">+</button>
-            <button className="w-6 h-6 hover:bg-slate-100 text-slate-600 rounded flex items-center justify-center font-bold text-sm">-</button>
-            <button className="w-6 h-6 hover:bg-slate-100 text-slate-600 rounded flex items-center justify-center text-[10px]">🔍</button>
-            <button className="w-6 h-6 hover:bg-slate-100 text-slate-600 rounded flex items-center justify-center text-[10px]">🔒</button>
+          {/* Bottom Overlay Controls */}
+          {/* Zoom & Screen Controls (left) */}
+          <div className="absolute bottom-6 left-6 bg-white border border-slate-200 rounded-lg shadow-md flex flex-col items-center justify-center py-1 gap-0.5 z-30 select-none text-slate-600 w-8">
+            <button className="w-8 h-8 flex items-center justify-center hover:bg-slate-50 hover:text-slate-900 transition-colors"><Plus className="w-4 h-4" /></button>
+            <button className="w-8 h-8 flex items-center justify-center hover:bg-slate-50 hover:text-slate-900 transition-colors"><Minus className="w-4 h-4" /></button>
+            <button className="w-8 h-8 flex items-center justify-center hover:bg-slate-50 hover:text-slate-900 transition-colors"><Maximize className="w-3.5 h-3.5" /></button>
+            <button className="w-8 h-8 flex items-center justify-center hover:bg-slate-50 hover:text-slate-900 transition-colors"><Lock className="w-3.5 h-3.5" /></button>
           </div>
+
+          {/* Prompt Bar (center) */}
+          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white border border-slate-200 rounded-lg shadow-md flex items-center px-2 py-1.5 w-[380px] z-30">
+            <div className="text-purple-600 px-2 flex-shrink-0">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <input 
+              type="text" 
+              placeholder="Ask Jane to refactor the canvas..." 
+              className="flex-1 bg-transparent border-none outline-none text-xs text-slate-700 placeholder:text-slate-400 px-1 font-medium"
+            />
+            <button className="bg-[#C0AEE6] hover:bg-purple-400 text-white text-xs font-bold px-4 py-1.5 rounded-md transition-colors shadow-sm ml-2">
+              Apply
+            </button>
+          </div>
+
+          {/* FAB Action Button (right) */}
+          <div className="absolute bottom-6 right-6 w-12 h-12 bg-[#8A53D6] hover:bg-purple-600 rounded-full shadow-lg flex items-center justify-center cursor-pointer transition-colors z-30">
+            <Sparkles className="w-5 h-5 text-white" />
+          </div>
+        </div>
         </div>
       </div>
 
@@ -1299,223 +1411,7 @@ function InteractiveCanvas() {
   );
 }
 
-/* ===================== Feature Grid ===================== */
-function Features() {
-  const ref = useReveal<HTMLDivElement>();
-  return (
-    <section id="features" className="relative py-24 overflow-hidden bg-[var(--ig-bg)] transition-colors duration-500">
-      <InteractiveGrid color="#8A53D6" />
-      <div ref={ref} className="relative mx-auto max-w-6xl px-6">
-        <div className="text-center mb-12">
-          <div className="text-xs uppercase tracking-[0.2em] text-[var(--ig-accent)] mb-2">Capabilities</div>
-          <h2 className="font-display text-4xl md:text-6xl ig-metallic">Everything cloud, in one canvas.</h2>
-        </div>
-        <div className="grid md:grid-cols-3 gap-4 auto-rows-[260px]">
-          {/* Visual Canvas (span 2) */}
-          <TiltCard className="ig-card rounded-2xl p-6 md:col-span-2 md:row-span-2 relative overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Visual Canvas</div>
-                <h3 className="font-display text-3xl text-[var(--ig-text)] mt-1">Drag, drop, deploy.</h3>
-              </div>
-              <Boxes className="w-5 h-5 text-[var(--ig-accent-2)]" />
-            </div>
-            <div className="flex-1 mt-4 relative border border-[var(--ig-border-soft)] rounded-2xl bg-[var(--ig-bg-2)] p-4 overflow-x-auto md:overflow-hidden flex items-center justify-center min-h-[380px]">
-              <div className="w-[580px] h-[350px] relative shrink-0">
-                {/* Canvas Background Image */}
-                <img src={awsCanvasBgUrl} alt="AWS Cloud Canvas" className="absolute inset-0 w-full h-full object-cover rounded-2xl pointer-events-none opacity-80" />
 
-                {/* SVG Connections Overlay */}
-                <svg className="absolute inset-0 pointer-events-none z-10 w-full h-full" viewBox="0 0 580 350" fill="none">
-                  <defs>
-                    <marker id="arrow-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-                      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#f59e0b" />
-                    </marker>
-                    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-                      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#3b82f6" />
-                    </marker>
-                    <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-                      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#f97316" />
-                    </marker>
-                  </defs>
-                  
-                  {/* Line from EC2 to Lambda */}
-                  <path d="M 210,154 L 310,154" stroke="#f59e0b" strokeWidth="1.8" strokeLinecap="round" markerEnd="url(#arrow-amber)" className="ig-flow" />
-                  
-                  {/* Line from EC2 to RDS (orthogonal path: down then right) */}
-                  <path d="M 125,183 L 125,264 L 175,264" stroke="#3b82f6" strokeWidth="1.8" strokeLinecap="round" markerEnd="url(#arrow-blue)" className="ig-flow" />
-                </svg>
-
-                {/* Resource Nodes (Code Overlays) */}
-                {/* EC2 Instance */}
-                <div className="absolute left-[40px] top-[125px] w-[170px] h-[58px] border border-[var(--ig-border-soft)] hover:border-amber-500/40 hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] rounded-xl bg-[var(--ig-card)] backdrop-blur-md px-3 py-2 flex items-center gap-3 transition-all duration-300 group cursor-pointer z-20 hover:scale-[1.03]">
-                  <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-500 group-hover:scale-105 transition-transform shrink-0">
-                    <Server className="w-5 h-5" />
-                  </div>
-                  <div className="text-left overflow-hidden">
-                    <div className="text-xs font-bold text-[var(--ig-text)] group-hover:text-amber-400 transition-colors truncate">EC2 Instance</div>
-                    <div className="text-[9px] text-[var(--ig-muted)] font-mono leading-none mt-1 truncate">web-01</div>
-                  </div>
-                </div>
-
-                {/* Lambda */}
-                <div className="absolute left-[310px] top-[125px] w-[170px] h-[58px] border border-[var(--ig-border-soft)] hover:border-orange-500/40 hover:shadow-[0_0_15px_rgba(249,115,22,0.2)] rounded-xl bg-[var(--ig-card)] backdrop-blur-md px-3 py-2 flex items-center gap-3 transition-all duration-300 group cursor-pointer z-20 hover:scale-[1.03]">
-                  <div className="w-9 h-9 rounded-lg bg-orange-500/10 border border-orange-500/25 flex items-center justify-center text-orange-500 group-hover:scale-105 transition-transform shrink-0">
-                    <Cpu className="w-5 h-5" />
-                  </div>
-                  <div className="text-left overflow-hidden">
-                    <div className="text-xs font-bold text-[var(--ig-text)] group-hover:text-orange-400 transition-colors truncate">Lambda</div>
-                    <div className="text-[9px] text-[var(--ig-muted)] font-mono leading-none mt-1 truncate">process-data</div>
-                  </div>
-                </div>
-
-                {/* RDS */}
-                <div className="absolute left-[175px] top-[235px] w-[170px] h-[58px] border border-[var(--ig-border-soft)] hover:border-blue-500/40 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] rounded-xl bg-[var(--ig-card)] backdrop-blur-md px-3 py-2 flex items-center gap-3 transition-all duration-300 group cursor-pointer z-20 hover:scale-[1.03]">
-                  <div className="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-blue-400 group-hover:scale-105 transition-transform shrink-0">
-                    <Database className="w-5 h-5" />
-                  </div>
-                  <div className="text-left overflow-hidden">
-                    <div className="text-xs font-bold text-[var(--ig-text)] group-hover:text-blue-400 transition-colors truncate">RDS</div>
-                    <div className="text-[9px] text-[var(--ig-muted)] font-mono leading-none mt-1 truncate">mysql-db-01</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </TiltCard>
-
-          <TiltCard className="ig-card rounded-2xl pt-6 pb-0 px-0 flex flex-col justify-between overflow-hidden">
-            <div className="px-6 mb-3">
-              <div className="flex items-center justify-between">
-                <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Topology Map</div>
-                <Network className="w-4 h-4 text-[var(--ig-accent-2)]" />
-              </div>
-            </div>
-            <div className="flex-1 w-full border-t border-[var(--ig-border-soft)] overflow-hidden rounded-t-xl bg-[var(--ig-card)] relative">
-              <video 
-                src={topologyVideoUrl}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover rounded-t-xl"
-              />
-            </div>
-          </TiltCard>
-
-          <TiltCard className="ig-card rounded-2xl pt-5 pb-0 px-0 flex flex-col justify-between overflow-hidden">
-            <div className="flex items-center justify-between mb-4 px-5">
-              <div>
-                <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Deployed Resources</div>
-                <div className="font-display text-2xl text-[var(--ig-text)] mt-1">45 resources</div>
-              </div>
-              <Boxes className="w-4 h-4 text-[var(--ig-accent-2)]" />
-            </div>
-            <div className="mt-auto w-full flex justify-center">
-              <img 
-                src={deployedResourcesUrl} 
-                alt="Deployed Resources" 
-                className="w-full h-auto rounded-t-xl border-t border-[var(--ig-border-soft)] pointer-events-none select-none" 
-              />
-            </div>
-          </TiltCard>
-
-          <TiltCard className="ig-card rounded-2xl p-4 flex flex-col justify-between overflow-hidden">
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <div>
-                  <h4 className="text-xs font-bold text-[var(--ig-text)] tracking-wide">Drift detection</h4>
-                  <p className="text-[9px] text-[var(--ig-text)]/40 leading-none mt-0.5">Compare Terraform vs live resources</p>
-                </div>
-                <ShieldCheck className="w-4 h-4 text-amber-500" />
-              </div>
-              
-              {/* Filters */}
-              <div className="flex gap-3 my-2 border-t border-b border-[var(--ig-border-soft)] py-1.5">
-                <div className="flex items-center gap-1 text-[9px] text-[var(--ig-text)]/40">
-                  <span>Status:</span>
-                  <div className="flex items-center gap-0.5 border border-[var(--ig-border-soft)] rounded px-1 py-0.2 bg-[var(--ig-card)] text-[var(--ig-text)] font-medium">
-                    Open <span className="text-[6px]">▼</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 text-[9px] text-[var(--ig-text)]/40">
-                  <span>Pipeline:</span>
-                  <div className="flex items-center gap-0.5 border border-[var(--ig-border-soft)] rounded px-1 py-0.2 bg-[var(--ig-bg-2)] text-[var(--ig-text)] font-medium truncate max-w-[85px]">
-                    All pipelines <span className="text-[6px]">▼</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Table */}
-              <div className="mt-1">
-                <div className="flex justify-between text-[8px] font-bold uppercase tracking-wider text-[var(--ig-accent)] pb-1">
-                  <span>Pipeline</span>
-                  <span>Resource</span>
-                </div>
-                
-                <div className="text-[8px] font-mono text-[var(--ig-text)]/30 mt-1">ALB-TEST-1</div>
-                
-                <div className="flex justify-between items-start mt-1 bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/10 hover:border-amber-500/20 rounded-lg p-2 transition-all cursor-pointer">
-                  <div className="flex items-center gap-1 text-[10px] text-[var(--ig-text)] font-medium">
-                    <span className="text-[7px] text-amber-500/80">▶</span>
-                    <span>alb-test-1</span>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[9px] text-amber-400 font-mono font-medium truncate max-w-[120px]">aws_alb_2_listener</div>
-                    <div className="text-[7px] text-[var(--ig-text)]/30 font-mono tracking-tighter mt-0.5 truncate max-w-[100px]">99f0eca0-b9d4-494a-9db7...</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Status bar */}
-            <div className="flex items-center justify-between border-t border-[var(--ig-border-soft)] pt-1.5 mt-2 text-[9px]">
-              <span className="text-[var(--ig-text)]/40">Drift Compliant</span>
-              <span className="text-emerald-400 font-bold flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 ig-blink" /> 98%
-              </span>
-            </div>
-          </TiltCard>
-
-          <TiltCard className="ig-card rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Security</div>
-              <Cpu className="w-4 h-4 text-[var(--ig-accent-2)]" />
-            </div>
-            <ul className="space-y-2 text-sm">
-              {["TLS 1.3 enforced", "IAM least-privilege", "KMS rotation: 90d", "No public S3"].map((t) => (
-                <li key={t} className="flex items-center gap-2 text-[var(--ig-muted)]">
-                  <span className="h-5 w-5 rounded-full grid place-items-center" style={{ background: "rgba(52,211,153,.15)" }}>
-                    <Check className="w-3 h-3 text-emerald-400" />
-                  </span>
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </TiltCard>
-
-          <TiltCard className="ig-card rounded-2xl pt-6 pb-0 px-0 flex flex-col justify-between overflow-hidden">
-            <div className="px-6 mb-3">
-              <div className="flex items-center justify-between">
-                <div className="text-xs text-[var(--ig-accent)] uppercase tracking-widest">Pipelines</div>
-                <GitBranch className="w-4 h-4 text-[var(--ig-accent-2)]" />
-              </div>
-            </div>
-            <div className="flex-1 w-full border-t border-[var(--ig-border-soft)] overflow-hidden rounded-t-xl bg-[var(--ig-card)] relative">
-              <video 
-                src={pipelinesVideoUrl}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover rounded-t-xl"
-              />
-            </div>
-          </TiltCard>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ===================== Pipeline Showcase ===================== */
 function Pipelines() {
@@ -1765,32 +1661,300 @@ function Testimonials() {
 
 /* ===================== CTA ===================== */
 function FinalCTA() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      container.style.setProperty('--mouse-x', `${x}px`);
+      container.style.setProperty('--mouse-y', `${y}px`);
+    };
+
+    const handleMouseEnter = () => {
+      container.style.setProperty('--mouse-opacity', '1');
+    };
+
+    const handleMouseLeave = () => {
+      container.style.setProperty('--mouse-opacity', '0');
+    };
+
+    container.addEventListener('mousemove', handleMouseMove);
+    container.addEventListener('mouseenter', handleMouseEnter);
+    container.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      container.removeEventListener('mousemove', handleMouseMove);
+      container.removeEventListener('mouseenter', handleMouseEnter);
+      container.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
   return (
     <section id="pricing" className="py-24 relative overflow-hidden bg-[var(--ig-bg)] transition-colors duration-500">
       <InteractiveGrid color="#8A53D6" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div className="text-left">
-            <h2 className="font-display text-5xl md:text-7xl ig-metallic leading-[0.95]">Ship the cloud<br/>you can see.</h2>
-            <p className="mt-8 text-lg text-[var(--ig-muted)] max-w-md">Free for solo. $19/seat for teams. No credit card to start.</p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <a href="#jane" className="ig-cta px-8 py-4 inline-flex items-center gap-2">Start Designing <Arrow /></a>
-            </div>
-            
-            <div className="mt-12 pt-8 border-t border-[var(--ig-border)] flex items-center gap-6 transition-colors duration-500">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map(i => (
-                  <img key={i} src={`https://i.pravatar.cc/100?img=${i+10}`} className="w-10 h-10 rounded-full border-2 border-black" alt="" />
-                ))}
+          {/* Header container with interactive cursor blur layer */}
+          <div ref={containerRef} className="text-left relative select-none">
+            {/* Text wrapper at z-20 to keep it crisp and readable above the blur overlay */}
+            <div className="relative z-20">
+              <h2 className="font-display text-5xl md:text-7xl ig-metallic leading-[0.95]">Ship the cloud<br/>you can see.</h2>
+              <p className="mt-8 text-lg text-[var(--ig-muted)] max-w-md">Free for solo. $19/seat for teams. No credit card to start.</p>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <a href="#jane" className="ig-cta px-8 py-4 inline-flex items-center gap-2">Start Designing <Arrow /></a>
               </div>
-              <div className="text-xs text-slate-400">Join 10,000+ engineers<br/>shipping faster.</div>
+              
+              <div className="mt-12 pt-8 border-t border-[var(--ig-border)] flex items-center gap-6 transition-colors duration-500">
+                <div className="flex -space-x-3">
+                  {[1, 2, 3, 4].map(i => (
+                    <img key={i} src={`https://i.pravatar.cc/100?img=${i+10}`} className="w-10 h-10 rounded-full border-2 border-black" alt="" />
+                  ))}
+                </div>
+                <div className="text-xs text-slate-400">Join 10,000+ engineers<br/>shipping faster.</div>
+              </div>
             </div>
+
+            {/* Masked backdrop blur overlay that blurs the dot grid canvas underneath */}
+            <div 
+              className="absolute inset-0 pointer-events-none transition-opacity duration-300 z-10"
+              style={{
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                opacity: 'var(--mouse-opacity, 0)',
+                maskImage: 'radial-gradient(circle 200px at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 25%, transparent 100%)',
+                WebkitMaskImage: 'radial-gradient(circle 200px at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 25%, transparent 100%)',
+              }}
+            />
           </div>
           
-          <div className="flex justify-center md:justify-end">
+          <div className="flex justify-center md:justify-end relative z-20">
             <DemoStepper />
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ===================== Process Split Scroll Showcase ===================== */
+const STEPS = [
+  {
+    index: "01",
+    title: "Architect Visually",
+    subtitle: "Design cloud infrastructure the way you think.",
+    desc: "Create architectures on an interactive canvas using AWS, Azure, and GCP resources. Generate HLDs, LLDs, and reusable blueprints while visualizing dependencies in real time.",
+    mediaUrl: templatedVideoUrl,
+  },
+  {
+    index: "02",
+    title: "Accelerate with AI",
+    subtitle: "Turn ideas into deployable infrastructure.",
+    desc: "Leverage AI to generate architectures, convert templates across clouds, estimate costs, and recommend improvements before deployment begins.",
+    mediaUrl: accelerateAiUiUrl,
+  },
+  {
+    index: "03",
+    title: "Deploy with Confidence",
+    subtitle: "From design to production without context switching.",
+    desc: "Transform architectures into deployment pipelines, schedule releases, publish templates, and standardize delivery across teams and environments.",
+    mediaUrl: deployConfidenceUiUrl,
+  },
+  {
+    index: "04",
+    title: "Stay Secure & Compliant",
+    subtitle: "Security and governance built into every deployment.",
+    desc: "Protect credentials, enforce RBAC policies, validate compliance requirements, and continuously scan infrastructure before issues reach production.",
+    mediaUrl: secureCompliantUiUrl,
+  },
+  {
+    index: "05",
+    title: "Operate at Scale",
+    subtitle: "Know exactly what's running across every cloud.",
+    desc: "Discover deployed resources, detect configuration drift, monitor infrastructure health, and track every change through logs, audits, and observability insights.",
+    mediaUrl: operateScaleUiUrl,
+  }
+];
+
+function ProcessShowcase() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const triggerRef = useRef<any>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    let st: any = null;
+
+    // Enable pinned scroll timeline only on screens wider than 768px (desktops & tablets)
+    if (window.innerWidth >= 768) {
+      const timer = setTimeout(() => {
+        st = ScrollTrigger.create({
+          trigger: section,
+          start: "top top",
+          end: () => `+=${window.innerHeight * 3.5}`, // Pinned for 3.5 viewport heights
+          pin: true,
+          scrub: 0.5,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            setScrollProgress(self.progress);
+            const newIndex = Math.min(
+              STEPS.length - 1,
+              Math.floor(self.progress * STEPS.length)
+            );
+            setActiveIndex(newIndex);
+          }
+        });
+        triggerRef.current = st;
+        ScrollTrigger.refresh();
+      }, 100);
+
+      return () => {
+        clearTimeout(timer);
+        if (st) {
+          st.kill();
+        }
+      };
+    }
+  }, []);
+
+  const getStepProgress = (idx: number) => {
+    const stepDuration = 1 / STEPS.length;
+    const start = idx * stepDuration;
+    const end = start + stepDuration;
+
+    if (scrollProgress < start) return 0;
+    if (scrollProgress > end) return 1;
+    return (scrollProgress - start) / stepDuration;
+  };
+
+  return (
+    <section 
+      ref={sectionRef} 
+      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden z-20 transition-colors duration-500" 
+      style={{ background: 'radial-gradient(circle at 50% 50%, #9d5cef 0%, #8A53D6 50%, #5b2ea3 100%)' }}
+    >
+      {/* Dotted Canvas Background */}
+      <InteractiveGrid color="rgba(255, 255, 255, 0.35)" className="absolute inset-0 w-full h-full pointer-events-none z-0" />
+
+      {/* Main container with Card on the left and Heading on the right */}
+      <div className="relative w-full max-w-7xl mx-auto px-6 z-20 flex flex-col md:flex-row items-center gap-10 md:gap-16">
+        
+        {/* Left: The White Card Container */}
+        <div className="w-full md:w-[62%] shrink-0">
+          <div className="relative w-full bg-white border border-slate-200/80 rounded-[32px] shadow-[0_24px_70px_rgba(0,0,0,0.05)] grid grid-cols-1 md:grid-cols-2 items-stretch min-h-[500px] overflow-hidden">
+        {/* Left Column: Text Content Card */}
+        <div className="flex flex-col justify-center space-y-6 md:space-y-7 p-8 md:p-12 md:pr-4 select-none">
+          {STEPS.map((step, idx) => {
+            const isActive = idx === activeIndex;
+            const progress = getStepProgress(idx);
+            
+            return (
+              <div 
+                key={step.index} 
+                className="flex gap-5 cursor-pointer relative group transition-all duration-300"
+                onClick={() => {
+                  if (triggerRef.current) {
+                    const st = triggerRef.current;
+                    const scrollPos = st.start + (idx / STEPS.length) * (st.end - st.start) + 2;
+                    window.scrollTo({
+                      top: scrollPos,
+                      behavior: "smooth"
+                    });
+                  } else {
+                    setActiveIndex(idx);
+                  }
+                }}
+              >
+                {/* Status Indicator Column */}
+                <div className="flex flex-col items-center shrink-0 w-3">
+                  {/* Progress track */}
+                  <div className="w-[2px] flex-1 bg-slate-100/80 rounded-full relative min-h-[36px] overflow-hidden">
+                    <div 
+                      className="absolute top-0 left-0 w-full bg-[#8A53D6] rounded-full origin-top transition-transform duration-100"
+                      style={{ 
+                        height: "100%", 
+                        transform: `scaleY(${progress})` 
+                      }} 
+                    />
+                  </div>
+                </div>
+
+                {/* Text content block */}
+                <div className="flex-1 pb-1">
+                  <h3 className={`text-base md:text-lg font-bold tracking-tight transition-colors duration-300 ${isActive ? "text-slate-900" : "text-slate-400 group-hover:text-slate-500"}`}>
+                    {step.title}
+                  </h3>
+                  
+                  <div className={`grid transition-all duration-500 ease-in-out ${isActive ? "grid-rows-[1fr] opacity-100 mt-1.5" : "grid-rows-[0fr] opacity-0 pointer-events-none"}`}>
+                    <div className="overflow-hidden">
+                      <div className="text-[11px] md:text-xs font-semibold text-[#8A53D6] mb-1 leading-snug">
+                        {step.subtitle}
+                      </div>
+                      <p className="text-slate-500 text-xs md:text-[13px] leading-relaxed">
+                        {step.desc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Right Column: Media Preview Card hosting direct media */}
+        <div className="relative bg-slate-950 border-t md:border-t-0 md:border-l border-slate-800 rounded-b-[32px] md:rounded-b-none md:rounded-r-[32px] overflow-hidden min-h-[300px] md:min-h-full">
+          <div className="absolute inset-0">
+            {STEPS.map((step, idx) => {
+              const isActive = idx === activeIndex;
+              const isVideo = step.mediaUrl.endsWith(".mp4");
+              return (
+                <div 
+                  key={step.index}
+                  className={`absolute inset-0 w-full h-full transition-all duration-750 ease-out transform ${isActive ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"}`}
+                >
+                  {isVideo ? (
+                    <video 
+                      src={step.mediaUrl} 
+                      autoPlay 
+                      muted 
+                      loop 
+                      playsInline
+                      className="w-full h-full object-cover select-none"
+                    />
+                  ) : (
+                    <img 
+                      src={step.mediaUrl} 
+                      alt={step.title} 
+                      className="w-full h-full object-cover object-center select-none"
+                    />
+                  )}
+                </div>
+              );
+            })}
+        </div>
+      </div>
+    </div>
+  </div>
+
+      {/* Right side: The Heading and Paragraph */}
+      <div className="flex-1 text-left text-white select-none relative z-20">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[0.95] flex flex-col gap-1.5">
+          <span className="font-black" style={{ fontFamily: '"Cabinet Grotesk", "Satoshi", sans-serif' }}>Build.</span>
+          <span className="font-serif italic font-medium text-white/95" style={{ fontFamily: 'Georgia, serif' }}>Deploy.</span>
+          <span className="font-black uppercase tracking-tighter text-transparent" style={{ WebkitTextStroke: "1.2px rgba(255, 255, 255, 0.85)", fontFamily: '"Cabinet Grotesk", "Satoshi", sans-serif' }}>Operate.</span>
+        </h2>
+        <p className="mt-6 text-[13px] md:text-sm text-purple-100/80 leading-relaxed max-w-xs">
+          Design, deploy, secure, and manage modern infrastructure with built-in automation, governance, and observability.
+        </p>
+      </div>
+
       </div>
     </section>
   );
@@ -1803,11 +1967,11 @@ function InfraGlideLanding() {
       <CursorGlow />
       <main className="relative z-10">
         <Hero />
+        <TextScrollMarquee />
         <Metrics />
         <Marquee />
         <Jane />
-        <Features />
-        <ScrollGallery />
+        <ProcessShowcase />
         <section className="mx-auto max-w-[1400px] px-6 grid lg:grid-cols-2 gap-12 items-start pt-24 pb-16">
           <MarqueeCards />
           <Pipelines />

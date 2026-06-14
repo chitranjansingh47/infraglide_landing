@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useRef, useEffect } from 'react'
 import { InteractiveGrid } from '../components/InteractiveGrid'
 import { Calendar, User, ArrowRight } from 'lucide-react'
 
@@ -7,6 +8,39 @@ export const Route = createFileRoute('/blog')({
 })
 
 function BlogPage() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      container.style.setProperty('--mouse-x', `${x}px`);
+      container.style.setProperty('--mouse-y', `${y}px`);
+    };
+
+    const handleMouseEnter = () => {
+      container.style.setProperty('--mouse-opacity', '1');
+    };
+
+    const handleMouseLeave = () => {
+      container.style.setProperty('--mouse-opacity', '0');
+    };
+
+    container.addEventListener('mousemove', handleMouseMove);
+    container.addEventListener('mouseenter', handleMouseEnter);
+    container.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      container.removeEventListener('mousemove', handleMouseMove);
+      container.removeEventListener('mouseenter', handleMouseEnter);
+      container.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
   const posts = [
     {
       title: "How we built real-time drift detection for AWS",
@@ -37,16 +71,32 @@ function BlogPage() {
       <div className="absolute top-0 right-0 w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(138,83,214,0.15)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 pt-32 px-6 max-w-5xl mx-auto">
-        <div className="mb-20 text-center">
-          <h1 className="font-display-family text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
-            The Infraglide <span className="ig-metallic">Blog.</span>
-          </h1>
-          <p className="text-[var(--ig-muted)] text-xl max-w-2xl mx-auto font-medium">
-            Engineering deep dives, product updates, and thoughts on the future of cloud computing.
-          </p>
+        {/* Header container with interactive cursor blur layer */}
+        <div ref={containerRef} className="mb-20 text-center relative select-none">
+          {/* Text wrapper at z-20 to keep it crisp and readable above the blur overlay */}
+          <div className="relative z-20">
+            <h1 className="font-display-family text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
+              The Infraglide <span className="ig-metallic">Blog.</span>
+            </h1>
+            <p className="text-[var(--ig-muted)] text-xl max-w-2xl mx-auto font-medium">
+              Engineering deep dives, product updates, and thoughts on the future of cloud computing.
+            </p>
+          </div>
+
+          {/* Masked backdrop blur overlay that blurs the dot grid canvas underneath */}
+          <div 
+            className="absolute inset-0 pointer-events-none transition-opacity duration-300 z-10"
+            style={{
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              opacity: 'var(--mouse-opacity, 0)',
+              maskImage: 'radial-gradient(circle 200px at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 25%, transparent 100%)',
+              WebkitMaskImage: 'radial-gradient(circle 200px at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 25%, transparent 100%)',
+            }}
+          />
         </div>
 
-        <div className="grid gap-8">
+        <div className="relative z-20 grid gap-8">
           {posts.map((post, i) => (
             <article key={i} className="ig-card rounded-[2rem] p-8 md:p-10 transition-all duration-300 hover:border-[#8A53D6]/40 hover:-translate-y-1 hover:shadow-[0_24px_80px_rgba(0,0,0,0.15)] group relative overflow-hidden">
               <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between mb-6">
@@ -60,7 +110,7 @@ function BlogPage() {
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-[var(--ig-text)] mb-4 group-hover:text-[#8A53D6] transition-colors">{post.title}</h2>
               <p className="text-[var(--ig-muted)] text-lg leading-relaxed mb-8">{post.excerpt}</p>
-              <Link to="#" className="inline-flex items-center gap-2 text-[#8A53D6] font-semibold hover:text-[#a574f9] transition-colors">
+              <Link to="/blog" className="inline-flex items-center gap-2 text-[#8A53D6] font-semibold hover:text-[#a574f9] transition-colors">
                 Read article <ArrowRight className="w-4 h-4" />
               </Link>
             </article>
