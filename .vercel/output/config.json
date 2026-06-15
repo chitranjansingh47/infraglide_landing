@@ -5,8 +5,22 @@
       "handle": "filesystem"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "src": "^(?:/(.*))$",
+      "dest": "/index.html",
+      "check": true
+    },
+    {
+      "handle": "error"
+    },
+    {
+      "status": 404,
+      "src": "^(?!/api).*$",
+      "dest": "/404.html"
     }
-  ]
+  ],
+  "framework": {
+    "slug": "tanstack-start",
+    "version": "1.168.11"
+  },
+  "crons": []
 }
