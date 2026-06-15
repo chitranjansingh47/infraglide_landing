@@ -13,15 +13,23 @@ import logoUrl from "@/assets/infraglide-logo.png";
 import awsCanvasBgUrl from "@/assets/aws_canvas_bg.png";
 import driftDetectionBgUrl from "@/assets/drift_detection_bg.png";
 import deployedResourcesUrl from "@/assets/deployed_resources.png";
+import syncUrl from "@/assets/sync.png";
+import architectureUrl from "@/assets/architecture.png";
 import handCursorUrl from "@/assets/hand_cursor.png";
 import pipelinesVideoUrl from "@/assets/pipelines.mp4";
 import topologyVideoUrl from "@/assets/topology.mp4";
 import templatedVideoUrl from "@/assets/templated.mp4";
+import janeVideoUrl from "@/assets/jane-final.mp4";
 import architectVisuallyUiUrl from "@/assets/architect_visually_ui.png";
 import accelerateAiUiUrl from "@/assets/accelerate_ai_ui.png";
 import deployConfidenceUiUrl from "@/assets/deploy_confidence_ui.png";
+import deployVideoUrl from "@/assets/deploy-3.mp4";
 import secureCompliantUiUrl from "@/assets/secure_compliant_ui.png";
+import secureVideoUrl from "@/assets/secure.mp4";
 import operateScaleUiUrl from "@/assets/operate_scale_ui.png";
+import scaleVideoUrl from "@/assets/scale-5.mp4";
+import driftDetectionUiUrl from "@/assets/drift-detection.png";
+import driftUiUrl from "@/assets/drift.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -1413,42 +1421,6 @@ function InteractiveCanvas() {
 
 
 
-/* ===================== Pipeline Showcase ===================== */
-function Pipelines() {
-  const ref = useReveal<HTMLDivElement>();
-  const items = [
-    { name: "checkout-service", branch: "main", status: "Draft", tone: "text-[var(--ig-muted)] border-[#5a3a8a]" },
-    { name: "auth-gateway", branch: "release/2.4", status: "Success", tone: "text-emerald-400 border-emerald-500/40" },
-    { name: "billing-worker", branch: "feature/retry", status: "Deployment Failed", tone: "text-red-400 border-red-500/40" },
-  ];
-  return (
-    <div id="pipelines" className="relative">
-      <div ref={ref}>
-        <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
-          <h2 className="font-display text-4xl md:text-5xl ig-metallic">Continue where you left off</h2>
-          <a href="#" className="text-sm text-[var(--ig-accent-2)] hover:text-[var(--ig-text)] inline-flex items-center gap-1">View all <Arrow /></a>
-        </div>
-        <div className="flex flex-col gap-4">
-          {items.map((p) => (
-            <TiltCard key={p.name} className="ig-card rounded-2xl p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-display text-xl text-[var(--ig-text)]">{p.name}</div>
-                  <div className="text-xs text-[var(--ig-muted)] mt-1">{p.branch}</div>
-                </div>
-                <span className={`text-[10px] uppercase tracking-widest border rounded-full px-2 py-1 ${p.tone}`}>{p.status}</span>
-              </div>
-              <div className="mt-6 flex gap-2">
-                <button onClick={() => alert("Deployment triggered")} className="ig-cta px-4 py-2 text-xs flex-1">Deploy</button>
-                <button className="ig-ghost px-4 py-2 text-xs">Open</button>
-              </div>
-            </TiltCard>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* ===================== Providers ===================== */
 import awsIcon from '../assets/icon/icons8-aws-100.png';
@@ -1470,8 +1442,11 @@ function Providers() {
   return (
     <section id="topology" className="pb-24">
       <div className="mx-auto max-w-[1400px] px-6">
-        <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
+        <div className="flex flex-col items-start mb-8 gap-2">
           <h2 className="font-display text-4xl md:text-5xl ig-metallic">One canvas, every cloud.</h2>
+          <p className="text-[var(--ig-muted)] text-sm md:text-base font-medium max-w-2xl">
+            Connect, design, and manage infrastructure across AWS, GCP, Azure and more—all from a single workspace.
+          </p>
         </div>
         
         <div className="ig-card rounded-2xl p-6 md:p-8 border border-[#8A53D6]/20">
@@ -1585,9 +1560,17 @@ function Testimonials() {
 
   return (
     <section id="security" className="py-24 overflow-hidden relative">
-      <div className="mx-auto max-w-6xl px-6 mb-12 text-center">
+      <div className="mx-auto max-w-3xl px-6 mb-12 text-center">
         <div className="text-xs uppercase tracking-[0.2em] text-[var(--ig-accent)] mb-2">In their words</div>
         <h2 className="font-display text-4xl md:text-5xl ig-metallic leading-[0.95]">Loved by developers & SREs.</h2>
+        <div className="mt-8 space-y-4 text-sm md:text-base text-[var(--ig-muted)] leading-relaxed font-normal">
+          <p>
+            InfraGlide is a visual multi-cloud platform that helps teams design, deploy, secure, and operate infrastructure from a single workspace. From architecture design and AI-assisted workflows to deployment pipelines, compliance validation, and drift detection, every stage of the cloud lifecycle is connected through one intelligent canvas.
+          </p>
+          <p>
+            By bringing architecture, automation, governance, and operations together, InfraGlide eliminates the disconnect between planning and production. Teams can standardize deployments, accelerate delivery, improve visibility, and maintain control across AWS, Azure, GCP, Kubernetes, and Terraform environments—all without switching between tools.
+          </p>
+        </div>
       </div>
 
       {/* Edge Fade Overlays */}
@@ -1755,28 +1738,28 @@ const STEPS = [
     title: "Accelerate with AI",
     subtitle: "Turn ideas into deployable infrastructure.",
     desc: "Leverage AI to generate architectures, convert templates across clouds, estimate costs, and recommend improvements before deployment begins.",
-    mediaUrl: accelerateAiUiUrl,
+    mediaUrl: janeVideoUrl,
   },
   {
     index: "03",
     title: "Deploy with Confidence",
     subtitle: "From design to production without context switching.",
     desc: "Transform architectures into deployment pipelines, schedule releases, publish templates, and standardize delivery across teams and environments.",
-    mediaUrl: deployConfidenceUiUrl,
+    mediaUrl: deployVideoUrl,
   },
   {
     index: "04",
     title: "Stay Secure & Compliant",
     subtitle: "Security and governance built into every deployment.",
     desc: "Protect credentials, enforce RBAC policies, validate compliance requirements, and continuously scan infrastructure before issues reach production.",
-    mediaUrl: secureCompliantUiUrl,
+    mediaUrl: secureVideoUrl,
   },
   {
     index: "05",
     title: "Operate at Scale",
     subtitle: "Know exactly what's running across every cloud.",
     desc: "Discover deployed resources, detect configuration drift, monitor infrastructure health, and track every change through logs, audits, and observability insights.",
-    mediaUrl: operateScaleUiUrl,
+    mediaUrl: scaleVideoUrl,
   }
 ];
 
@@ -1913,7 +1896,7 @@ function ProcessShowcase() {
           <div className="absolute inset-0">
             {STEPS.map((step, idx) => {
               const isActive = idx === activeIndex;
-              const isVideo = step.mediaUrl.endsWith(".mp4");
+              const isVideo = typeof step.mediaUrl === "string" && step.mediaUrl.toLowerCase().includes(".mp4");
               return (
                 <div 
                   key={step.index}
@@ -1974,7 +1957,10 @@ function InfraGlideLanding() {
         <ProcessShowcase />
         <section className="mx-auto max-w-[1400px] px-6 grid lg:grid-cols-2 gap-12 items-start pt-24 pb-16">
           <MarqueeCards />
-          <Pipelines />
+          <div className="flex flex-col gap-8">
+            <SyncInfraCard />
+            <DriftDetectionCard />
+          </div>
         </section>
         <Providers />
         <Testimonials />
@@ -2364,6 +2350,49 @@ function ScrollGallery() {
 }
 
 /* ===================== Marquee of Cards (alpha-masked, infinite) ===================== */
+/* ===================== Architecture & Design Card ===================== */
+function ArchitectureCard() {
+  return (
+    <div className="bg-white flex flex-col justify-between relative overflow-hidden select-none working-cursor min-h-[440px]">
+      {/* Purple Header with Dotted Grid */}
+      <div className="p-8 bg-[#8a53d6] rounded-b-[2rem] relative overflow-hidden flex flex-col justify-center text-white min-h-[160px]">
+        {/* Dotted Grid Overlay */}
+        <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.55) 1.5px, transparent 1.5px)', backgroundSize: '24px 24px', backgroundPosition: 'center' }} />
+        
+        {/* Text Content */}
+        <div className="relative z-10">
+          <h3 className="text-3xl md:text-[34px] leading-[1.1] text-white mb-2 tracking-tight">
+            <span className="font-black" style={{ fontFamily: '"Cabinet Grotesk", "Satoshi", sans-serif' }}>Architecture</span>
+            <span className="font-serif italic font-medium text-white/95 ml-2" style={{ fontFamily: 'Georgia, serif' }}>& design</span>
+          </h3>
+          <p className="text-white/95 text-xs md:text-sm font-semibold leading-relaxed max-w-sm">
+            Generate HLDs,LLDs,Architectures.Find <br />your Billing Estimations
+          </p>
+        </div>
+      </div>
+
+      {/* Card Body */}
+      <div className="p-6 md:p-8 flex items-end justify-end relative z-10 gap-6">
+        {/* Right: Buttons */}
+        <div className="flex flex-col gap-2.5 items-stretch w-full max-w-[210px] relative z-10">
+          <div className="grid grid-cols-2 gap-2.5">
+            <button className="py-2.5 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/50 rounded-xl text-[10px] font-bold text-slate-500 uppercase tracking-widest transition-colors cursor-pointer text-center">HLD</button>
+            <button className="py-2.5 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/50 rounded-xl text-[10px] font-bold text-slate-500 uppercase tracking-widest transition-colors cursor-pointer text-center">LLD</button>
+          </div>
+          <button className="w-full py-2.5 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/50 rounded-xl text-[10px] font-bold text-slate-500 uppercase tracking-widest transition-colors cursor-pointer text-center">$BILLING ESTIMATION</button>
+          <button className="w-full mt-1.5 py-3.5 bg-[#8A53D6] hover:bg-[#9a63e6] text-white text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95 duration-200 flex items-center justify-center gap-2 cursor-pointer text-center">Architecture</button>
+        </div>
+      </div>
+
+      {/* Screenshot Image coming from the left bottom corner */}
+      <div className="absolute bottom-0 left-0 w-[52%] md:w-[48%] h-[60%] rounded-tr-3xl shadow-[15px_-10px_40px_rgba(0,0,0,0.08)] overflow-hidden hidden md:block border-t border-r border-slate-200/60 translate-y-4 hover:translate-y-0 transition-transform duration-500 bg-white z-0">
+        <img src={architectureUrl} alt="Architecture UI Screenshot" className="w-full h-full object-cover object-left-top select-none pointer-events-none" />
+      </div>
+    </div>
+  );
+}
+
+/* ===================== Marquee of Cards (alpha-masked, infinite) ===================== */
 function MarqueeCards() {
   const cards = [
     { t: "VPC · us-east-1",    s: "10.0.0.0/16 · 6 subnets",     i: Network,   c: "ok" },
@@ -2402,27 +2431,377 @@ function MarqueeCards() {
           </div>
         </div>
       </div>
-      <div className="flex-1 mt-10 rounded-[2rem] bg-[#8a53d6] relative overflow-hidden min-h-[320px] shadow-2xl flex flex-col justify-center p-8 md:p-12">
-        <div className="absolute inset-0 opacity-50 mix-blend-screen" style={{ backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.5) 2px, transparent 2px)', backgroundSize: '32px 32px', backgroundPosition: 'center' }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#8a53d6] to-transparent opacity-60 pointer-events-none" />
-        
-        <div className="relative z-10 w-full md:w-1/2">
-          <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/60 mb-3">Templating Engine</div>
-          <h3 className="text-3xl md:text-[32px] leading-[1.15] text-white mb-4 italic font-medium" style={{ fontFamily: 'Georgia, serif' }}>
-            Standards applied <br className="hidden md:block" />automatically.
-          </h3>
-          <p className="text-white/80 text-sm md:text-[15px] font-medium leading-relaxed mb-6 pr-4">
-            Define your infra patterns once. InfraGlide enforces them at the design level — across every team, every cloud.
-          </p>
-          <a href="/templates" className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white font-medium transition-all text-sm">
-            Browse templates <Arrow className="w-3.5 h-3.5" />
-          </a>
+      <div className="mt-10 rounded-[2rem] border border-slate-200/80 bg-white shadow-2xl overflow-hidden flex flex-col">
+        {/* Top Card: Templating Engine */}
+        <div className="bg-[#8a53d6] relative overflow-hidden min-h-[320px] flex flex-col justify-center p-8 md:p-12 border-b border-white/10">
+          <div className="absolute inset-0 opacity-50 mix-blend-screen" style={{ backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.5) 2px, transparent 2px)', backgroundSize: '32px 32px', backgroundPosition: 'center' }} />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#8a53d6] to-transparent opacity-60 pointer-events-none" />
+          
+          <div className="relative z-10 w-full md:w-1/2">
+            <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/60 mb-3">Templating Engine</div>
+            <h3 className="text-3xl md:text-[32px] leading-[1.15] text-white mb-4 italic font-medium" style={{ fontFamily: 'Georgia, serif' }}>
+              Standards applied <br className="hidden md:block" />automatically.
+            </h3>
+            <p className="text-white/80 text-sm md:text-[15px] font-medium leading-relaxed mb-6 pr-4">
+              Define your infra patterns once. InfraGlide enforces them at the design level — across every team, every cloud.
+            </p>
+            <a href="/templates" className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white font-medium transition-all text-sm">
+              Browse templates <Arrow className="w-3.5 h-3.5" />
+            </a>
+          </div>
+
+          {/* Screenshot Image */}
+          <div className="absolute bottom-0 right-0 w-[45%] md:w-[35%] h-[80%] rounded-tl-3xl shadow-[-15px_-10px_40px_rgba(0,0,0,0.2)] overflow-hidden hidden md:block border-t border-l border-white/10 translate-y-4 hover:translate-y-0 transition-transform duration-500">
+             <img src="/assets/templates.png" alt="Templates UI" className="w-full h-full object-cover object-left-top" />
+          </div>
         </div>
 
-        {/* Screenshot Image */}
-        <div className="absolute bottom-0 right-0 w-[45%] md:w-[35%] h-[80%] rounded-tl-3xl shadow-[-15px_-10px_40px_rgba(0,0,0,0.2)] overflow-hidden hidden md:block border-t border-l border-white/10 translate-y-4 hover:translate-y-0 transition-transform duration-500">
-           <img src="/assets/templates.png" alt="Templates UI" className="w-full h-full object-cover object-left-top" />
+        {/* Bottom Card: Architecture & Design */}
+        <ArchitectureCard />
+      </div>
+    </div>
+  );
+}
+
+/* ===================== Drift Detection Card ===================== */
+function DriftDetectionCard() {
+  return (
+    <div 
+      className="border border-slate-200/80 rounded-[2rem] shadow-2xl overflow-hidden select-none working-cursor flex flex-row min-h-[380px] relative"
+      style={{ containerType: 'inline-size' }}
+    >
+
+      {/* Left — drift-detection.png: nav tab list enlarged */}
+      <div className="w-[45%] shrink-0 relative bg-white border-r border-slate-100">
+        <img
+          src={driftDetectionUiUrl}
+          alt="Drift Detection navigation tabs"
+          className="w-full h-auto select-none pointer-events-none block"
+        />
+      </div>
+
+      {/* Right — purple dotted grid + text */}
+      <div className="flex-1 bg-[#8a53d6] relative overflow-hidden flex flex-col p-8 md:p-10">
+        {/* Dotted grid */}
+        <div
+          className="absolute inset-0 opacity-40"
+          style={{
+            backgroundImage: 'radial-gradient(rgba(255,255,255,0.6) 1.5px, transparent 1.5px)',
+            backgroundSize: '24px 24px',
+          }}
+        />
+
+        {/* Text */}
+        <div className="relative z-10">
+          <h3
+            className="text-4xl md:text-[42px] font-black leading-[1.0] text-white mb-5"
+            style={{ fontFamily: '"Cabinet Grotesk", "Satoshi", sans-serif' }}
+          >
+            Drift{" "}
+            <span
+              className="italic font-medium"
+              style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontWeight: 400 }}
+            >
+              detection.
+            </span>
+          </h3>
+          <p className="text-white/85 text-[15px] font-medium leading-relaxed max-w-[240px]">
+            Gain real-time visibility into infrastructure changes, configuration anomalies, and compliance deviations across every cloud.
+          </p>
         </div>
+      </div>
+
+      {/* drift.png — floats OVER the left nav panel, sliding right on enter */}
+      <motion.div
+        initial={{ x: -80, opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        className="absolute z-20 rounded-xl overflow-hidden shadow-[0_12px_36px_rgba(138,83,214,0.18)] border border-[#8a53d6]/10"
+        style={{
+          left: '-1.1cqw',
+          top: '37.67cqw',
+          width: '52cqw',
+          height: '11.44cqw',
+          background: 'rgba(242, 239, 253, 0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+        }}
+      >
+        <img
+          src={driftUiUrl}
+          alt="Drift Active Option"
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '32.17cqw',
+            height: '11.44cqw',
+          }}
+          className="object-cover object-left-top select-none pointer-events-none block"
+        />
+      </motion.div>
+
+    </div>
+  );
+}
+
+/* ===================== Sync Deployed Infra Card ===================== */
+
+function SyncInfraCard() {
+  const [provider, setProvider] = useState<"aws" | "gcp" | "azure" | "">("");
+  const [syncedProvider, setSyncedProvider] = useState<"aws" | "gcp" | "azure" | "">("");
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [credential, setCredential] = useState<string>("");
+  const [isCredDropdownOpen, setIsCredDropdownOpen] = useState(false);
+
+  const providersList = [
+    { value: "aws", label: "AWS" },
+    { value: "gcp", label: "GCP" },
+    { value: "azure", label: "Azure" },
+  ];
+
+  const credentialsList = provider
+    ? [
+        `${provider}-cred1`,
+        `${provider}-cred2`,
+        `${provider}-cred3`,
+      ]
+    : [];
+
+  const resources = {
+    aws: [
+      { type: "EC2 Instance", name: "aws_instance.web-server", id: "i-09f872e18d7d8e23f", location: "us-east-1a", status: "Active" },
+      { type: "Lambda Function", name: "aws_lambda_function.process-image", id: "arn:aws:lambda:us-east-1:...", location: "us-east-1", status: "Active" },
+      { type: "Redshift Cluster", name: "aws_redshift_cluster.analytics", id: "redshift-dw-cluster", location: "us-east-1", status: "Active" },
+    ],
+    gcp: [
+      { type: "Compute Engine", name: "google_compute_instance.app-node", id: "gcp-inst-34982", location: "us-central1-a", status: "Active" },
+      { type: "Cloud Storage", name: "google_storage_bucket.media-assets", id: "gs://infraglide-media", location: "global", status: "Active" },
+      { type: "Pub/Sub Topic", name: "google_pubsub_topic.events", id: "projects/infraglide/topics/events", location: "global", status: "Active" },
+    ],
+    azure: [
+      { type: "Linux VM", name: "azurerm_linux_virtual_machine.backend", id: "/subscriptions/.../backend-vm", location: "eastus2", status: "Active" },
+      { type: "Windows App Service", name: "azurerm_windows_web_app.portal", id: "infraglide-portal.azurewebsites.net", location: "eastus", status: "Active" },
+      { type: "Cosmos DB", name: "azurerm_cosmosdb_account.users-db", id: "cosmos-users-nosql", location: "global", status: "Active" },
+    ],
+  };
+
+  const handleSync = () => {
+    if (!provider || !credential) return;
+    setIsSyncing(true);
+    setShowResults(false);
+    setTimeout(() => {
+      setIsSyncing(false);
+      setSyncedProvider(provider);
+      setShowResults(true);
+    }, 1200);
+  };
+
+  return (
+    <div 
+      className="bg-white border border-slate-200/80 rounded-[2rem] p-8 md:p-12 shadow-2xl flex flex-col justify-between relative overflow-hidden min-h-[500px] h-full text-slate-800 transition-all select-none working-cursor"
+    >
+      <div>
+        {/* Heading & Baseline */}
+        <div className="mb-8 relative z-20">
+          <h3 className="font-display text-3xl md:text-[34px] ig-metallic leading-[0.95]">
+            Sync your Deployed Infra
+          </h3>
+          <p className="mt-5 text-[var(--ig-muted)] text-sm md:text-base leading-relaxed max-w-md">
+            Discover, import, and sync your running cloud resources from multiple providers on a single canvas.
+          </p>
+        </div>
+
+        {/* Dropdown Selector & Sync Button */}
+        <div className="flex flex-row items-center gap-4 mb-8 relative z-30">
+          {/* Custom Dropdown Selector */}
+          <div className="relative min-w-0 flex-1">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-3.5 text-sm font-semibold flex items-center justify-between shadow-sm hover:border-slate-300 transition-all cursor-pointer"
+            >
+              <span className={provider ? "text-slate-800" : "text-slate-400"}>
+                {provider ? providersList.find(p => p.value === provider)?.label : "choose the provider"}
+              </span>
+              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {isDropdownOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-30" 
+                  onClick={() => setIsDropdownOpen(false)} 
+                />
+                
+                <div className="absolute top-[calc(100%+6px)] left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl py-1.5 z-40">
+                  {providersList.map((p) => {
+                    const isSelected = provider === p.value;
+                    return (
+                      <button
+                        key={p.value}
+                        onClick={() => {
+                          setProvider(p.value as any);
+                          setCredential("");
+                          setIsDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 text-sm font-semibold flex items-center gap-3 transition-colors hover:bg-slate-50 cursor-pointer ${
+                          isSelected ? "bg-[#8A53D6]/5 text-[#8A53D6]" : "text-slate-700"
+                        }`}
+                      >
+                        <span className="w-4 flex items-center justify-center shrink-0">
+                          {isSelected && <Check className="w-4 h-4 text-[#8A53D6]" />}
+                        </span>
+                        <span>{p.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Custom Credential Selector */}
+          <div className="relative min-w-0 flex-1">
+            <button
+              onClick={() => provider && setIsCredDropdownOpen(!isCredDropdownOpen)}
+              disabled={!provider}
+              className={`w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-3.5 text-sm font-semibold flex items-center justify-between shadow-sm hover:border-slate-300 transition-all ${
+                !provider ? "opacity-50 cursor-not-allowed bg-slate-50" : "cursor-pointer"
+              }`}
+            >
+              <span className={credential ? "text-slate-800" : "text-slate-400"}>
+                {credential || "choose the credential"}
+              </span>
+              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isCredDropdownOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {isCredDropdownOpen && provider && (
+              <>
+                <div 
+                  className="fixed inset-0 z-30" 
+                  onClick={() => setIsCredDropdownOpen(false)} 
+                />
+                
+                <div className="absolute top-[calc(100%+6px)] left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl py-1.5 z-40">
+                  {credentialsList.map((cred) => {
+                    const isSelected = credential === cred;
+                    return (
+                      <button
+                        key={cred}
+                        onClick={() => {
+                          setCredential(cred);
+                          setIsCredDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 text-sm font-semibold flex items-center gap-3 transition-colors hover:bg-slate-50 cursor-pointer ${
+                          isSelected ? "bg-[#8A53D6]/5 text-[#8A53D6]" : "text-slate-700"
+                        }`}
+                      >
+                        <span className="w-4 flex items-center justify-center shrink-0">
+                          {isSelected && <Check className="w-4 h-4 text-[#8A53D6]" />}
+                        </span>
+                        <span>{cred}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+
+          <button 
+            onClick={handleSync}
+            disabled={isSyncing || !provider || !credential}
+            className={`px-6 py-3.5 text-sm font-semibold flex items-center justify-center gap-2 text-white bg-[#8A53D6] hover:bg-[#9a63e6] rounded-xl transition-all shadow-md active:scale-95 duration-200 disabled:opacity-50 disabled:cursor-not-allowed shrink-0`}
+          >
+            <RefreshCcw className={`w-4 h-4 ${isSyncing ? "animate-spin" : ""}`} />
+            <span>Sync from cloud</span>
+          </button>
+        </div>
+
+        {/* Result Area */}
+        <div className="relative z-10 bg-slate-50 border border-slate-100 rounded-2xl p-6 min-h-[200px] flex flex-col justify-center overflow-hidden transition-all duration-300">
+          {isSyncing && (
+            <div className="flex flex-col items-center justify-center py-6 text-center">
+              <div className="relative h-12 w-12 rounded-full grid place-items-center bg-purple-50 text-[#8A53D6] border border-purple-100 animate-pulse mb-3">
+                <RefreshCcw className="w-5 h-5 animate-spin" />
+              </div>
+              <p className="text-xs font-semibold text-slate-600">Querying live APIs for resources...</p>
+            </div>
+          )}
+
+          {!isSyncing && !showResults && (
+            <div className="text-center py-6 text-slate-400">
+              <div className="inline-block p-3 rounded-full bg-slate-100/50 mb-2">
+                <Cloud className="w-6 h-6 text-slate-400" />
+              </div>
+              <p className="text-xs font-semibold">Ready to import resources. Choose a provider above to get started.</p>
+            </div>
+          )}
+
+          {!isSyncing && showResults && syncedProvider && (
+            <div className="space-y-3 w-full">
+              {/* Table Headers */}
+              <div className="grid grid-cols-[2.2fr_1.5fr_1.1fr_1.1fr] gap-3 pb-3 border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-left">
+                <div>Name</div>
+                <div>Type</div>
+                <div>Location</div>
+                <div>Status</div>
+              </div>
+              
+              {/* Table Rows */}
+              <div className="divide-y divide-slate-100">
+                {resources[syncedProvider].map((res, i) => (
+                  <motion.div
+                    key={res.name}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: i * 0.1 }}
+                    className="grid grid-cols-[2.2fr_1.5fr_1.1fr_1.1fr] gap-3 py-3 items-center text-left text-xs"
+                  >
+                    {/* Name */}
+                    <div className="font-bold text-slate-800 truncate pr-2" title={res.name}>
+                      {res.name}
+                    </div>
+                    
+                    {/* Type */}
+                    <div className="truncate">
+                      <span className="inline-block bg-slate-100 border border-slate-200/50 text-slate-600 font-semibold px-2.5 py-0.5 rounded-full text-[10px]">
+                        {res.type}
+                      </span>
+                    </div>
+                    
+                    {/* Location */}
+                    <div className="truncate">
+                      <span className="inline-block border border-slate-200 bg-white text-slate-500 px-2.5 py-0.5 rounded-full text-[10px]">
+                        {res.location}
+                      </span>
+                    </div>
+                    
+                    {/* Status */}
+                    <div className="flex items-center">
+                      <span className="inline-flex items-center gap-1 border border-emerald-200 bg-emerald-50 text-emerald-600 font-bold px-2 py-0.5 rounded-full text-[10px]">
+                        <Check className="w-3 h-3 text-emerald-600" />
+                        Active
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Cloud/Resources Photo at the bottom left */}
+      <div className="absolute -bottom-16 -left-16 w-[360px] pointer-events-none z-0 opacity-40 hover:opacity-70 transition-opacity duration-500">
+        <img 
+          src={syncUrl} 
+          alt="Cloud Infrastructure Sync Icon" 
+          className="w-full h-full object-contain select-none"
+        />
       </div>
     </div>
   );

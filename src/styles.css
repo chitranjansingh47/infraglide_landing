@@ -206,7 +206,7 @@ html, body {
 .working-cursor, .working-cursor * {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='%23a78bfa' stroke='white' stroke-width='1'%3E%3Cpath d='M5 5l5.5 15.5 2.5-6.5 6.5-2.5L5 5z'/%3E%3C/svg%3E"), auto !important;
 }
-.working-cursor a:hover, .working-cursor button:hover, .working-cursor input:hover {
+.working-cursor a:hover, .working-cursor button:hover, .working-cursor input:hover, .working-cursor select:hover {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='%238A53D6' stroke='white' stroke-width='1'%3E%3Cpath d='M5 5l5.5 15.5 2.5-6.5 6.5-2.5L5 5z'/%3E%3C/svg%3E"), pointer !important;
 }
 .font-display { font-family: "Cabinet Grotesk", "Satoshi", ui-sans-serif, system-ui, sans-serif; font-weight: 800; letter-spacing: -0.04em; }
