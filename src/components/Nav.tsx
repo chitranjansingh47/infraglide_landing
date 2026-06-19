@@ -53,9 +53,8 @@ export function Nav() {
     return () => window.removeEventListener("scroll", f);
   }, []);
 
-  // When scrolled OR not on home page, act as a floating, rounded pill.
-  // When at top of home page, act as the top cap of the Hero card.
-  const isFloating = scrolled || !isHome;
+  // Act as a floating, rounded glassmorphic pill from initial load.
+  const isFloating = true;
 
   return (
     <header 
@@ -63,136 +62,66 @@ export function Nav() {
     >
       <nav 
         className="relative px-6 py-4 flex items-center justify-between transition-all duration-500 z-10"
+        aria-label="InfraGlide main navigation"
+        role="navigation"
       >
         {/* Background layer to prevent clipping / opacity fading bugs on absolute dropdown children */}
         <div 
-          className={`absolute inset-0 z-[-1] transition-all duration-500 ${isFloating ? 'rounded-[2.5rem] shadow-2xl' : 'rounded-t-[2.5rem]'}`}
+          className={`absolute inset-0 z-[-1] transition-all duration-500 ${isFloating ? 'rounded-[2.5rem]' : 'rounded-t-[2.5rem]'} ${scrolled ? 'shadow-2xl' : 'shadow-none'}`}
           style={{ 
-            background: isFloating
-              ? (isDark ? "rgba(19, 9, 34, 0.75)" : "rgba(255, 255, 255, 0.75)") 
-              : (isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.4)"),
-            borderBottom: isFloating 
-              ? (isDark ? "1px solid rgba(255, 255, 255, 0.15)" : "1px solid rgba(138, 83, 214, 0.2)")
-              : (isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(138, 83, 214, 0.1)"),
-            borderTop: isFloating 
-              ? (isDark ? "1px solid rgba(255, 255, 255, 0.15)" : "1px solid rgba(138, 83, 214, 0.2)")
+            background: scrolled
+              ? (isFloating
+                  ? (isDark ? "rgba(19, 9, 34, 0.75)" : "rgba(255, 255, 255, 0.75)") 
+                  : (isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.4)"))
+              : "transparent",
+            borderBottom: scrolled
+              ? (isFloating 
+                  ? (isDark ? "1px solid rgba(255, 255, 255, 0.15)" : "1px solid rgba(138, 83, 214, 0.2)")
+                  : (isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(138, 83, 214, 0.1)"))
               : "1px solid transparent",
-            borderLeft: isFloating 
-              ? (isDark ? "1px solid rgba(255, 255, 255, 0.15)" : "1px solid rgba(138, 83, 214, 0.2)")
+            borderTop: scrolled
+              ? (isFloating 
+                  ? (isDark ? "1px solid rgba(255, 255, 255, 0.15)" : "1px solid rgba(138, 83, 214, 0.2)")
+                  : "1px solid transparent")
               : "1px solid transparent",
-            borderRight: isFloating 
-              ? (isDark ? "1px solid rgba(255, 255, 255, 0.15)" : "1px solid rgba(138, 83, 214, 0.2)")
+            borderLeft: scrolled
+              ? (isFloating 
+                  ? (isDark ? "1px solid rgba(255, 255, 255, 0.15)" : "1px solid rgba(138, 83, 214, 0.2)")
+                  : "1px solid transparent")
               : "1px solid transparent",
-            backdropFilter: isFloating ? "blur(16px)" : "blur(0px)",
-            WebkitBackdropFilter: isFloating ? "blur(16px)" : "blur(0px)",
+            borderRight: scrolled
+              ? (isFloating 
+                  ? (isDark ? "1px solid rgba(255, 255, 255, 0.15)" : "1px solid rgba(138, 83, 214, 0.2)")
+                  : "1px solid transparent")
+              : "1px solid transparent",
+            backdropFilter: scrolled && isFloating ? "blur(16px)" : "blur(0px)",
+            WebkitBackdropFilter: scrolled && isFloating ? "blur(16px)" : "blur(0px)",
           }}
         />
         <Link to="/" className="flex items-center gap-2 pl-2">
-          <img src={logoUrl} alt="InfraGlide" className={`h-8 w-auto transition-all ${isDark ? 'drop-shadow-[0_1px_12px_rgba(255,255,255,0.75)]' : ''}`} />
+          <img src={logoUrl} alt="InfraGlide — Visual Cloud Infrastructure Platform" className={`h-8 w-auto transition-all ${isDark ? 'drop-shadow-[0_1px_12px_rgba(255,255,255,0.75)]' : ''}`} />
         </Link>
 
-        <ul className="hidden md:flex items-center gap-1 text-sm font-medium">
-          <li className="relative group">
-            <button className="flex items-center gap-1 px-3 py-2 rounded-lg text-[var(--ig-muted)] hover:text-[var(--ig-text)] hover:bg-[var(--ig-border-soft)] transition-colors">
-              Product <ChevronDown className="w-3 h-3 opacity-50" />
-            </button>
-            <div className="absolute top-[calc(100%+8px)] left-0 min-w-[210px] bg-white dark:bg-[#120822] border border-[var(--ig-border)] rounded-2xl p-2 opacity-0 pointer-events-none -translate-y-2 transition-all duration-200 shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.5)] z-[300] group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0">
-              <div className="absolute -top-2 left-0 right-0 h-2 bg-transparent" />
-              
-              <Link to="/" hash="features" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <Sparkles className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Features</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/pricing" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <DollarSign className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Pricing</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/docs" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <BookOpen className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Documentation</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/changelog" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <History className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Changelog</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/templates" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <LayoutGrid className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Templates</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-            </div>
+        <ul className="hidden md:flex items-center gap-1.5 text-sm font-medium">
+          <li>
+            <Link to="/" className="px-3.5 py-2 rounded-lg text-[var(--ig-muted)] hover:text-[var(--ig-text)] hover:bg-[var(--ig-border-soft)] transition-colors">
+              Home
+            </Link>
           </li>
-          <li className="relative group">
-            <button className="flex items-center gap-1 px-3 py-2 rounded-lg text-[var(--ig-muted)] hover:text-[var(--ig-text)] hover:bg-[var(--ig-border-soft)] transition-colors">
-              Company <ChevronDown className="w-3 h-3 opacity-50" />
-            </button>
-            <div className="absolute top-[calc(100%+8px)] left-0 min-w-[210px] bg-white dark:bg-[#120822] border border-[var(--ig-border)] rounded-2xl p-2 opacity-0 pointer-events-none -translate-y-2 transition-all duration-200 shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.5)] z-[300] group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0">
-              <div className="absolute -top-2 left-0 right-0 h-2 bg-transparent" />
-              
-              <Link to="/about" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <Info className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>About</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/blog" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <FileText className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Blog</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/team" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <Users className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Team</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/contact" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <Mail className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Contact</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-            </div>
+          <li>
+            <Link to="/" hash="features" className="px-3.5 py-2 rounded-lg text-[var(--ig-muted)] hover:text-[var(--ig-text)] hover:bg-[var(--ig-border-soft)] transition-colors">
+              Features
+            </Link>
           </li>
-          <li className="relative group">
-            <button className="flex items-center gap-1 px-3 py-2 rounded-lg text-[var(--ig-muted)] hover:text-[var(--ig-text)] hover:bg-[var(--ig-border-soft)] transition-colors">
-              Legal <ChevronDown className="w-3 h-3 opacity-50" />
-            </button>
-            <div className="absolute top-[calc(100%+8px)] left-0 min-w-[210px] bg-white dark:bg-[#120822] border border-[var(--ig-border)] rounded-2xl p-2 opacity-0 pointer-events-none -translate-y-2 transition-all duration-200 shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.5)] z-[300] group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0">
-              <div className="absolute -top-2 left-0 right-0 h-2 bg-transparent" />
-              
-              <Link to="/privacy" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <Shield className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Privacy</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/terms" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <FileCheck className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Terms</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/security" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <Lock className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Security</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-              
-              <Link to="/status" className="group/item flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs md:text-sm text-[var(--ig-muted)] hover:text-[#8A53D6] dark:hover:text-[#b07eff] hover:bg-[#8A53D6]/5 dark:hover:bg-[#8A53D6]/10 transition-all font-medium">
-                <Activity className="w-4 h-4 text-[#8A53D6] opacity-70 group-hover/item:opacity-100 transition-opacity" />
-                <span>Status</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[var(--ig-muted)] opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all ml-auto" />
-              </Link>
-            </div>
+          <li>
+            <Link to="/about" className="px-3.5 py-2 rounded-lg text-[var(--ig-muted)] hover:text-[var(--ig-text)] hover:bg-[var(--ig-border-soft)] transition-colors">
+              About
+            </Link>
+          </li>
+          <li>
+            <Link to="/docs" className="px-3.5 py-2 rounded-lg text-[var(--ig-muted)] hover:text-[var(--ig-text)] hover:bg-[var(--ig-border-soft)] transition-colors">
+              Documentation
+            </Link>
           </li>
         </ul>
 
@@ -221,9 +150,10 @@ export function Nav() {
             WebkitBackdropFilter: "blur(20px)",
           }}
         >
+          <Link to="/" onClick={() => setOpen(false)} className="px-3 py-2 rounded-lg text-sm text-[var(--ig-muted)] hover:bg-[var(--ig-border-soft)] hover:text-[var(--ig-text)]">Home</Link>
           <Link to="/" hash="features" onClick={() => setOpen(false)} className="px-3 py-2 rounded-lg text-sm text-[var(--ig-muted)] hover:bg-[var(--ig-border-soft)] hover:text-[var(--ig-text)]">Features</Link>
-          <Link to="/pricing" onClick={() => setOpen(false)} className="px-3 py-2 rounded-lg text-sm text-[var(--ig-muted)] hover:bg-[var(--ig-border-soft)] hover:text-[var(--ig-text)]">Pricing</Link>
           <Link to="/about" onClick={() => setOpen(false)} className="px-3 py-2 rounded-lg text-sm text-[var(--ig-muted)] hover:bg-[var(--ig-border-soft)] hover:text-[var(--ig-text)]">About</Link>
+          <Link to="/docs" onClick={() => setOpen(false)} className="px-3 py-2 rounded-lg text-sm text-[var(--ig-muted)] hover:bg-[var(--ig-border-soft)] hover:text-[var(--ig-text)]">Documentation</Link>
         </div>
       )}
     </header>

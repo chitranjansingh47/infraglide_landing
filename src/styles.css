@@ -1,9 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,900&f[]=satoshi@700,900&display=swap");
 @import "tailwindcss" source(none);
-@source "../src";
 @import "tw-animate-css";
-@import url("https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@1&f[]=satoshi@1&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap");
-
+@source "../src";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -66,25 +65,25 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --background: #FAFAFC;
+  --foreground: #111827;
+  --card: #FFFFFF;
+  --card-foreground: #111827;
+  --popover: #FFFFFF;
+  --popover-foreground: #111827;
+  --primary: #8A53D6;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EDE4FF;
+  --secondary-foreground: #8A53D6;
+  --muted: #FAFAFC;
+  --muted-foreground: #667085;
+  --accent: #EDE4FF;
+  --accent-foreground: #8A53D6;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #E4E7EC;
+  --input: #E4E7EC;
+  --ring: #8A53D6;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -101,25 +100,25 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
+  --background: #0A0510;
+  --foreground: #FFFFFF;
+  --card: #160F24;
+  --card-foreground: #FFFFFF;
+  --popover: #160F24;
+  --popover-foreground: #FFFFFF;
+  --primary: #8A53D6;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1F1535;
+  --secondary-foreground: #b07eff;
+  --muted: #160F24;
+  --muted-foreground: #9E98A6;
+  --accent: #1F1535;
+  --accent-foreground: #b07eff;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(138, 83, 214, 0.2);
+  --input: rgba(138, 83, 214, 0.2);
+  --ring: #8A53D6;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -148,38 +147,38 @@
 
 /* ============ InfraGlide — Theme Variables ============ */
 :root {
-  --ig-bg: #f8fafc;
-  --ig-bg-2: #f1f5f9;
-  --ig-bg-3: #ffffff;
-  --ig-text: #0f172a;
-  --ig-muted: #64748b;
-  --ig-dim: #94a3b8;
-  --ig-border: rgba(138, 83, 214, 0.25);
-  --ig-border-soft: rgba(138, 83, 214, 0.12);
-  --ig-card: rgba(255, 255, 255, 0.7);
+  --ig-bg: #FAFAFC;
+  --ig-bg-2: #F4F4F7;
+  --ig-bg-3: #FFFFFF;
+  --ig-text: #111827;
+  --ig-muted: #667085;
+  --ig-dim: #9E98A6;
+  --ig-border: #E4E7EC;
+  --ig-border-soft: #F2F4F7;
+  --ig-card: #FFFFFF;
   --ig-accent: #8A53D6;
-  --ig-accent-2: #6d28d9;
-  --ig-success: #10b981;
-  --ig-danger: #ef4444;
-  --ig-warning: #f59e0b;
-  font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  --ig-accent-2: #5B2FB2;
+  --ig-success: #22C55E;
+  --ig-danger: #EF4444;
+  --ig-warning: #F59E0B;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 .dark {
-  --ig-bg: #000000;
-  --ig-bg-2: #0a0510;
-  --ig-bg-3: #1a0b2e;
-  --ig-text: #ffffff;
-  --ig-muted: #b0b0b0;
-  --ig-dim: #5a3a8a;
+  --ig-bg: #0A0510;
+  --ig-bg-2: #120A1E;
+  --ig-bg-3: #160F24;
+  --ig-text: #FFFFFF;
+  --ig-muted: #9E98A6;
+  --ig-dim: #5A3A8A;
   --ig-border: rgba(138, 83, 214, 0.2);
   --ig-border-soft: rgba(138, 83, 214, 0.1);
-  --ig-card: rgba(138, 83, 214, 0.04);
+  --ig-card: rgba(22, 15, 36, 0.8);
   --ig-accent: #8A53D6;
   --ig-accent-2: #b07eff;
-  --ig-success: #34d399;
-  --ig-danger: #f87171;
-  --ig-warning: #fbbf24;
+  --ig-success: #22C55E;
+  --ig-danger: #EF4444;
+  --ig-warning: #F59E0B;
 }
 
 html, body { 
@@ -209,14 +208,14 @@ html, body {
 .working-cursor a:hover, .working-cursor button:hover, .working-cursor input:hover, .working-cursor select:hover {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='%238A53D6' stroke='white' stroke-width='1'%3E%3Cpath d='M5 5l5.5 15.5 2.5-6.5 6.5-2.5L5 5z'/%3E%3C/svg%3E"), pointer !important;
 }
-.font-display { font-family: "Cabinet Grotesk", "Satoshi", ui-sans-serif, system-ui, sans-serif; font-weight: 800; letter-spacing: -0.04em; }
-.font-display-family { font-family: "Cabinet Grotesk", "Satoshi", ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.04em; }
-.font-body { font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif; }
+.font-display { font-family: "Sora", "Inter", ui-sans-serif, system-ui, sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+.font-display-family { font-family: "Sora", "Inter", ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.02em; }
+.font-body { font-family: "Inter", ui-sans-serif, system-ui, sans-serif; }
 .hero-heading-char { font-weight: 300; }
 .hero-subheading { font-weight: 300; }
 
 .ig-metallic {
-  background: linear-gradient(to bottom, var(--ig-text) 0%, var(--ig-accent) 100%);
+  background: linear-gradient(to right, #9333ea, #4f46e5);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -234,6 +233,14 @@ html, body {
   border: 1px solid var(--ig-border);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+}
+
+.ig-docs-page {
+  --ig-card: rgba(255, 255, 255, 0.95);
+}
+.dark .ig-docs-page {
+  --ig-card: rgba(10, 5, 20, 0.92);
 }
 
 .ig-glow {
@@ -275,14 +282,14 @@ html, body {
 .ig-tilt-inner { transform-style: preserve-3d; }
 
 .ig-cta {
-  background: #8A53D6;
+  background: linear-gradient(135deg, #9D67E8 0%, #8A53D6 50%, #6C38D4 100%);
   color: #ffffff;
   border-radius: 9999px;
   font-weight: 700;
-  transition: transform 0.25s cubic-bezier(0.2,0.9,0.4,1.1), box-shadow 0.25s, background 0.25s;
-  box-shadow: 0 0 24px rgba(138, 83, 214, 0.4);
+  transition: transform 0.25s cubic-bezier(0.2,0.9,0.4,1.1), box-shadow 0.25s, filter 0.25s;
+  box-shadow: 0 10px 30px rgba(138, 83, 214, 0.25);
 }
-.ig-cta:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 0 48px rgba(138, 83, 214, 0.7); background: #9a63e6; }
+.ig-cta:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 15px 35px rgba(138, 83, 214, 0.45); filter: brightness(1.05); }
 
 .ig-ghost {
   background: rgba(138,83,214,0.06);
@@ -344,11 +351,11 @@ html, body {
 
 /* ===== Dotted grid (denser, brainboard-style) ===== */
 .ig-dots {
-  background-image: radial-gradient(rgba(138,83,214,0.35) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(220, 203, 255, 0.5) 1.5px, transparent 1.5px);
   background-size: 18px 18px;
 }
 .ig-dots-soft {
-  background-image: radial-gradient(rgba(176,126,255,0.18) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(220, 203, 255, 0.25) 1.5px, transparent 1.5px);
   background-size: 22px 22px;
 }
 

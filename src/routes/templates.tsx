@@ -1,10 +1,35 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useRef, useEffect } from 'react'
 import { InteractiveGrid } from '../components/InteractiveGrid'
 import { Layers } from 'lucide-react'
 
+const templatesSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "InfraGlide Infrastructure Templates",
+  "url": "https://infraglide.com/templates",
+  "description": "Pre-built, production-ready cloud infrastructure templates for AWS, Azure, and GCP. Start from a Terraform-native template: Kubernetes clusters, VPC networks, serverless apps, data pipelines, and more.",
+  "publisher": { "@type": "Organization", "name": "InfraGlide", "url": "https://infraglide.com" }
+};
+
 export const Route = createFileRoute('/templates')({
   component: TemplatesPage,
+  head: () => ({
+    meta: [
+      { title: "Infrastructure Templates — AWS, Azure & GCP Starter Blueprints | InfraGlide" },
+      { name: "description", content: "Browse production-ready cloud infrastructure templates for AWS, Azure, and GCP. Kubernetes, VPC, serverless, data pipelines, and more — all Terraform-native and deployable in one click on InfraGlide." },
+      { name: "keywords", content: "cloud infrastructure templates, Terraform templates, AWS infrastructure blueprint, Azure starter template, GCP infrastructure template, Kubernetes cluster template, VPC template, serverless infrastructure template, InfraGlide templates" },
+      { property: "og:url", content: "https://infraglide.com/templates" },
+      { property: "og:title", content: "Infrastructure Templates — AWS, Azure & GCP Starter Blueprints | InfraGlide" },
+      { property: "og:description", content: "Production-ready cloud infrastructure templates for AWS, Azure, and GCP. Terraform-native, one-click deployable." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://infraglide.com/templates" },
+    ],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(templatesSchema) },
+    ],
+  }),
 })
 
 function TemplatesPage() {
@@ -125,6 +150,8 @@ function TemplatesPage() {
 
       {/* Interactive Grid behind the text so we can blur it underneath */}
       <InteractiveGrid color="#8A53D6" className="absolute inset-0 w-full h-full pointer-events-none z-0" />
+      {/* Backdrop blur to soften the interactive grid */}
+      <div className="absolute inset-0 bg-[var(--ig-bg)]/50 backdrop-blur-[6px] pointer-events-none z-0" />
 
       <div className="relative z-10 pt-32 px-6 max-w-6xl mx-auto">
         
@@ -204,6 +231,76 @@ function TemplatesPage() {
             </div>
           ))}
         </div>
+
+        {/* Readful content section explaining Blueprint best practices */}
+        <section className="relative z-30 mt-32 border-t border-[var(--ig-border-soft)] pt-20">
+          <div className="grid md:grid-cols-2 gap-12 items-start text-left">
+            <div className="space-y-6">
+              <div className="text-xs uppercase tracking-[0.25em] text-[var(--ig-accent)] font-bold">Best Practices</div>
+              <h2 className="font-display-family text-3xl md:text-4xl text-slate-900 dark:text-white leading-tight font-extrabold">
+                Enterprise-grade blueprints <br/>
+                <span className="ig-metallic">designed for scale.</span>
+              </h2>
+              <p className="text-[var(--ig-muted)] text-sm md:text-base leading-relaxed font-medium">
+                Standardize your organization's infrastructure by creating secure, compliant, and pre-configured templates. InfraGlide enables you to bootstrap environments in minutes while completely eliminating manual configuration errors.
+              </p>
+              <div className="space-y-4 pt-2">
+                {[
+                  { title: "Compliance-by-Design", desc: "Every blueprint is pre-vetted against standard security benchmarks and least-privilege RBAC standards." },
+                  { title: "Multi-Cloud Adaptability", desc: "Instantly migrate or duplicate architecture patterns across AWS, GCP, and Azure with native Terraform conversion." }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex gap-3 items-start">
+                    <div className="w-5 h-5 rounded-full bg-purple-500/10 flex items-center justify-center text-[#8A53D6] shrink-0 mt-0.5 border border-purple-500/15">
+                      <span className="text-xs font-bold font-mono">✓</span>
+                    </div>
+                    <div className="text-xs md:text-sm text-[var(--ig-muted)] leading-relaxed">
+                      <strong className="text-slate-800 dark:text-white block mb-0.5">{item.title}</strong>
+                      {item.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="ig-card rounded-3xl p-8 border border-[rgba(138,83,214,0.12)] bg-[rgba(138,83,214,0.02)] space-y-6 flex flex-col justify-between h-full">
+              <div className="space-y-4">
+                <span className="text-[10px] font-bold text-[var(--ig-accent)] uppercase tracking-wider">How it works</span>
+                <h4 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">The Blueprint Lifecycle</h4>
+                <p className="text-xs md:text-sm text-[var(--ig-muted)] leading-relaxed font-medium">
+                  InfraGlide template blueprints aren't static diagrams. They compile directly into production-grade HCL files behind the scenes, allowing you to preview plan costs and apply configurations safely.
+                </p>
+              </div>
+              
+              <div className="border-t border-[var(--ig-border-soft)] pt-6">
+                <div className="text-xs text-[var(--ig-muted)] leading-relaxed font-medium">
+                  <strong>Need customized patterns?</strong> You can design, save, and publish your own workspace pipelines as reusable organization templates, ensuring SRE standards are maintained.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA section to trigger the demo stepper */}
+        <section className="relative z-30 mt-20 text-center pb-10">
+          <div className="max-w-xl mx-auto space-y-6">
+            <h3 className="text-2xl md:text-3xl text-slate-900 dark:text-white font-extrabold tracking-tight">
+              Ready to see them in action?
+            </h3>
+            <p className="text-[var(--ig-muted)] text-sm md:text-base leading-relaxed">
+              Explore how these pre-configured templates deploy live resources and sync with our interactive visual workspace.
+            </p>
+            <div className="pt-2 flex justify-center">
+              <Link 
+                to="/" 
+                hash="get-started" 
+                className="ig-cta px-8 py-4 inline-flex items-center gap-2.5 text-sm font-bold tracking-wide uppercase select-none cursor-pointer"
+              >
+                Browse More with InfraGlide <span className="text-base leading-none">→</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   )

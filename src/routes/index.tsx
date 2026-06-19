@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowLeft, FileText, Target, FileUp, FileCode, FileDown, Share2, Save, Minus, Plus, Maximize, Rocket, ArrowRight, ChevronRight, ChevronDown, Check, Code, Network, Boxes, ShieldCheck, Cpu, Database, Cloud, GitBranch, ArrowUpRight, Zap, Eye, Lock, RefreshCcw, Github, Twitter, Linkedin, AlertTriangle, Shield, Settings, Play, Menu, X, Send, DollarSign, Gauge, Workflow, Container, Sparkles, Server, Layers, Sun, Moon, LayoutGrid } from "lucide-react";
+import { ArrowLeft, FileText, Target, FileUp, FileCode, FileDown, Share2, Save, Minus, Plus, Maximize, Rocket, ArrowRight, ChevronRight, ChevronDown, Check, Code, Network, Boxes, ShieldCheck, Cpu, Database, Cloud, GitBranch, ArrowUpRight, Zap, Eye, Lock, RefreshCcw, Github, Twitter, Linkedin, AlertTriangle, Shield, Settings, Play, Menu, X, Send, DollarSign, Gauge, Workflow, Container, Sparkles, Server, Layers, Sun, Moon, LayoutGrid, Calendar, Clock, Edit3, Users } from "lucide-react";
 import { InteractiveGrid } from "../components/InteractiveGrid";
 import { DemoStepper } from "../components/DemoStepper";
 import TextScrollMarquee from "../components/TextScrollMarquee";
@@ -17,9 +17,8 @@ import syncUrl from "@/assets/sync.png";
 import architectureUrl from "@/assets/architecture.png";
 import handCursorUrl from "@/assets/hand_cursor.png";
 import pipelinesVideoUrl from "@/assets/pipelines.mp4";
-import topologyVideoUrl from "@/assets/topology.mp4";
 import templatedVideoUrl from "@/assets/templated.mp4";
-import janeVideoUrl from "@/assets/jane-final.mp4";
+import janeVideoUrl from "@/assets/jane (2).mp4";
 import architectVisuallyUiUrl from "@/assets/architect_visually_ui.png";
 import accelerateAiUiUrl from "@/assets/accelerate_ai_ui.png";
 import deployConfidenceUiUrl from "@/assets/deploy_confidence_ui.png";
@@ -30,6 +29,15 @@ import operateScaleUiUrl from "@/assets/operate_scale_ui.png";
 import scaleVideoUrl from "@/assets/scale-5.mp4";
 import driftDetectionUiUrl from "@/assets/drift-detection.png";
 import driftUiUrl from "@/assets/drift.png";
+import templatesUrl from "@/assets/templates.png";
+import rbacUiUrl from "@/assets/RBAC.png";
+import iconAwsUrl from "@/assets/icon/icons8-aws-100.png";
+import iconAzureUrl from "@/assets/icon/icons8-azure-100.png";
+import iconGcpUrl from "@/assets/icon/icons8-google-cloud-100.png";
+import iconTerraformUrl from "@/assets/icon/icons8-terraform-100.png";
+import iconDockerUrl from "@/assets/icon/icons8-docker-96.png";
+import iconKubernetesUrl from "@/assets/icon/icons8-kubernetes-100.png";
+import iconSlackUrl from "@/assets/icon/slack.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,11 +104,21 @@ function useCounter(target: number, duration = 1800) {
           requestAnimationFrame(step);
         }
       });
-    }, { threshold: 0.4 });
+    }, { threshold: 0.1 });
     io.observe(el);
     return () => io.disconnect();
   }, [target, duration]);
   return { ref, val };
+}
+
+function AnimatedStat({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const { ref, val } = useCounter(target);
+  return (
+    <span ref={ref}>
+      {Math.round(val)}
+      {suffix}
+    </span>
+  );
 }
 
 /* ===================== Cursor Glow ===================== */
@@ -304,153 +322,98 @@ function RenderTerminalLine({ line, isLast }: { line: TerminalLine; isLast: bool
 
 /* ===================== Hero ===================== */
 function Hero() {
-  const gridRef = useRef<HTMLDivElement | null>(null);
   const heroRef = useRef<HTMLDivElement | null>(null);
   const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const subheadingRef = useRef<HTMLParagraphElement | null>(null);
-  const consoleRef = useRef<HTMLDivElement | null>(null);
-
-  // Scroll visibility for Terminal UI: every 80px scroll reveals one more line
-  const [visibleLinesCount, setVisibleLinesCount] = useState(3);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const count = Math.min(TERMINAL_LOGS.length, Math.floor(scrollY / 16) + 3);
-      setVisibleLinesCount(count);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Auto-scroll terminal console to bottom when new lines appear
-  useEffect(() => {
-    if (consoleRef.current) {
-      consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
-    }
-  }, [visibleLinesCount]);
-
-  useEffect(() => {
-    const el = gridRef.current; if (!el) return;
-    const move = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 30;
-      const y = (e.clientY / window.innerHeight - 0.5) * 30;
-      el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    };
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
-  }, []);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top",
-          end: "bottom -50%",
-          scrub: 4.5,
-        }
-      });
-
-      tl.fromTo(
-        [".hero-heading-char", ".hero-subheading"],
-        { fontWeight: 500, fontVariationSettings: "'wght' 500" },
-        { fontWeight: 600, fontVariationSettings: "'wght' 600", duration: 1.2 },
-        0
-      );
-    }, heroRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const word = "InfraGlide";
 
   return (
-    <section ref={heroRef} className="relative pb-16 overflow-hidden ig-noise" style={{ backgroundColor: "#8A53D6" }}>
-      <InteractiveGrid color="#ffffff" />
+    <section 
+      ref={heroRef} 
+      className="relative mt-24 mx-auto max-w-[1300px] w-[calc(100%-2rem)] rounded-t-[2.5rem] md:rounded-t-[3rem] pt-24 pb-16 overflow-hidden bg-[#FAF8F5] dark:bg-[#0D0D0C] border-t border-x border-[rgba(138,83,214,0.15)] dark:border-white/5 shadow-xl ig-noise"
+    >
+      {/* Dotted pattern background */}
+      <div 
+        aria-hidden 
+        className="absolute inset-0 pointer-events-none opacity-40 dark:opacity-20"
+        style={{
+          backgroundImage: 'radial-gradient(rgba(138, 83, 214, 0.25) 1.5px, transparent 1.5px)',
+          backgroundSize: '24px 24px',
+        }}
+      />
 
-      {/* The Glassmorphism Card */}
-      <div className="relative z-10 mx-auto w-[min(1200px,calc(100%-2rem))] mt-6 bg-[#f4ebfe] dark:bg-[#130922] border border-white/30 dark:border-white/10 rounded-[2.5rem] shadow-2xl transition-colors duration-500">
-        <div className="pt-32 pb-20 px-6 sm:px-12 grid md:grid-cols-12 gap-12 items-center">
+      <div className="relative z-10 mx-auto max-w-6xl px-6 flex flex-col items-center text-center justify-center">
         
-        {/* Left Column: Left-aligned Text Content */}
-        <div className="md:col-span-7 text-left flex flex-col justify-center">
-          <h1 ref={headingRef} className="font-display-family text-[13vw] leading-[0.85] sm:text-7xl md:text-[8.5rem]">
-            {word.split("").map((c, i) => (
-              <span key={i} className="hero-heading-char ig-metallic inline-block" style={{ animationDelay: `${i * 0.04}s` }}>{c}</span>
-            ))}
-          </h1>
-          <p ref={subheadingRef} className="hero-subheading mt-4 text-2xl md:text-5xl font-display-family text-[var(--ig-accent-2)]">
-            Your Cloud, Visualized.
-          </p>
-          <p className="mt-6 text-[var(--ig-muted)] text-lg max-w-xl font-medium">
-            Visualize, design, and deploy cloud infrastructure with AI. Terraform-native, real-time drift detection, and cost optimization — all on one canvas.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center justify-start gap-4">
-            <a href="#jane" className="ig-cta px-8 py-4 inline-flex items-center gap-2 text-lg">
-              Start Designing <Arrow />
-            </a>
-            <a href="#features" className="ig-ghost px-8 py-4 inline-flex items-center gap-2 text-lg">
-              <Play className="w-5 h-5" /> Watch Demo
-            </a>
-          </div>
-        </div>
+        {/* Heading */}
+        <h1 
+          ref={headingRef} 
+          className="font-display text-5xl sm:text-6xl md:text-7xl tracking-tight leading-[1.05] text-[var(--ig-text)] font-bold mb-6 max-w-2xl"
+        >
+          One canvas,<br/>
+          <span className="ig-metallic">every cloud.</span>
+        </h1>
 
-        {/* Right Column: Terminal Deploy UI */}
-        <div className="md:col-span-5 flex items-center justify-center relative min-h-[440px]">
-          <div className="w-full max-w-[480px] rounded-xl overflow-hidden bg-[#0d1117] border border-[#30363d] flex flex-col font-mono text-[13px] leading-relaxed select-none h-[420px]">
+        {/* Description */}
+        <p className="text-lg text-[var(--ig-muted)] font-medium leading-relaxed mb-8 max-w-xl">
+          Connect, design, and manage infrastructure across AWS, Azure, and Google Cloud — all from a single, powerful workspace.
+        </p>
+
+        {/* Buttons */}
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
+          <a href="#jane" className="ig-cta px-6 py-3.5 inline-flex items-center gap-2 text-base">
+            Start Designing <Arrow />
+          </a>
+          <a href="#features" className="ig-ghost px-6 py-3.5 inline-flex items-center gap-2 text-base">
+            <Play className="w-4 h-4" /> Watch Demo
+          </a>
+        </div>
+        
+        {/* Purple Bottom Tile statistics pill */}
+        <div className="relative w-full max-w-6xl mx-auto rounded-3xl bg-gradient-to-r from-[#8A53D6] to-[#6366f1] p-6 md:p-8 shadow-xl text-[var(--ig-text)] select-none">
+          <div className="absolute inset-0 bg-white/5 opacity-10 pointer-events-none rounded-3xl"
+            style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
+          <div className="relative z-10 flex flex-wrap items-center justify-between gap-6">
             
-            {/* Windows-style Title Bar */}
-            <div className="w-full bg-[#161b22] border-b border-[#30363d] px-4 py-1.5 flex items-center justify-between relative shrink-0 select-none">
-              {/* Left aligned title and spinner */}
-              <div className="flex items-center gap-2 text-xs font-semibold text-[#e6edf3]">
-                <span className="font-bold text-[#58a6ff]">&gt;_</span>
-                <span>Terraform Deploy</span>
-                <span className="inline-block animate-spin text-slate-400 text-[10px]">↻</span>
+            <div className="flex items-center gap-4 flex-1 min-w-[280px]">
+              <div className="w-11 h-11 rounded-full bg-white/15 flex items-center justify-center border border-white/20 shrink-0 shadow-inner">
+                <Sparkles className="w-5 h-5 text-white" />
               </div>
-              
-              {/* Windows control buttons */}
-              <div className="flex items-center text-slate-400 text-xs">
-                <button className="w-7 h-7 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors rounded">
-                  <Minus className="w-3.5 h-3.5" />
-                </button>
-                <button className="w-7 h-7 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors rounded">
-                  <Maximize className="w-3 h-3" />
-                </button>
-                <button className="w-7 h-7 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors rounded">
-                  <ChevronDown className="w-3.5 h-3.5" />
-                </button>
-                <button className="w-7 h-7 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors rounded">
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
+              <p className="text-sm font-semibold leading-relaxed text-white text-left">
+                Everything you need to build, run, and scale modern infrastructure — visually.
+              </p>
             </div>
 
-            {/* Terminal Body Console */}
-            <div ref={consoleRef} className="flex-1 p-4 overflow-y-auto space-y-1 text-left scrollbar-thin">
-              {TERMINAL_LOGS.slice(0, visibleLinesCount).map((line, idx) => (
-                <div 
-                  key={idx} 
-                  className="terminal-line"
-                >
-                  <RenderTerminalLine 
-                    line={line} 
-                    isLast={idx === visibleLinesCount - 1} 
-                  />
+            <div className="flex flex-wrap items-center gap-6 md:gap-12 shrink-0 w-full sm:w-auto">
+              
+              <div className="flex flex-col text-left">
+                <div className="text-3xl font-black text-white leading-tight">
+                  <AnimatedStat target={3} suffix="+" />
                 </div>
-              ))}
+                <div className="text-[10px] text-purple-200 font-bold uppercase tracking-wider">Cloud Providers</div>
+              </div>
+
+              <div className="flex flex-col text-left sm:border-l sm:border-white/20 sm:pl-8">
+                <div className="text-3xl font-black text-white leading-tight">
+                  <AnimatedStat target={10} suffix="x" />
+                </div>
+                <div className="text-[10px] text-purple-200 font-bold uppercase tracking-wider">Faster Deployment</div>
+              </div>
+
+              <div className="flex flex-col text-left sm:border-l sm:border-white/20 sm:pl-8">
+                <div className="text-3xl font-black text-white leading-tight">
+                  <AnimatedStat target={99} suffix="%" />
+                </div>
+                <div className="text-[10px] text-purple-200 font-bold uppercase tracking-wider">Drift Detection Accuracy</div>
+              </div>
+
             </div>
 
           </div>
         </div>
 
-      </div>
       </div>
 
       {/* Floating orb */}
-      <div aria-hidden className="absolute left-1/2 top-[68%] -translate-x-1/2 h-[420px] w-[420px] rounded-full ig-portal-pulse"
-        style={{ background: "radial-gradient(circle, rgba(138,83,214,.5) 0%, rgba(138,83,214,.15) 40%, transparent 70%)", filter: "blur(40px)" }} />
+      <div aria-hidden className="absolute left-1/2 top-[68%] -translate-x-1/2 h-[420px] w-[420px] rounded-full ig-portal-pulse pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(138,83,214,.3) 0%, rgba(138,83,214,0.05) 40%, transparent 70%)", filter: "blur(40px)" }} />
     </section>
   );
 }
@@ -566,8 +529,8 @@ function Jane() {
               <div className="inline-flex items-center gap-2 ig-pill px-3 py-1 text-xs text-[var(--ig-accent-2)] mb-6">
                 <Sparkles className="w-3 h-3" /> Jane AI · v3
               </div>
-              <h2 className="font-display text-4xl md:text-6xl ig-metallic leading-[0.95]">Meet Jane,<br/>your AI infrastructure architect.</h2>
-              <p className="mt-5 text-[var(--ig-muted)] max-w-md">She speaks Terraform, reads your topology, and ships production changes — with the receipts.</p>
+              <h2 className="font-display text-4xl md:text-6xl text-[var(--ig-text)] leading-[0.95]">Meet Jane,<br/>your AI <span className="ig-metallic">infrastructure architect.</span></h2>
+              <p className="mt-5 text-[var(--ig-muted)] text-sm md:text-base font-medium leading-relaxed max-w-md">She speaks Terraform, reads your topology, and ships production changes — with the receipts.</p>
               <div className="mt-6 flex flex-wrap gap-2">
                 {suggestions.map((s) => (
                   <button key={s} onClick={() => send(s)} className="ig-ghost px-3 py-1.5 text-xs">{s}</button>
@@ -1432,19 +1395,28 @@ import dockerIcon from '../assets/icon/icons8-docker-96.png';
 
 function Providers() {
   const providers = [
-    { name: "AWS", desc: "Native Terraform for all 200+ services.", icon: awsIcon },
-    { name: "Azure", desc: "ARM + Bicep imports in one click.", icon: azureIcon },
-    { name: "GCP", desc: "Project, IAM, and VPC sync.", icon: gcpIcon },
-    { name: "Kubernetes", desc: "Helm-aware topology and drift.", icon: k8sIcon },
-    { name: "Terraform", desc: "Round-trip code · canvas · code.", icon: terraformIcon },
-    { name: "Docker", desc: "Compose-to-cloud in seconds.", icon: dockerIcon },
+    { 
+      name: "AWS", 
+      desc: "Connect your AWS accounts securely. Import, query, and synchronize VPCs, EC2 instances, S3 buckets, and RDS databases onto our visual topology in real-time.", 
+      icon: awsIcon 
+    },
+    { 
+      name: "Azure", 
+      desc: "Integrate your Azure subscription. Instantly discover and visualize resource groups, virtual machines, AKS clusters, and key vaults with native ARM and Bicep synchronization.", 
+      icon: azureIcon 
+    },
+    { 
+      name: "GCP", 
+      desc: "Sync your Google Cloud projects. Import Compute Engines, Cloud Storage buckets, and VPC networks. Enforce organizational policies, view metrics, and manage drift.", 
+      icon: gcpIcon 
+    },
   ];
   return (
     <section id="topology" className="pb-24">
       <div className="mx-auto max-w-[1400px] px-6">
-        <div className="flex flex-col items-start mb-8 gap-2">
-          <h2 className="font-display text-4xl md:text-5xl ig-metallic">One canvas, every cloud.</h2>
-          <p className="text-[var(--ig-muted)] text-sm md:text-base font-medium max-w-2xl">
+        <div className="flex flex-col items-center text-center mb-12 gap-3">
+          <h2 className="font-display text-4xl md:text-5xl text-[var(--ig-text)]">One canvas, <span className="ig-metallic">every cloud.</span></h2>
+          <p className="text-[var(--ig-muted)] text-sm md:text-base font-medium leading-relaxed max-w-2xl mx-auto">
             Connect, design, and manage infrastructure across AWS, GCP, Azure and more—all from a single workspace.
           </p>
         </div>
@@ -1452,16 +1424,126 @@ function Providers() {
         <div className="ig-card rounded-2xl p-6 md:p-8 border border-[#8A53D6]/20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {providers.map((p) => (
-              <div key={p.name} className="rounded-xl p-6 transition-all hover:-translate-y-1 bg-[var(--ig-card)] border border-[var(--ig-border-soft)] hover:border-[var(--ig-border)] hover:ig-glow flex flex-col h-full">
-                <div className="h-12 w-12 rounded-xl grid place-items-center mb-5 shrink-0" style={{ background: "rgba(138,83,214,.1)", border: "1px solid rgba(138,83,214,.2)" }}>
-                  <img src={p.icon} alt={p.name} className="w-7 h-7 object-contain opacity-90" />
+              <div key={p.name} className="rounded-xl p-6 transition-all hover:-translate-y-1 bg-[var(--ig-card)] border border-[var(--ig-border-soft)] hover:border-[var(--ig-border)] hover:ig-glow flex flex-col items-center text-center h-full">
+                <div className="h-16 w-16 rounded-2xl grid place-items-center mb-5 shrink-0" style={{ background: "rgba(138,83,214,.08)", border: "1px solid rgba(138,83,214,.2)" }}>
+                  <img src={p.icon} alt={p.name} className="w-10 h-10 object-contain opacity-90" />
                 </div>
                 <div className="font-display text-2xl text-[var(--ig-text)]">{p.name}</div>
-                <p className="text-sm text-[var(--ig-muted)] mt-2 flex-1">{p.desc}</p>
-                <button className="mt-6 ig-ghost px-4 py-2 text-xs self-start">Connect</button>
+                <p className="text-sm text-[var(--ig-muted)] mt-3.5 leading-relaxed flex-1">{p.desc}</p>
+                <button 
+                  onClick={() => document.getElementById('get-started')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="mt-6 ig-ghost px-8 py-3 text-sm font-semibold cursor-pointer transition-all hover:bg-[#8A53D6]/5 active:scale-95 duration-200"
+                >
+                  Connect
+                </button>
               </div>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ===================== FAQ Section ===================== */
+function FAQ() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const faqItems = [
+    {
+      q: "How does the visual canvas work?",
+      a: "Design infrastructure using a drag-and-drop canvas and instantly generate production-ready Terraform while maintaining infrastructure best practices."
+    },
+    {
+      q: "Can InfraGlide manage multiple cloud providers?",
+      a: "Yes. Connect AWS, Azure, and Google Cloud environments to visualize resources, manage deployments, and monitor infrastructure from one workspace."
+    },
+    {
+      q: "What compliance features are available?",
+      a: "InfraGlide helps teams enforce governance policies, monitor compliance status, and maintain infrastructure standards throughout the deployment lifecycle."
+    },
+    {
+      q: "What can I monitor with Observability?",
+      a: "Track deployments, topology activity, audit trails, resource metrics, and operational events through a centralized observability dashboard."
+    },
+    {
+      q: "Is InfraGlide suitable for enterprise teams?",
+      a: "Yes. With multi-cloud support, RBAC, compliance controls, audit trails, Terraform workflows, and collaborative architecture design, InfraGlide is built for modern platform and DevOps teams."
+    }
+  ];
+
+  const toggle = (i: number) => {
+    setActiveIndex(activeIndex === i ? null : i);
+  };
+
+  return (
+    <section id="faq" className="py-24 relative overflow-hidden bg-[var(--ig-bg)] border-t border-[var(--ig-border-soft)]">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
+          
+          {/* Left Column (Vertically Centered & Right Aligned on Desktop) */}
+          <div className="md:col-span-5 flex flex-col items-center md:items-end text-center md:text-right">
+            <div className="max-w-[340px] md:max-w-[380px] mx-auto md:mr-0 md:ml-auto">
+              <h2 className="font-display text-3xl md:text-4xl text-[var(--ig-text)] leading-[1.15] tracking-tight">
+                Questions?<br />We've got the<br /><span className="ig-metallic">infrastructure answers.</span>
+              </h2>
+              <p className="mt-6 text-sm md:text-base text-[var(--ig-muted)] font-medium leading-relaxed">
+                Whether you're designing architectures, generating Terraform, detecting drift, or governing access across multiple clouds, InfraGlide helps you move faster with confidence.
+              </p>
+              <div className="mt-8 flex justify-center md:justify-end">
+                <Link 
+                  to="/docs" 
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--ig-border-soft)] hover:bg-[#8A53D6] hover:text-white border border-[var(--ig-border)] transition-all font-semibold group text-xs md:text-sm"
+                >
+                  Explore Documentation 
+                  <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Accordion Q&A */}
+          <div className="md:col-span-7 space-y-4">
+            {faqItems.map((item, idx) => {
+              const isOpen = activeIndex === idx;
+              return (
+                <div 
+                  key={idx}
+                  className={`rounded-2xl transition-all duration-300 bg-[var(--ig-card)] border ${
+                    isOpen 
+                      ? 'border-[#8A53D6] shadow-[0_4px_20px_rgba(138,83,214,0.1)]' 
+                      : 'border-[var(--ig-border-soft)] hover:border-[var(--ig-border)]'
+                  }`}
+                >
+                  <button
+                    onClick={() => toggle(idx)}
+                    className="w-full flex items-center justify-between px-6 py-5 text-left font-display text-lg md:text-xl text-[var(--ig-text)] select-none focus:outline-none"
+                  >
+                    <span>{item.q}</span>
+                    <div 
+                      className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 shrink-0 ${
+                        isOpen 
+                          ? 'border-[#8A53D6]/40 bg-[#8A53D6]/10 text-[#8A53D6]' 
+                          : 'border-[var(--ig-border-soft)] text-[var(--ig-muted)] bg-[var(--ig-bg-2)]'
+                      }`}
+                    >
+                      <Plus className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-45' : ''}`} />
+                    </div>
+                  </button>
+                  <div 
+                    className={`overflow-hidden transition-all duration-300 ${
+                      isOpen ? 'max-h-[300px] opacity-100 border-t border-[var(--ig-border-soft)]' : 'max-h-0 opacity-0'
+                    }`}
+                  >
+                    <div className="px-6 py-5 text-sm md:text-base text-[var(--ig-muted)] leading-relaxed bg-[var(--ig-bg-2)]/30">
+                      {item.a}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
         </div>
       </div>
     </section>
@@ -1562,7 +1644,7 @@ function Testimonials() {
     <section id="security" className="py-24 overflow-hidden relative">
       <div className="mx-auto max-w-3xl px-6 mb-12 text-center">
         <div className="text-xs uppercase tracking-[0.2em] text-[var(--ig-accent)] mb-2">In their words</div>
-        <h2 className="font-display text-4xl md:text-5xl ig-metallic leading-[0.95]">Loved by developers & SREs.</h2>
+        <h2 className="font-display text-4xl md:text-5xl text-[var(--ig-text)] leading-[0.95]">Loved by <span className="ig-metallic">developers & SREs.</span></h2>
         <div className="mt-8 space-y-4 text-sm md:text-base text-[var(--ig-muted)] leading-relaxed font-normal">
           <p>
             InfraGlide is a visual multi-cloud platform that helps teams design, deploy, secure, and operate infrastructure from a single workspace. From architecture design and AI-assisted workflows to deployment pipelines, compliance validation, and drift detection, every stage of the cloud lifecycle is connected through one intelligent canvas.
@@ -1678,7 +1760,7 @@ function FinalCTA() {
   }, []);
 
   return (
-    <section id="pricing" className="py-24 relative overflow-hidden bg-[var(--ig-bg)] transition-colors duration-500">
+    <section id="get-started" className="py-24 relative overflow-hidden bg-[var(--ig-bg)] transition-colors duration-500">
       <InteractiveGrid color="#8A53D6" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
@@ -1686,8 +1768,8 @@ function FinalCTA() {
           <div ref={containerRef} className="text-left relative select-none">
             {/* Text wrapper at z-20 to keep it crisp and readable above the blur overlay */}
             <div className="relative z-20">
-              <h2 className="font-display text-5xl md:text-7xl ig-metallic leading-[0.95]">Ship the cloud<br/>you can see.</h2>
-              <p className="mt-8 text-lg text-[var(--ig-muted)] max-w-md">Free for solo. $19/seat for teams. No credit card to start.</p>
+              <h2 className="font-display text-5xl md:text-7xl text-[var(--ig-text)] leading-[0.95]">Ship the cloud<br/><span className="ig-metallic">you can see.</span></h2>
+              <p className="mt-8 text-lg text-[var(--ig-muted)] max-w-md">Design, deploy, and scale your cloud visually. Start building on a single playful canvas.</p>
               <div className="mt-10 flex flex-wrap gap-4">
                 <a href="#jane" className="ig-cta px-8 py-4 inline-flex items-center gap-2">Start Designing <Arrow /></a>
               </div>
@@ -1929,7 +2011,7 @@ function ProcessShowcase() {
       {/* Right side: The Heading and Paragraph */}
       <div className="flex-1 text-left text-white select-none relative z-20">
         <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[0.95] flex flex-col gap-1.5">
-          <span className="font-black" style={{ fontFamily: '"Cabinet Grotesk", "Satoshi", sans-serif' }}>Build.</span>
+          <span className="font-black" style={{ fontFamily: '"Sora", "Inter", sans-serif' }}>Build.</span>
           <span className="font-serif italic font-medium text-white/95" style={{ fontFamily: 'Georgia, serif' }}>Deploy.</span>
           <span className="font-black uppercase tracking-tighter text-transparent" style={{ WebkitTextStroke: "1.2px rgba(255, 255, 255, 0.85)", fontFamily: '"Cabinet Grotesk", "Satoshi", sans-serif' }}>Operate.</span>
         </h2>
@@ -1943,8 +2025,76 @@ function ProcessShowcase() {
   );
 }
 
+/* ===================== About Teaser ===================== */
+function AboutTeaser() {
+  const ref = useReveal<HTMLDivElement>();
+  return (
+    <section
+      className="relative bg-white py-20 md:py-28 overflow-hidden"
+    >
+      {/* Interactive dotted grid — same as demo page */}
+      <InteractiveGrid
+        color="#8A53D6"
+        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+      />
+      {/* Subtle white vignette so content stays crisp */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{ background: 'radial-gradient(ellipse at center, rgba(255,255,255,0) 30%, rgba(255,255,255,0.6) 100%)' }}
+      />
+      <div ref={ref} className="relative z-10 mx-auto max-w-5xl px-6 flex flex-col md:flex-row items-center gap-12 md:gap-20">
+        {/* Left: tag + heading */}
+        <div className="flex-1 text-left">
+          <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#8A53D6] mb-4">
+            <span className="h-px w-6 bg-[#8A53D6] rounded-full" />
+            About InfraGlide
+          </span>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#111827] leading-[1.1] mb-0">
+            Built by engineers,<br />
+            <span style={{
+              background: 'linear-gradient(90deg, #8A53D6 0%, #6366f1 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>for engineering teams.</span>
+          </h2>
+        </div>
+
+        {/* Right: description + CTA */}
+        <div className="flex-1 flex flex-col items-start gap-6">
+          <p className="text-[#4B5563] text-base md:text-lg leading-relaxed font-medium">
+            InfraGlide was born out of frustration with fragmented cloud tooling. We believe infrastructure should be visual, collaborative, and fast to ship — not a maze of YAML and CLIs spread across a dozen tools.
+          </p>
+          <p className="text-[#6B7280] text-base leading-relaxed">
+            Our team is building the platform we always wished existed — one that handles Terraform, drift detection, RBAC, cost visibility, and AI-assisted design in a single, beautiful workspace.
+          </p>
+          <Link
+            to="/about"
+            className="ig-cta inline-flex items-center gap-2.5 px-7 py-3.5 text-sm font-bold text-white transition-all duration-200"
+          >
+            Know More
+            <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 10h12M12 4l6 6-6 6" />
+            </svg>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ===================== Page ===================== */
 function InfraGlideLanding() {
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#get-started") {
+      const timer = setTimeout(() => {
+        document.getElementById("get-started")?.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-x-hidden ig-noise">
       <CursorGlow />
@@ -1952,18 +2102,30 @@ function InfraGlideLanding() {
         <Hero />
         <TextScrollMarquee />
         <Metrics />
-        <Marquee />
-        <Jane />
+        <AboutTeaser />
         <ProcessShowcase />
-        <section className="mx-auto max-w-[1400px] px-6 grid lg:grid-cols-2 gap-12 items-start pt-24 pb-16">
-          <MarqueeCards />
-          <div className="flex flex-col gap-8">
-            <SyncInfraCard />
-            <DriftDetectionCard />
+        <section id="features" className="mx-auto max-w-[1400px] px-6 pt-24 pb-16">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-[var(--ig-text)] font-extrabold tracking-tight">
+              One platform. <span className="ig-metallic">Every workflow.</span>
+            </h2>
+            <p className="mt-4 text-[var(--ig-muted)] text-base md:text-lg lg:text-xl font-medium leading-relaxed">
+              Architecture, deployments, drift detection, compliance, RBAC, observability, and more—built into a single cloud workspace.
+            </p>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <MarqueeCards />
+            <div className="flex flex-col gap-8">
+              <SyncInfraCard />
+              <DriftDetectionCard />
+              <FleetMarqueeStrip />
+              <RbacCard />
+            </div>
           </div>
         </section>
+        <Jane />
         <Providers />
-        <Testimonials />
+        <FAQ />
         <FinalCTA />
       </main>
     </div>
@@ -2340,7 +2502,7 @@ function ScrollGallery() {
 
         <article className="w-[85vw] md:w-[680px] h-[480px] shrink-0 flex items-center justify-center relative select-none">
           <div className="text-center p-8 bg-[rgba(138,83,214,0.06)] border border-[rgba(138,83,214,0.2)] rounded-3xl backdrop-blur-md">
-            <h3 className="font-display text-4xl md:text-5xl ig-metallic leading-[0.95]">Experience the canvas.</h3>
+            <h3 className="font-display text-4xl md:text-5xl text-[var(--ig-text)] leading-[0.95]">Experience <span className="ig-metallic">the canvas.</span></h3>
             <a href="#jane" className="ig-cta px-8 py-4 inline-flex items-center gap-2 mt-8 text-sm uppercase tracking-wider">Start Designing <Arrow /></a>
           </div>
         </article>
@@ -2353,16 +2515,16 @@ function ScrollGallery() {
 /* ===================== Architecture & Design Card ===================== */
 function ArchitectureCard() {
   return (
-    <div className="bg-white flex flex-col justify-between relative overflow-hidden select-none working-cursor min-h-[440px]">
+    <div className="bg-white flex flex-col justify-between relative overflow-hidden select-none working-cursor min-h-[380px] md:min-h-[440px]">
       {/* Purple Header with Dotted Grid */}
-      <div className="p-8 bg-[#8a53d6] rounded-b-[2rem] relative overflow-hidden flex flex-col justify-center text-white min-h-[160px]">
+      <div className="p-8 bg-[#8a53d6] rounded-b-[2rem] relative overflow-hidden flex flex-col justify-center text-white min-h-[130px] md:min-h-[160px]">
         {/* Dotted Grid Overlay */}
         <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.55) 1.5px, transparent 1.5px)', backgroundSize: '24px 24px', backgroundPosition: 'center' }} />
         
         {/* Text Content */}
         <div className="relative z-10">
           <h3 className="text-3xl md:text-[34px] leading-[1.1] text-white mb-2 tracking-tight">
-            <span className="font-black" style={{ fontFamily: '"Cabinet Grotesk", "Satoshi", sans-serif' }}>Architecture</span>
+            <span className="font-black" style={{ fontFamily: '"Sora", "Inter", sans-serif' }}>Architecture</span>
             <span className="font-serif italic font-medium text-white/95 ml-2" style={{ fontFamily: 'Georgia, serif' }}>& design</span>
           </h3>
           <p className="text-white/95 text-xs md:text-sm font-semibold leading-relaxed max-w-sm">
@@ -2372,9 +2534,9 @@ function ArchitectureCard() {
       </div>
 
       {/* Card Body */}
-      <div className="p-6 md:p-8 flex items-end justify-end relative z-10 gap-6">
+      <div className="p-6 md:p-8 flex items-center justify-center md:items-end md:justify-end relative z-10 gap-6">
         {/* Right: Buttons */}
-        <div className="flex flex-col gap-2.5 items-stretch w-full max-w-[210px] relative z-10">
+        <div className="flex flex-col gap-2.5 items-stretch w-full max-w-xs md:max-w-[210px] relative z-10">
           <div className="grid grid-cols-2 gap-2.5">
             <button className="py-2.5 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/50 rounded-xl text-[10px] font-bold text-slate-500 uppercase tracking-widest transition-colors cursor-pointer text-center">HLD</button>
             <button className="py-2.5 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/50 rounded-xl text-[10px] font-bold text-slate-500 uppercase tracking-widest transition-colors cursor-pointer text-center">LLD</button>
@@ -2392,43 +2554,229 @@ function ArchitectureCard() {
   );
 }
 
-/* ===================== Marquee of Cards (alpha-masked, infinite) ===================== */
-function MarqueeCards() {
-  const cards = [
-    { t: "VPC · us-east-1",    s: "10.0.0.0/16 · 6 subnets",     i: Network,   c: "ok" },
-    { t: "Auth Gateway",       s: "Deploy · 1m 04s ago",         i: Lock,      c: "ok" },
-    { t: "Cost Forecast",      s: "$48,210 / mo · ▼ 12%",        i: DollarSign,c: "warn" },
-    { t: "RDS · prod",         s: "Multi-AZ · Graviton",         i: Database,  c: "ok" },
-    { t: "Drift Detected",     s: "subnet-9f2a · auto-patch",    i: ShieldCheck, c: "warn" },
-    { t: "EKS · cluster-eu",   s: "12 nodes · 87% CPU",          i: Container, c: "warn" },
-    { t: "Datadog Sync",       s: "All metrics streaming",       i: Gauge,     c: "ok" },
-    { t: "Pipeline · web-prod",s: "Plan ✓ · Apply ⏳",           i: Workflow,  c: "ok" },
-    { t: "S3 · assets",        s: "Public access blocked",       i: ShieldCheck, c: "ok" },
-    { t: "Helm · billing",     s: "v2.4.1 · canary 10%",         i: Layers,    c: "ok" },
-  ];
-  const row = [...cards, ...cards];
+/* ===================== Pipeline Scheduler Card ===================== */
+function PipelineSchedulerCard() {
   return (
-    <div className="relative flex flex-col h-full">
-      <div>
-        <div className="mb-10">
-          <h2 className="font-display text-4xl md:text-5xl ig-metallic">Your fleet, in motion.</h2>
+    <div className="bg-[#8a53d6] border-t border-slate-200/60 flex flex-col md:flex-row justify-between relative overflow-hidden select-none working-cursor min-h-[320px] md:h-[420px]">
+      {/* Dotted Grid Overlay */}
+      <div className="absolute inset-0 opacity-35 mix-blend-screen" style={{ backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.45) 1.5px, transparent 1.5px)', backgroundSize: '24px 24px', backgroundPosition: 'center' }} />
+      
+      {/* Background outline icons */}
+      <div className="absolute -bottom-8 -left-8 text-white/5 pointer-events-none select-none z-0">
+        <svg width="220" height="220" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
+        </svg>
+      </div>
+      <div className="absolute -bottom-12 left-20 text-white/5 pointer-events-none select-none z-0 rotate-12">
+        <svg width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      </div>
+
+      {/* Left side: text and description */}
+      <div className="w-full md:w-[45%] p-6 md:p-8 flex flex-col justify-between relative z-10 text-white">
+        <div>
+          <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/60 mb-2">Pipeline Scheduler</div>
+          <h3 className="text-3xl md:text-[34px] leading-[1.1] text-white mb-3 tracking-tight">
+            <span className="font-black" style={{ fontFamily: '"Sora", "Inter", sans-serif' }}>Schedule once,</span>
+            <span className="font-serif italic font-medium text-white/95 block mt-1" style={{ fontFamily: 'Georgia, serif' }}>run automatically.</span>
+          </h3>
+          <p className="text-white/80 text-xs md:text-sm font-semibold leading-relaxed mb-6">
+            Create smart schedules for your pipelines or topologies. Automate deploys or destroys and keep your infrastructure in sync — day in, day out.
+          </p>
         </div>
-        <div className="ig-mask-x overflow-hidden">
-          <div className="flex gap-4 ig-marquee-slow w-max">
-            {row.map((c, i) => (
-              <div key={i} className="ig-card rounded-2xl p-4 w-[260px] flex items-center gap-3 relative overflow-hidden">
-                <div aria-hidden className="absolute inset-0 ig-dots opacity-20" />
-                <div className="relative h-10 w-10 rounded-xl grid place-items-center" style={{ background: "rgba(138,83,214,.15)", border: "1px solid rgba(138,83,214,.3)" }}>
-                  <c.i className="w-4 h-4 text-[var(--ig-accent-2)]" />
-                </div>
-                <div className="relative flex-1 min-w-0">
-                  <div className="text-sm text-[var(--ig-text)] truncate">{c.t}</div>
-                  <div className="text-xs text-[var(--ig-muted)] truncate">{c.s}</div>
-                </div>
-                <span className={`relative h-2 w-2 rounded-full ig-blink ${c.c === "ok" ? "bg-emerald-400" : "bg-yellow-400"}`} />
-              </div>
-            ))}
+        <button className="self-start inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white font-medium transition-all text-xs cursor-pointer">
+          Create new schedule <Arrow className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
+      {/* Right side: Mockup Dashboard */}
+      <div className="hidden md:flex w-full md:w-[55%] p-4 md:p-6 items-center justify-center relative z-10">
+        <div className="w-full max-w-[370px] bg-white rounded-2xl p-4 shadow-xl border border-slate-100 flex flex-col gap-3 text-slate-800">
+          
+          {/* Mock Header */}
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-900 tracking-tight">Weekly Prod Refresh</span>
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-[9px] font-bold text-emerald-600 border border-emerald-100/80">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Enabled
+            </div>
           </div>
+
+          {/* Quick Info Grid */}
+          <div className="grid grid-cols-4 border-y border-slate-100 py-2.5 divide-x divide-slate-100">
+            <div className="flex flex-col items-center justify-center">
+              <Calendar className="w-4.5 h-4.5 text-[#8a53d6] mb-1" />
+              <span className="text-[9px] font-bold text-slate-800 leading-tight">Every Day</span>
+              <span className="text-[7px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Frequency</span>
+            </div>
+            
+            <div className="flex flex-col items-center justify-center pl-1">
+              <Clock className="w-4.5 h-4.5 text-[#8a53d6] mb-1" />
+              <span className="text-[9px] font-bold text-slate-800 leading-tight">02:00 AM</span>
+              <span className="text-[7px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Time</span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center pl-1">
+              <Play className="w-4 h-4 text-[#8a53d6] mb-1" />
+              <span className="text-[9px] font-bold text-slate-800 leading-tight">Deploy (apply)</span>
+              <span className="text-[7px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Action</span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center pl-1">
+              <GitBranch className="w-4 h-4 text-[#8a53d6] mb-1" />
+              <span className="text-[9px] font-bold text-slate-800 leading-tight truncate w-full px-0.5 text-center">Pipeline</span>
+              <span className="text-[7px] font-bold text-slate-400 uppercase tracking-wider mt-0.5 truncate w-full px-0.5 text-center">Linkin Park</span>
+            </div>
+          </div>
+
+          {/* Schedule Preview & Timeline */}
+          <div className="grid grid-cols-12 gap-3">
+            {/* Left side: weekday check and next run */}
+            <div className="col-span-6 flex flex-col justify-between gap-2.5">
+              <div>
+                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Schedule preview</span>
+                <div className="flex gap-0.5 mt-1">
+                  {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => {
+                    const active = i < 5; // Mon-Fri
+                    return (
+                      <div 
+                        key={i} 
+                        className={`h-4.5 w-4.5 rounded-full flex items-center justify-center text-[8px] font-bold ${
+                          active 
+                            ? "bg-[#8a53d6] text-white" 
+                            : "border border-slate-200 text-slate-300"
+                        }`}
+                      >
+                        {active ? <Check className="w-2.5 h-2.5" /> : ""}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="p-2 bg-purple-50/50 border border-purple-100/50 rounded-xl flex items-center gap-2">
+                <div className="h-6 w-6 rounded-full bg-purple-100/60 flex items-center justify-center text-[#8a53d6] shrink-0">
+                  <Clock className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-[7px] font-bold text-slate-400 block leading-none uppercase tracking-wider">Next run</span>
+                  <span className="text-[11px] font-bold text-slate-800 block mt-0.5 leading-none">1h 23m</span>
+                  <span className="text-[7.5px] font-semibold text-slate-400 block mt-0.5 leading-none">Today, 02:00 AM</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side: Upcoming runs list */}
+            <div className="col-span-6 border-l border-slate-100 pl-3.5 relative flex flex-col gap-1.5 justify-between">
+              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider block">Upcoming runs</span>
+              
+              <div className="relative flex flex-col gap-1.5">
+                {/* Timeline Line */}
+                <div className="absolute top-1.5 bottom-1.5 left-1 w-0.5 bg-slate-100" />
+                
+                {/* Row 1 */}
+                <div className="flex items-center gap-1.5 relative pl-3">
+                  <div className="absolute left-[3px] top-[6px] h-1 w-1 rounded-full bg-[#8a53d6]" />
+                  <div className="h-4.5 w-4.5 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 shrink-0">
+                    <Calendar className="w-2.5 h-2.5 text-[#8a53d6]" />
+                  </div>
+                  <span className="text-[8.5px] font-semibold text-slate-700 truncate">Today, 02:00 AM</span>
+                  <span className="px-1 py-0.2 rounded bg-purple-100 text-[6.5px] font-bold text-[#8a53d6] scale-90">Next</span>
+                </div>
+
+                {/* Row 2 */}
+                <div className="flex items-center gap-1.5 relative pl-3">
+                  <div className="absolute left-[3px] top-[6px] h-1 w-1 rounded-full bg-slate-300" />
+                  <div className="h-4.5 w-4.5 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 shrink-0">
+                    <Calendar className="w-2.5 h-2.5 text-[#8a53d6]" />
+                  </div>
+                  <span className="text-[8.5px] font-medium text-slate-500 truncate">Tomorrow, 02:00 AM</span>
+                </div>
+
+                {/* Row 3 */}
+                <div className="flex items-center gap-1.5 relative pl-3">
+                  <div className="absolute left-[3px] top-[6px] h-1 w-1 rounded-full bg-slate-300" />
+                  <div className="h-4.5 w-4.5 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 shrink-0">
+                    <Calendar className="w-2.5 h-2.5 text-[#8a53d6]" />
+                  </div>
+                  <span className="text-[8.5px] font-medium text-slate-500 truncate">Thu, 02:00 AM</span>
+                </div>
+
+                {/* Row 4 */}
+                <div className="flex items-center gap-1.5 relative pl-3">
+                  <div className="absolute left-[3px] top-[6px] h-1 w-1 rounded-full bg-slate-300" />
+                  <div className="h-4.5 w-4.5 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 shrink-0">
+                    <Calendar className="w-2.5 h-2.5 text-[#8a53d6]" />
+                  </div>
+                  <span className="text-[8.5px] font-medium text-slate-500 truncate">Fri, 02:00 AM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer of white card */}
+          <div className="flex items-center justify-between border-t border-slate-100 pt-2.5 mt-0.5">
+            <div className="flex items-center gap-1 text-[8px] font-bold text-slate-500">
+              <Shield className="w-3 h-3 text-emerald-500 shrink-0" />
+              <span>Last run: <span className="text-emerald-600">Success</span> · May 19</span>
+            </div>
+            
+            <div className="flex items-center gap-1.5">
+              <button className="flex items-center gap-1 px-2.5 py-1.5 bg-[#8a53d6] hover:bg-[#9a63e6] text-white text-[8px] font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer">
+                <Edit3 className="w-2.5 h-2.5" />
+                Edit schedule
+              </button>
+              <button className="h-6.5 w-6.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/60 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-all cursor-pointer">
+                <div className="flex gap-0.5">
+                  <span className="h-0.5 w-0.5 rounded-full bg-slate-400" />
+                  <span className="h-0.5 w-0.5 rounded-full bg-slate-400" />
+                  <span className="h-0.5 w-0.5 rounded-full bg-slate-400" />
+                </div>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ===================== Marquee Cards (Provider Logo Strip + Feature Cards) ===================== */
+function MarqueeCards() {
+  const providers = [
+    { name: "AWS",          img: iconAwsUrl },
+    { name: "Google Cloud", img: iconGcpUrl },
+    { name: "Azure",        img: iconAzureUrl },
+    { name: "Terraform",    img: iconTerraformUrl },
+    { name: "Slack",        img: iconSlackUrl },
+  ];
+
+  const items = [...providers, ...providers, ...providers];
+
+  return (
+    <div className="relative flex flex-col h-full min-w-0 w-full overflow-hidden">
+      {/* Provider Logo Strip heading */}
+      <div className="mb-10">
+        <h2 className="font-display text-4xl md:text-5xl text-[var(--ig-text)]">Connect <span className="ig-metallic">everything.</span></h2>
+        <p className="mt-3 text-[var(--ig-muted)] text-sm font-medium">Integrates with all major cloud providers and tools.</p>
+      </div>
+      <div className="relative ig-mask-x overflow-hidden rounded-2xl border border-[rgba(138,83,214,0.12)] bg-[rgba(138,83,214,0.03)] px-0 py-4">
+        <div className="flex gap-8 ig-marquee-slow w-max items-center">
+          {items.map((p, i) => (
+            <div key={i} className="flex flex-col items-center gap-2 px-4 py-3 rounded-xl hover:bg-[rgba(138,83,214,0.06)] transition-colors shrink-0 group">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm border border-slate-100/80 group-hover:shadow-md group-hover:border-[rgba(138,83,214,0.2)] transition-all p-2">
+                <img src={p.img} alt={p.name} className="w-full h-full object-contain" />
+              </div>
+              <span className="text-[10px] font-bold text-[var(--ig-muted)] tracking-wide uppercase whitespace-nowrap">{p.name}</span>
+            </div>
+          ))}
         </div>
       </div>
       <div className="mt-10 rounded-[2rem] border border-slate-200/80 bg-white shadow-2xl overflow-hidden flex flex-col">
@@ -2452,12 +2800,56 @@ function MarqueeCards() {
 
           {/* Screenshot Image */}
           <div className="absolute bottom-0 right-0 w-[45%] md:w-[35%] h-[80%] rounded-tl-3xl shadow-[-15px_-10px_40px_rgba(0,0,0,0.2)] overflow-hidden hidden md:block border-t border-l border-white/10 translate-y-4 hover:translate-y-0 transition-transform duration-500">
-             <img src="/assets/templates.png" alt="Templates UI" className="w-full h-full object-cover object-left-top" />
+             <img src={templatesUrl} alt="Templates UI" className="w-full h-full object-cover object-left-top" />
           </div>
         </div>
 
         {/* Bottom Card: Architecture & Design */}
         <ArchitectureCard />
+
+        {/* Pipeline Scheduler Card */}
+        <PipelineSchedulerCard />
+      </div>
+    </div>
+  );
+}
+
+/* ===================== Fleet Marquee Strip (below Drift Detection) ===================== */
+function FleetMarqueeStrip() {
+  const cards = [
+    { t: "VPC · us-east-1",    s: "10.0.0.0/16 · 6 subnets",     i: Network,   c: "ok" },
+    { t: "Auth Gateway",       s: "Deploy · 1m 04s ago",         i: Lock,      c: "ok" },
+    { t: "Cost Forecast",      s: "$48,210 / mo · ▼ 12%",        i: DollarSign,c: "warn" },
+    { t: "RDS · prod",         s: "Multi-AZ · Graviton",         i: Database,  c: "ok" },
+    { t: "Drift Detected",     s: "subnet-9f2a · auto-patch",    i: ShieldCheck, c: "warn" },
+    { t: "EKS · cluster-eu",   s: "12 nodes · 87% CPU",          i: Container, c: "warn" },
+    { t: "Datadog Sync",       s: "All metrics streaming",       i: Gauge,     c: "ok" },
+    { t: "Pipeline · web-prod",s: "Plan ✓ · Apply ⏳",           i: Workflow,  c: "ok" },
+    { t: "S3 · assets",        s: "Public access blocked",       i: ShieldCheck, c: "ok" },
+    { t: "Helm · billing",     s: "v2.4.1 · canary 10%",         i: Layers,    c: "ok" },
+  ];
+  const row = [...cards, ...cards];
+  return (
+    <div>
+      <div className="mb-6">
+        <h2 className="font-display text-3xl md:text-4xl text-[var(--ig-text)]">Your fleet, <span className="ig-metallic">in motion.</span></h2>
+      </div>
+      <div className="ig-mask-x overflow-hidden">
+        <div className="flex gap-4 ig-marquee-slow w-max">
+          {row.map((c, i) => (
+            <div key={i} className="ig-card rounded-2xl p-4 w-[240px] flex items-center gap-3 relative overflow-hidden">
+              <div aria-hidden className="absolute inset-0 ig-dots opacity-20" />
+              <div className="relative h-10 w-10 rounded-xl grid place-items-center" style={{ background: "rgba(138,83,214,.15)", border: "1px solid rgba(138,83,214,.3)" }}>
+                <c.i className="w-4 h-4 text-[var(--ig-accent-2)]" />
+              </div>
+              <div className="relative flex-1 min-w-0">
+                <div className="text-sm text-[var(--ig-text)] truncate">{c.t}</div>
+                <div className="text-xs text-[var(--ig-muted)] truncate">{c.s}</div>
+              </div>
+              <span className={`relative h-2 w-2 rounded-full ig-blink ${c.c === "ok" ? "bg-emerald-400" : "bg-yellow-400"}`} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -2467,12 +2859,12 @@ function MarqueeCards() {
 function DriftDetectionCard() {
   return (
     <div 
-      className="border border-slate-200/80 rounded-[2rem] shadow-2xl overflow-hidden select-none working-cursor flex flex-row min-h-[380px] relative"
+      className="border border-slate-200/80 rounded-[2rem] shadow-2xl overflow-hidden select-none working-cursor flex flex-col md:flex-row md:min-h-[380px] relative bg-white"
       style={{ containerType: 'inline-size' }}
     >
 
       {/* Left — drift-detection.png: nav tab list enlarged */}
-      <div className="w-[45%] shrink-0 relative bg-white border-r border-slate-100">
+      <div className="w-full md:w-[45%] shrink-0 relative bg-white border-b md:border-b-0 md:border-r border-slate-100">
         <img
           src={driftDetectionUiUrl}
           alt="Drift Detection navigation tabs"
@@ -2495,7 +2887,7 @@ function DriftDetectionCard() {
         <div className="relative z-10">
           <h3
             className="text-4xl md:text-[42px] font-black leading-[1.0] text-white mb-5"
-            style={{ fontFamily: '"Cabinet Grotesk", "Satoshi", sans-serif' }}
+            style={{ fontFamily: '"Sora", "Inter", sans-serif' }}
           >
             Drift{" "}
             <span
@@ -2517,7 +2909,7 @@ function DriftDetectionCard() {
         whileInView={{ x: 0, opacity: 1 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="absolute z-20 rounded-xl overflow-hidden shadow-[0_12px_36px_rgba(138,83,214,0.18)] border border-[#8a53d6]/10"
+        className="absolute z-20 rounded-xl overflow-hidden shadow-[0_12px_36px_rgba(138,83,214,0.18)] border border-[#8a53d6]/10 hidden md:block"
         style={{
           left: '-1.1cqw',
           top: '37.67cqw',
@@ -2542,6 +2934,79 @@ function DriftDetectionCard() {
         />
       </motion.div>
 
+    </div>
+  );
+}
+
+/* ===================== RBAC Card ===================== */
+function RbacCard() {
+  return (
+    <div 
+      className="border border-slate-200/80 rounded-[2rem] shadow-2xl overflow-hidden select-none working-cursor flex flex-col md:flex-row md:min-h-[380px] relative bg-white"
+      style={{ containerType: 'inline-size' }}
+    >
+      {/* Left — white dotted bg + text */}
+      <div className="w-full md:w-[43%] shrink-0 bg-white relative overflow-hidden flex flex-col justify-between p-6 md:p-8 text-slate-800 md:border-r border-b md:border-b-0 border-slate-200/60">
+        {/* Dotted grid background */}
+        <div
+          className="absolute inset-0 opacity-80"
+          style={{
+            backgroundImage: 'radial-gradient(rgba(138,83,214,0.15) 1.5px, transparent 1.5px)',
+            backgroundSize: '20px 20px',
+          }}
+        />
+
+        {/* Text and Icon Header */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-4 md:mb-6">
+            <div className="h-7 w-7 rounded-lg bg-[#8A53D6]/8 flex items-center justify-center border border-[#8A53D6]/20">
+              <Shield className="w-3.5 h-3.5 text-[#8A53D6]" />
+            </div>
+            <span className="tracking-wider text-[10px] font-bold text-[#8A53D6] uppercase">RBAC MANAGEMENT</span>
+          </div>
+          <h3 className="font-display text-2xl md:text-[28px] text-[var(--ig-text)] leading-[1.1] mb-3">
+            Role-based access, <span className="italic font-medium font-serif ig-metallic">built for teams.</span>
+          </h3>
+          <p className="mt-4 text-[var(--ig-muted)] text-[11px] md:text-xs font-medium leading-relaxed">
+            Create roles, manage permissions, and control access to every module across your infrastructure.
+          </p>
+        </div>
+
+        {/* Bottom Pill */}
+        <div className="relative z-10 mt-4 bg-slate-50 border border-slate-200/60 rounded-xl p-3 flex items-center gap-2 shadow-sm">
+          <div className="h-7 w-7 rounded-lg bg-[#8A53D6]/8 flex items-center justify-center shrink-0 border border-[#8A53D6]/15">
+            <Users className="w-3.5 h-3.5 text-[#8A53D6]" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-[10px] font-bold text-slate-800 leading-snug">Groups · Roles · Permissions</div>
+            <div className="text-[9px] text-[var(--ig-muted)] mt-0.5">Everything in one place.</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right — Light background placeholder */}
+      <div className="flex-1 bg-slate-50 hidden md:block" />
+
+      {/* Floating RBAC UI image window */}
+      <motion.div
+        initial={{ x: 60, opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        className="absolute z-20 rounded-2xl overflow-hidden shadow-[0_24px_50px_rgba(0,0,0,0.12)] border border-slate-200/60 bg-white hidden md:block"
+        style={{
+          left: '36cqw',
+          top: '24px',
+          bottom: '-16px',
+          width: '72cqw',
+        }}
+      >
+        <img 
+          src={rbacUiUrl} 
+          alt="RBAC Management Interface"
+          className="w-full h-full object-cover object-left-top select-none pointer-events-none block rounded-2xl"
+        />
+      </motion.div>
     </div>
   );
 }
@@ -2602,26 +3067,26 @@ function SyncInfraCard() {
 
   return (
     <div 
-      className="bg-white border border-slate-200/80 rounded-[2rem] p-8 md:p-12 shadow-2xl flex flex-col justify-between relative overflow-hidden min-h-[500px] h-full text-slate-800 transition-all select-none working-cursor"
+      className="bg-white border border-slate-200/80 rounded-[2rem] p-6 md:p-8 shadow-2xl flex flex-col justify-between relative overflow-hidden min-h-[420px] h-full text-slate-800 transition-all select-none working-cursor"
     >
       <div>
         {/* Heading & Baseline */}
-        <div className="mb-8 relative z-20">
-          <h3 className="font-display text-3xl md:text-[34px] ig-metallic leading-[0.95]">
-            Sync your Deployed Infra
+        <div className="mb-5 relative z-20">
+          <h3 className="font-display text-3xl md:text-[34px] text-slate-800 leading-[0.95]">
+            Sync your <span className="ig-metallic">Deployed Infra</span>
           </h3>
-          <p className="mt-5 text-[var(--ig-muted)] text-sm md:text-base leading-relaxed max-w-md">
+          <p className="mt-3.5 text-[var(--ig-muted)] text-sm leading-relaxed max-w-md">
             Discover, import, and sync your running cloud resources from multiple providers on a single canvas.
           </p>
         </div>
 
         {/* Dropdown Selector & Sync Button */}
-        <div className="flex flex-row items-center gap-4 mb-8 relative z-30">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-6 relative z-30">
           {/* Custom Dropdown Selector */}
           <div className="relative min-w-0 flex-1">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-3.5 text-sm font-semibold flex items-center justify-between shadow-sm hover:border-slate-300 transition-all cursor-pointer"
+              className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm font-semibold flex items-center justify-between shadow-sm hover:border-slate-300 transition-all cursor-pointer"
             >
               <span className={provider ? "text-slate-800" : "text-slate-400"}>
                 {provider ? providersList.find(p => p.value === provider)?.label : "choose the provider"}
@@ -2668,7 +3133,7 @@ function SyncInfraCard() {
             <button
               onClick={() => provider && setIsCredDropdownOpen(!isCredDropdownOpen)}
               disabled={!provider}
-              className={`w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-3.5 text-sm font-semibold flex items-center justify-between shadow-sm hover:border-slate-300 transition-all ${
+              className={`w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm font-semibold flex items-center justify-between shadow-sm hover:border-slate-300 transition-all ${
                 !provider ? "opacity-50 cursor-not-allowed bg-slate-50" : "cursor-pointer"
               }`}
             >
@@ -2714,7 +3179,7 @@ function SyncInfraCard() {
           <button 
             onClick={handleSync}
             disabled={isSyncing || !provider || !credential}
-            className={`px-6 py-3.5 text-sm font-semibold flex items-center justify-center gap-2 text-white bg-[#8A53D6] hover:bg-[#9a63e6] rounded-xl transition-all shadow-md active:scale-95 duration-200 disabled:opacity-50 disabled:cursor-not-allowed shrink-0`}
+            className="px-6 py-2.5 text-sm font-semibold flex items-center justify-center gap-2 text-white bg-[#8A53D6] hover:bg-[#9a63e6] rounded-xl transition-all shadow-md active:scale-95 duration-200 disabled:opacity-50 disabled:cursor-not-allowed shrink-0 w-full sm:w-auto"
           >
             <RefreshCcw className={`w-4 h-4 ${isSyncing ? "animate-spin" : ""}`} />
             <span>Sync from cloud</span>
@@ -2722,20 +3187,20 @@ function SyncInfraCard() {
         </div>
 
         {/* Result Area */}
-        <div className="relative z-10 bg-slate-50 border border-slate-100 rounded-2xl p-6 min-h-[200px] flex flex-col justify-center overflow-hidden transition-all duration-300">
+        <div className="relative z-10 bg-slate-50 border border-slate-100 rounded-2xl p-5 min-h-[170px] flex flex-col justify-center overflow-hidden transition-all duration-300">
           {isSyncing && (
-            <div className="flex flex-col items-center justify-center py-6 text-center">
-              <div className="relative h-12 w-12 rounded-full grid place-items-center bg-purple-50 text-[#8A53D6] border border-purple-100 animate-pulse mb-3">
-                <RefreshCcw className="w-5 h-5 animate-spin" />
+            <div className="flex flex-col items-center justify-center py-4 text-center">
+              <div className="relative h-10 w-10 rounded-full grid place-items-center bg-purple-50 text-[#8A53D6] border border-purple-100 animate-pulse mb-2.5">
+                <RefreshCcw className="w-4.5 h-4.5 animate-spin" />
               </div>
               <p className="text-xs font-semibold text-slate-600">Querying live APIs for resources...</p>
             </div>
           )}
 
           {!isSyncing && !showResults && (
-            <div className="text-center py-6 text-slate-400">
-              <div className="inline-block p-3 rounded-full bg-slate-100/50 mb-2">
-                <Cloud className="w-6 h-6 text-slate-400" />
+            <div className="text-center py-4 text-slate-400">
+              <div className="inline-block p-2.5 rounded-full bg-slate-100/50 mb-1.5">
+                <Cloud className="w-5 h-5 text-slate-400" />
               </div>
               <p className="text-xs font-semibold">Ready to import resources. Choose a provider above to get started.</p>
             </div>

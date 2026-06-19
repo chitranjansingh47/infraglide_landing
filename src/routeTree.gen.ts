@@ -12,15 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as TeamRouteImport } from './routes/team'
-import { Route as StatusRouteImport } from './routes/status'
 import { Route as SecurityRouteImport } from './routes/security'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ChangelogRouteImport } from './routes/changelog'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -39,11 +36,6 @@ const TeamRoute = TeamRouteImport.update({
   path: '/team',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StatusRoute = StatusRouteImport.update({
-  id: '/status',
-  path: '/status',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SecurityRoute = SecurityRouteImport.update({
   id: '/security',
   path: '/security',
@@ -52,11 +44,6 @@ const SecurityRoute = SecurityRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsRoute = DocsRouteImport.update({
@@ -79,11 +66,6 @@ const ChangelogRoute = ChangelogRouteImport.update({
   path: '/changelog',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -98,15 +80,12 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/docs': typeof DocsRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/security': typeof SecurityRoute
-  '/status': typeof StatusRoute
   '/team': typeof TeamRoute
   '/templates': typeof TemplatesRoute
   '/terms': typeof TermsRoute
@@ -114,15 +93,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/docs': typeof DocsRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/security': typeof SecurityRoute
-  '/status': typeof StatusRoute
   '/team': typeof TeamRoute
   '/templates': typeof TemplatesRoute
   '/terms': typeof TermsRoute
@@ -131,15 +107,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
   '/changelog': typeof ChangelogRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/docs': typeof DocsRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/security': typeof SecurityRoute
-  '/status': typeof StatusRoute
   '/team': typeof TeamRoute
   '/templates': typeof TemplatesRoute
   '/terms': typeof TermsRoute
@@ -149,15 +122,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/blog'
     | '/changelog'
     | '/contact'
     | '/demo'
     | '/docs'
-    | '/pricing'
     | '/privacy'
     | '/security'
-    | '/status'
     | '/team'
     | '/templates'
     | '/terms'
@@ -165,15 +135,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/blog'
     | '/changelog'
     | '/contact'
     | '/demo'
     | '/docs'
-    | '/pricing'
     | '/privacy'
     | '/security'
-    | '/status'
     | '/team'
     | '/templates'
     | '/terms'
@@ -181,15 +148,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
-    | '/blog'
     | '/changelog'
     | '/contact'
     | '/demo'
     | '/docs'
-    | '/pricing'
     | '/privacy'
     | '/security'
-    | '/status'
     | '/team'
     | '/templates'
     | '/terms'
@@ -198,15 +162,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRoute
   ChangelogRoute: typeof ChangelogRoute
   ContactRoute: typeof ContactRoute
   DemoRoute: typeof DemoRoute
   DocsRoute: typeof DocsRoute
-  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   SecurityRoute: typeof SecurityRoute
-  StatusRoute: typeof StatusRoute
   TeamRoute: typeof TeamRoute
   TemplatesRoute: typeof TemplatesRoute
   TermsRoute: typeof TermsRoute
@@ -235,13 +196,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeamRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/status': {
-      id: '/status'
-      path: '/status'
-      fullPath: '/status'
-      preLoaderRoute: typeof StatusRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/security': {
       id: '/security'
       path: '/security'
@@ -254,13 +208,6 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs': {
@@ -291,13 +238,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChangelogRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -318,15 +258,12 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRoute,
   ChangelogRoute: ChangelogRoute,
   ContactRoute: ContactRoute,
   DemoRoute: DemoRoute,
   DocsRoute: DocsRoute,
-  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   SecurityRoute: SecurityRoute,
-  StatusRoute: StatusRoute,
   TeamRoute: TeamRoute,
   TemplatesRoute: TemplatesRoute,
   TermsRoute: TermsRoute,

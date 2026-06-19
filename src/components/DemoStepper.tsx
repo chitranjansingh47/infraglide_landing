@@ -8,10 +8,13 @@ export function DemoStepper() {
   const [curStep, setCurStep] = useState(0);
   const [checks, setChecks] = useState<Record<string, boolean>>({});
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    mobile: '',
     company: '',
     role: '',
     cloud: 'AWS',
@@ -25,9 +28,9 @@ export function DemoStepper() {
     setError(null);
   };
 
-  const nextStep = () => {
-    if (curStep === 0 && (!formData.name || !formData.email)) {
-      setError('Name and Email are required.');
+  const nextStep = async () => {
+    if (curStep === 0 && (!formData.name || !formData.email || !formData.mobile)) {
+      setError('Name, Email and Mobile No are required.');
       return;
     }
     if (curStep === 1 && !formData.company) {
@@ -37,7 +40,79 @@ export function DemoStepper() {
     if (curStep < TOTAL_STEPS - 1) {
       goStep(curStep + 1);
     } else {
-      alert("Demo booked successfully! We'll be in touch soon.");
+      setSubmitting(true);
+      setError(null);
+      
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_pky4dwb';
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'WAVeCXF2tLIdKx9Qt';
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_0uxnxlb';
+      const autoReplyTemplateId = import.meta.env.VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID || 'template_tqbd94l';
+      
+      const useCasesText = Object.keys(checks)
+        .filter(k => checks[k])
+        .map(k => {
+          if (k === 'iac') return 'Visual Infrastructure as Code';
+          if (k === 'drift') return 'Drift Detection & Remediation';
+          if (k === 'security') return 'Security & Compliance Scanning';
+          return k;
+        })
+        .join(', ') || 'No specific goals specified';
+
+      const templateParams = {
+        name: formData.name,
+        email: formData.email,
+        mobile: formData.mobile || 'Not provided',
+        company: formData.company,
+        role: formData.role || 'Not specified',
+        cloud: formData.cloud,
+        use_cases: useCasesText
+      };
+
+      try {
+        // Send email to SRE team
+        const resTeam = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            service_id: serviceId,
+            template_id: templateId,
+            user_id: publicKey,
+            template_params: templateParams
+          })
+        });
+
+        if (!resTeam.ok) {
+          const errText = await resTeam.text();
+          throw new Error(errText || 'Failed to submit demo request.');
+        }
+
+        // Send auto-reply to customer
+        const resUser = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            service_id: serviceId,
+            template_id: autoReplyTemplateId,
+            user_id: publicKey,
+            template_params: templateParams
+          })
+        });
+
+        if (!resUser.ok) {
+          console.warn('Auto-reply email failed to send:', await resUser.text());
+        }
+
+        setSubmitted(true);
+      } catch (err: any) {
+        console.error('EmailJS submission error:', err);
+        setError(err.message || 'An error occurred while submitting your request. Please try again.');
+      } finally {
+        setSubmitting(false);
+      }
     }
   };
 
@@ -263,7 +338,7 @@ export function DemoStepper() {
       {/* STEPPER HEADER */}
       <div className="ds-stepper-card">
         <div className="ds-stepper-header">
-          <span className="ds-stepper-header-title">Demo Request</span>
+          <span className="ds-stepper-header-title">Let's Connect</span>
           <span className="ds-stepper-header-sub">Step {curStep + 1} of {TOTAL_STEPS} — {STEP_NAMES[curStep]}</span>
         </div>
         
@@ -320,6 +395,11 @@ export function DemoStepper() {
                 <div className="ds-field-label">Work Email <span className="ds-req-star">*</span></div>
                 <input type="email" placeholder="e.g. jane@company.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
                 <div className="ds-hint">We use this to verify your organization domain.</div>
+              </div>
+              <div className="ds-field">
+                <div className="ds-field-label">Mobile No <span className="ds-req-star">*</span></div>
+                <input type="tel" placeholder="e.g. +91 98765 43210" value={formData.mobile} onChange={e => setFormData({...formData, mobile: e.target.value})} />
+                <div className="ds-hint">Include country code. We may contact you to confirm your demo slot.</div>
               </div>
             </div>
           </div>
@@ -406,16 +486,35 @@ export function DemoStepper() {
               <div className="ds-card-icon" style={{ background: 'rgba(16, 185, 129, 0.15)' }}>
                 <CalendarCheck className="w-4 h-4 text-emerald-400" />
               </div>
-              <span className="ds-card-title-text">Schedule your session</span>
+              <span className="ds-card-title-text">
+                {submitted ? 'Request Submitted' : 'Schedule your session'}
+              </span>
             </div>
             <div className="ds-card-body text-center py-8">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4">
-                <CalendarCheck className="w-8 h-8 text-emerald-400" />
-              </div>
-              <h3 className="text-lg font-bold text-[var(--ig-text)] mb-2">Ready to see InfraGlide in action?</h3>
-              <p className="text-sm text-[var(--ig-muted)] mb-6 max-w-sm mx-auto">
-                Submit your request and our team will prepare a personalized live demo environment for {formData.company || 'your organization'}.
-              </p>
+              {submitted ? (
+                <>
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4 animate-bounce">
+                    <Check className="w-8 h-8 text-emerald-400" />
+                  </div>
+                  <h3 className="text-lg font-bold text-[var(--ig-text)] mb-2">Thank you, {formData.name}!</h3>
+                  <p className="text-sm text-[var(--ig-muted)] mb-2 max-w-sm mx-auto">
+                    Your request has been successfully sent. We have sent a confirmation email to <strong className="text-[#8A53D6]">{formData.email}</strong>.
+                  </p>
+                  <p className="text-xs text-[var(--ig-dim)] max-w-xs mx-auto">
+                    Our team will reach out to you within 24 hours to schedule your session.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4">
+                    <CalendarCheck className="w-8 h-8 text-emerald-400" />
+                  </div>
+                  <h3 className="text-lg font-bold text-[var(--ig-text)] mb-2">Ready to see InfraGlide in action?</h3>
+                  <p className="text-sm text-[var(--ig-muted)] mb-6 max-w-sm mx-auto">
+                    Submit your request and our team will prepare a personalized live demo environment for {formData.company || 'your organization'}.
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -424,13 +523,55 @@ export function DemoStepper() {
       {/* NAV BUTTONS */}
       <div className="ds-nav-btns">
         <div className="flex gap-2">
-          {curStep > 0 && <button className="ds-btn" onClick={() => goStep(curStep - 1)}>← Back</button>}
+          {curStep > 0 && !submitted && (
+            <button className="ds-btn" onClick={() => goStep(curStep - 1)} disabled={submitting}>
+              ← Back
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-[12.5px] text-[var(--ig-muted)] font-medium hidden sm:inline">Step {curStep + 1} of {TOTAL_STEPS}</span>
-          <button className="ds-btn primary flex items-center gap-2" onClick={nextStep}>
-            {curStep === TOTAL_STEPS - 1 ? 'Submit Request ✓' : 'Continue →'}
-          </button>
+          {!submitted && (
+            <span className="text-[12.5px] text-[var(--ig-muted)] font-medium hidden sm:inline">
+              Step {curStep + 1} of {TOTAL_STEPS}
+            </span>
+          )}
+          {submitted ? (
+            <button 
+              className="ds-btn primary" 
+              onClick={() => {
+                setSubmitted(false);
+                setCurStep(0);
+                setFormData({
+                  name: '',
+                  email: '',
+                  mobile: '',
+                  company: '',
+                  role: '',
+                  cloud: 'AWS',
+                });
+                setChecks({});
+              }}
+            >
+              Book Another Demo
+            </button>
+          ) : (
+            <button 
+              className="ds-btn primary flex items-center gap-2" 
+              onClick={nextStep} 
+              disabled={submitting}
+            >
+              {submitting ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />
+                  Sending...
+                </>
+              ) : curStep === TOTAL_STEPS - 1 ? (
+                'Submit Request ✓'
+              ) : (
+                'Continue →'
+              )}
+            </button>
+          )}
         </div>
       </div>
     </div>

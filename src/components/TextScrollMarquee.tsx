@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import awsCanvasBgUrl from "@/assets/aws_canvas_bg.png";
 
 // Ensure ScrollTrigger is registered
 if (typeof window !== "undefined") {
@@ -38,6 +39,8 @@ export default function TextScrollMarquee() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLDivElement | null>(null);
+  const canvasTriggerRef = useRef<HTMLSpanElement | null>(null);
 
   useLayoutEffect(() => {
     // Small timeout to guarantee measurements occur after DOM rendering settles
@@ -85,6 +88,27 @@ export default function TextScrollMarquee() {
             },
           });
         });
+
+        // 3. Canvas pops in when "one playful canvas." reaches center
+        if (canvasRef.current && canvasTriggerRef.current) {
+          gsap.fromTo(
+            canvasRef.current,
+            { yPercent: 110, opacity: 0, scale: 0.8 },
+            {
+              yPercent: 0,
+              opacity: 1,
+              scale: 1,
+              ease: "back.out(1.2)",
+              duration: 0.8,
+              scrollTrigger: {
+                trigger: canvasTriggerRef.current,
+                containerAnimation: scrollTween,
+                start: "left 45%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
       }, triggerRef);
 
       return () => ctx.revert();
@@ -131,77 +155,72 @@ export default function TextScrollMarquee() {
             fontFamily: '"Cabinet Grotesk", "Satoshi", ui-sans-serif, system-ui, sans-serif',
           }}
         >
-          {/* Segment 1: Every node, */}
+
+          {/* Segment 1: Cloud? */}
           <SplitText
             className="text-[10vh] md:text-[14vh] font-black tracking-tighter leading-none"
-            children="Every node,"
+            children="Cloud?"
           />
-
-          {/* Node SVG Conjunction */}
-          <div className="mx-6 md:mx-10 self-center flex items-center justify-center shrink-0">
-            <div className="w-[10vh] h-[10vh] md:w-[14vh] md:h-[14vh] rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center shadow-lg">
-              <svg className="w-[60%] h-[60%] text-white/90" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="50" cy="50" r="14" fill="currentColor" fillOpacity="0.2" />
-                <circle cx="50" cy="20" r="8" fill="currentColor" />
-                <circle cx="20" cy="70" r="8" fill="currentColor" />
-                <circle cx="80" cy="70" r="8" fill="currentColor" />
-                <line x1="50" y1="34" x2="50" y2="28" />
-                <line x1="28" y1="64" x2="42" y2="56" />
-                <line x1="72" y1="64" x2="58" y2="56" />
-              </svg>
-            </div>
-          </div>
-
-          {/* Segment 2: every edge, */}
-          <SplitText
-            className="text-[10vh] md:text-[14vh] font-light tracking-tight leading-none italic text-white/95"
-            style={{ fontFamily: "Georgia, serif" }}
-            children="every edge,"
-          />
-
-          {/* Edge SVG Wave Connector */}
-          <div className="mx-8 md:mx-14 self-center flex items-center justify-center shrink-0">
-            <svg className="w-[16vh] h-[8vh] md:w-[24vh] md:h-[10vh] text-white/40" viewBox="0 0 160 40" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <path d="M10 20 C 40 5, 120 35, 150 20" strokeDasharray="6 6" />
-              <circle cx="10" cy="20" r="4" fill="currentColor" />
-              <circle cx="150" cy="20" r="4" fill="currentColor" />
-            </svg>
-          </div>
-
-          {/* Segment 3: every cloud, */}
-          <SplitText
-            className="text-[10vh] md:text-[14vh] font-black uppercase tracking-tighter leading-none"
-            style={{
-              WebkitTextStroke: "1.5px rgba(255, 255, 255, 0.75)",
-              color: "transparent",
-            }}
-            children="every cloud,"
-          />
-
-          {/* Cloud SVG Badge */}
-          <div className="mx-6 md:mx-10 self-center flex items-center justify-center shrink-0">
-            <div className="w-[10vh] h-[10vh] md:w-[14vh] md:h-[14vh] rounded-3xl border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center rotate-6 hover:rotate-0 transition-transform duration-500 shadow-lg">
-              <svg className="w-[55%] h-[55%] text-white/95" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.47 0-.89.09-1.3.27A6.47 6.47 0 0 0 12 9a6.5 6.5 0 0 0-6.4 5.3A4.5 4.5 0 0 0 2 18.5C2 21 4 22 6.5 22h11c1.9 0 3.5-1.3 3.5-3z" />
-              </svg>
-            </div>
-          </div>
 
           {/* Spacer Dot-Line */}
           <div className="mx-6 md:mx-10 w-[15vw] h-[2px] bg-gradient-to-r from-transparent via-white/30 to-transparent self-center shrink-0" />
 
-          {/* Segment 4: one */}
-          <SplitText
-            className="text-[10vh] md:text-[14vh] font-medium tracking-tight leading-none text-white/90 ml-6"
-            children="one"
-          />
+          {/* Segment 2: one — used as canvas scroll trigger */}
+          <span ref={canvasTriggerRef} className="inline-flex items-baseline">
+            <SplitText
+              className="text-[10vh] md:text-[14vh] font-medium tracking-tight leading-none text-white/90 ml-6"
+              children="one"
+            />
+          </span>
 
-          {/* Segment 5: playful canvas. */}
+          {/* Segment 3: playful canvas. */}
           <SplitText
             className="text-[11vh] md:text-[15vh] font-serif italic font-semibold leading-none mx-4 pr-16"
             style={{ fontFamily: "Georgia, serif" }}
             children="playful canvas."
           />
+        </div>
+      </div>
+
+      {/* 4. Canvas Mockup — slides up when "one playful canvas." is centered */}
+      <div
+        ref={canvasRef}
+        className="absolute bottom-0 left-1/2 z-30 pointer-events-none"
+        style={{
+          transform: "translateX(-50%) translateY(110%)",
+          width: "min(900px, 90vw)",
+        }}
+      >
+        {/* Window Chrome Bar */}
+        <div className="flex items-center gap-2 px-4 py-2.5 bg-[rgba(255,255,255,0.08)] border border-white/10 rounded-t-2xl backdrop-blur-md">
+          {/* Traffic lights */}
+          <span className="w-3 h-3 rounded-full bg-[#ff5f57] shadow-[0_0_6px_rgba(255,95,87,0.5)]" />
+          <span className="w-3 h-3 rounded-full bg-[#ffbd2e] shadow-[0_0_6px_rgba(255,189,46,0.5)]" />
+          <span className="w-3 h-3 rounded-full bg-[#27c840] shadow-[0_0_6px_rgba(39,200,64,0.5)]" />
+          {/* Tabs */}
+          <div className="ml-4 flex items-center gap-1">
+            <span className="px-3 py-1 rounded-md bg-white/10 border border-white/15 text-white text-[11px] font-medium">Pipeline</span>
+            <span className="px-3 py-1 rounded-md text-white/50 text-[11px]">Draft</span>
+            <span className="px-3 py-1 rounded-md text-[#f59e0b] text-[11px] font-medium flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] animate-pulse" />DRIFT
+            </span>
+          </div>
+          <div className="ml-auto flex items-center gap-2">
+            <span className="px-3 py-1 rounded-md bg-[#27c840]/20 border border-[#27c840]/30 text-[#27c840] text-[11px] font-semibold">● LIVE</span>
+            <span className="px-3 py-1 rounded-md bg-[#8A53D6] text-white text-[11px] font-semibold shadow-md">Deploy</span>
+            <span className="px-3 py-1 rounded-md bg-red-500/80 text-white text-[11px] font-semibold">Destroy</span>
+          </div>
+        </div>
+        {/* Canvas Image */}
+        <div className="relative rounded-b-2xl overflow-hidden border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
+          <img
+            src={awsCanvasBgUrl}
+            alt="InfraGlide Canvas"
+            className="w-full h-auto block object-cover object-top"
+            style={{ maxHeight: "55vh", objectPosition: "top left" }}
+          />
+          {/* Gradient fade at the bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#8A53D6] to-transparent pointer-events-none" />
         </div>
       </div>
 

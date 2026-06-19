@@ -338,7 +338,7 @@ export function ProductShowcase() {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <a href="#pricing" className="ig-cta px-7 py-3.5 inline-flex items-center gap-2">
+          <a href="#get-started" className="ig-cta px-7 py-3.5 inline-flex items-center gap-2">
             Open the canvas <ArrowRight className="w-4 h-4" />
           </a>
         </div>

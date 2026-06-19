@@ -2,8 +2,35 @@ import { createFileRoute } from '@tanstack/react-router'
 import { InteractiveGrid } from '../components/InteractiveGrid'
 import { Play } from 'lucide-react'
 
+const demoSchema = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "InfraGlide Live Product Demo",
+  "description": "Schedule a live demo of InfraGlide — the AI-powered visual cloud infrastructure platform for AWS, Azure, and GCP with Terraform-native IaC and Jane AI.",
+  "url": "https://infraglide.com/demo",
+  "organizer": { "@type": "Organization", "name": "InfraGlide", "url": "https://infraglide.com" },
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled"
+};
+
 export const Route = createFileRoute('/demo')({
   component: DemoPage,
+  head: () => ({
+    meta: [
+      { title: "Request a Live Demo — See InfraGlide in Action | AWS, Azure & GCP" },
+      { name: "description", content: "Request a live InfraGlide demo. See the AI-powered visual cloud infrastructure platform in action — design AWS, Azure, and GCP architectures, generate Terraform, detect drift, and run pipelines in real time." },
+      { name: "keywords", content: "InfraGlide demo, cloud infrastructure demo, Terraform visual demo, AWS infrastructure demo, Azure GCP demo, multi-cloud platform demo, request InfraGlide access" },
+      { property: "og:url", content: "https://infraglide.com/demo" },
+      { property: "og:title", content: "Request a Live Demo — See InfraGlide in Action" },
+      { property: "og:description", content: "See InfraGlide live. Visual design, Terraform IaC, drift detection, and Jane AI — all in one platform." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://infraglide.com/demo" },
+    ],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(demoSchema) },
+    ],
+  }),
 })
 
 function DemoPage() {
@@ -36,7 +63,7 @@ function DemoPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-[var(--ig-text)] mb-6">Ready to try it yourself?</h2>
           <div className="flex items-center justify-center gap-4">
-            <a href="/pricing" className="ig-cta py-4 px-8 text-lg font-semibold rounded-xl">Start Free Trial</a>
+            <a href="/#get-started" className="ig-cta py-4 px-8 text-lg font-semibold rounded-xl">Start Designing Now</a>
             <a href="/contact" className="ig-ghost py-4 px-8 text-lg font-semibold rounded-xl">Contact Sales</a>
           </div>
         </div>

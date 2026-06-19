@@ -1,0 +1,46 @@
+{
+  "name": "InfraGlide",
+  "short_name": "InfraGlide",
+  "description": "Visual AI-powered cloud infrastructure platform for AWS, Azure, and GCP. Terraform-native IaC, real-time drift detection, and Jane AI copilot.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0612",
+  "theme_color": "#8A53D6",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": ["productivity", "developer", "utilities"],
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "InfraGlide Visual Infrastructure Canvas"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Documentation",
+      "url": "/docs",
+      "description": "Open InfraGlide documentation"
+    },
+    {
+      "name": "Request Demo",
+      "url": "/demo",
+      "description": "Schedule a live product demo"
+    }
+  ]
+}
