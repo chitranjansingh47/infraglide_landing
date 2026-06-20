@@ -615,7 +615,7 @@ function AboutPage() {
               Experience a modern multi-cloud platform designed for platform teams, developers, and leaders alike. Start drawing your cloud topology on a single collaborative canvas today.
             </p>
             <div className="pt-4 flex justify-center">
-              <Link to="/demo" className="ig-cta px-8 py-4 inline-flex items-center gap-2.5 text-sm font-bold tracking-wide uppercase select-none cursor-pointer">
+              <Link to="/" hash="get-started" className="ig-cta px-8 py-4 inline-flex items-center gap-2.5 text-sm font-bold tracking-wide uppercase select-none cursor-pointer">
                 Start Designing <Arrow />
               </Link>
             </div>

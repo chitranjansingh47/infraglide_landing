@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useLocation } from "@tanstack/react-router";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowLeft, FileText, Target, FileUp, FileCode, FileDown, Share2, Save, Minus, Plus, Maximize, Rocket, ArrowRight, ChevronRight, ChevronDown, Check, Code, Network, Boxes, ShieldCheck, Cpu, Database, Cloud, GitBranch, ArrowUpRight, Zap, Eye, Lock, RefreshCcw, Github, Twitter, Linkedin, AlertTriangle, Shield, Settings, Play, Menu, X, Send, DollarSign, Gauge, Workflow, Container, Sparkles, Server, Layers, Sun, Moon, LayoutGrid, Calendar, Clock, Edit3, Users } from "lucide-react";
 import { InteractiveGrid } from "../components/InteractiveGrid";
@@ -2086,14 +2086,16 @@ function AboutTeaser() {
 
 /* ===================== Page ===================== */
 function InfraGlideLanding() {
+  const { hash } = useLocation();
+
   useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hash === "#get-started") {
+    if (hash === "get-started") {
       const timer = setTimeout(() => {
         document.getElementById("get-started")?.scrollIntoView({ behavior: "smooth" });
-      }, 500);
+      }, 100);
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [hash]);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden ig-noise">

@@ -129,7 +129,7 @@ export function Nav() {
           <button onClick={toggleTheme} className="ig-ghost p-2 rounded-full text-[var(--ig-muted)] hover:text-[var(--ig-text)]" aria-label="Toggle Theme">
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
-          <Link to="/demo" className="hidden sm:inline-flex ig-cta px-4 py-2 text-sm items-center gap-1 font-semibold transition-all">
+          <Link to="/" hash="get-started" className="hidden sm:inline-flex ig-cta px-4 py-2 text-sm items-center gap-1 font-semibold transition-all">
             Get Demo <Arrow className="w-3.5 h-3.5" />
           </Link>
           <button onClick={() => setOpen((o) => !o)} className="md:hidden ig-ghost p-2 text-[var(--ig-muted)]" aria-label="menu">
